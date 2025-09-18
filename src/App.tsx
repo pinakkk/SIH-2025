@@ -9,7 +9,9 @@ import { ROUTES } from '@/lib/constants';
 
 // Lazy load pages for better performance
 const LazyRegisterPage = React.lazy(() => 
-  import('@/pages/RegisterPage').then(module => ({ default: module.RegisterPage }))
+  import('@/pages/RegisterPage').then(module => ({ 
+    default: module.RegisterPage 
+  }))
 );
 
 function App() {

@@ -152,7 +152,7 @@ export function LoginPage() {
 
         {/* Create Account */}
         <p className="text-center text-sm text-gray-400">
-          New here? <a href="#" className="text-orange-400 hover:text-orange-300 hover:underline transition-colors">Create Account</a>
+          New here? <a onClick={() => navigate(ROUTES.REGISTER)} className="text-orange-400 hover:text-orange-300 hover:underline transition-colors cursor-pointer">Create Account</a>
         </p>
       </div>
     </div>
