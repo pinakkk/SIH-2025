@@ -18,8 +18,6 @@ function App() {
   return (
     <Router>
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
-        <Navbar />
-        
         <React.Suspense
           fallback={
             <div className="min-h-screen flex items-center justify-center">
@@ -28,7 +26,7 @@ function App() {
           }
         >
           <Routes>
-            {/* Public routes */}
+            {/* Auth routes - no navbar */}
             <Route
               path={ROUTES.LOGIN}
               element={
@@ -50,12 +48,15 @@ function App() {
               }
             />
 
-            {/* Protected routes */}
+            {/* Protected routes - with navbar */}
             <Route
               path={ROUTES.DASHBOARD}
               element={
                 <ProtectedRoute>
-                  <DashboardPage />
+                  <>
+                    <Navbar />
+                    <DashboardPage />
+                  </>
                 </ProtectedRoute>
               }
             />

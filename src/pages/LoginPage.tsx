@@ -1,129 +1,159 @@
-import React, { useState } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Eye, EyeOff, Mail, Lock } from 'lucide-react';
-import { useAuth } from '@/hooks/use-auth';
-import { Button } from '@/components/ui/Button';
-import { Input } from '@/components/ui/Input';
-import { Card, CardHeader, CardContent } from '@/components/ui/Card';
-import { ROUTES } from '@/lib/constants';
+import { useState } from "react";
+import { Icon } from "@iconify/react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/hooks/use-auth";
+import { ROUTES } from "@/lib/constants";
 
 export function LoginPage() {
-  const [showPassword, setShowPassword] = useState(false);
-  const [email, setEmail] = useState('demo@example.com');
-  const [password, setPassword] = useState('password');
-  const [error, setError] = useState('');
-
-  const { login, isLoading } = useAuth();
   const navigate = useNavigate();
-  const location = useLocation();
-
-  const from = (location.state as any)?.from?.pathname || ROUTES.DASHBOARD;
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
-
+  const { login, isLoading } = useAuth();
+  
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  
+  const handleLogin = async () => {
+    if (!email || !password) {
+      setError("Please fill in all fields");
+      return;
+    }
+    
     try {
+      setError(null);
       await login({ email, password });
-      navigate(from, { replace: true });
+      navigate(ROUTES.DASHBOARD);
     } catch (err) {
-      setError('Invalid email or password');
+      setError(err instanceof Error ? err.message : "Login failed. Please check your credentials.");
+    }
+  };
+
+  // Handle Enter key press
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleLogin();
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-primary-50 via-secondary-50 to-accent-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-      <div className="w-full max-w-md">
-        <Card glass className="backdrop-blur-xl">
-          <CardHeader>
-            <div className="text-center">
-              <div className="w-16 h-16 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Lock className="h-8 w-8 text-white" />
-              </div>
-              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                Welcome back
-              </h1>
-              <p className="text-gray-600 dark:text-gray-400 mt-2">
-                Sign in to your account to continue
-              </p>
-            </div>
-          </CardHeader>
+    <div className="min-h-screen flex items-center justify-center bg-[#1b140e] bg-opacity-95 px-4">
+      <div className="w-full max-w-sm text-white backdrop-blur-sm p-8 rounded-3xl border border-gray-800/50">
+        {/* Heading */}
+        <h1 className="text-center text-xl font-semibold mb-6 text-orange-100">Login</h1>
 
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              {error && (
-                <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-3">
-                  <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
-                </div>
-              )}
+        {/* Logo + Title */}
+        <div className="flex flex-col items-center mb-8">
+          <img
+            src="/src/assets/icons/rescue-saathi.png"
+            alt="Rescue Saathi Logo"
+            className="w-24 h-24 mb-3"
+          />
+          <h2 className="text-2xl font-bold bg-gradient-to-r from-orange-400 to-yellow-300 text-transparent bg-clip-text">RESCUE SAATHI</h2>
+          <p className="text-sm text-gray-300 mt-2 text-center">
+            India's First SocialApp For Disaster Safety
+          </p>
+        </div>
 
-              <div className="relative">
-                <Input
-                  type="email"
-                  label="Email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email"
-                  required
-                  className="pl-10"
-                />
-                <Mail className="h-4 w-4 text-gray-400 absolute left-3 top-9" />
-              </div>
-
-              <div className="relative">
-                <Input
-                  type={showPassword ? 'text' : 'password'}
-                  label="Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Enter your password"
-                  required
-                  className="pl-10 pr-10"
-                />
-                <Lock className="h-4 w-4 text-gray-400 absolute left-3 top-9" />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-9 text-gray-400 hover:text-gray-600"
-                >
-                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                </button>
-              </div>
-
-              <Button
-                type="submit"
-                className="w-full"
-                loading={isLoading}
-              >
-                Sign In
-              </Button>
-
-              <div className="text-center">
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Don't have an account?{' '}
-                  <Link
-                    to={ROUTES.REGISTER}
-                    className="font-medium text-primary-600 hover:text-primary-500"
-                  >
-                    Sign up
-                  </Link>
-                </p>
-              </div>
-            </form>
-          </CardContent>
-        </Card>
-
-        <div className="mt-8 text-center">
-          <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
-            <p className="text-sm text-blue-600 dark:text-blue-400 mb-2">
-              <strong>Demo Credentials:</strong>
-            </p>
-            <p className="text-xs text-blue-500 dark:text-blue-300">
-              Email: demo@example.com<br />
-              Password: password
-            </p>
+        {/* Email Input */}
+        <div className="mb-6">
+          <label className="block text-sm text-gray-300 mb-2 font-medium pl-1">Email</label>
+          <div className="relative">
+            <Icon icon="mdi:email-outline" className="absolute top-3.5 left-3 text-gray-400 text-xl" />
+            <input
+              type="text"
+              placeholder="Email or Phone Number"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              onKeyPress={handleKeyPress}
+              className="w-full pl-10 pr-4 py-3.5 rounded-2xl border border-gray-700 bg-[#2b2420]/70 text-sm placeholder-gray-400 focus:outline-none focus:border-orange-500 transition-all"
+            />
           </div>
         </div>
+
+        {/* Password Input */}
+        <div className="mb-5">
+          <label className="block text-sm text-gray-300 mb-2 font-medium pl-1">Password</label>
+          <div className="relative">
+            <Icon icon="mdi:lock-outline" className="absolute top-3.5 left-3 text-gray-400 text-xl" />
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              onKeyPress={handleKeyPress}
+              className="w-full pl-10 pr-4 py-3.5 rounded-2xl border border-gray-700 bg-[#2b2420]/70 text-sm placeholder-gray-400 focus:outline-none focus:border-orange-500 transition-all"
+            />
+          </div>
+        </div>
+
+        {/* Remember me + Forgot Password */}
+        <div className="flex items-center justify-between text-xs mb-7">
+          <label className="flex items-center space-x-2">
+            <input type="checkbox" className="accent-orange-500 w-4 h-4" />
+            <span>Remember me</span>
+          </label>
+          <a href="#" className="text-orange-400 hover:underline hover:text-orange-300">
+            Forgot Password?
+          </a>
+        </div>
+
+        {/* Error message */}
+        {error && (
+          <div className="mb-5 p-3 bg-red-100 border border-red-400 text-red-700 rounded-xl text-xs">
+            {error}
+          </div>
+        )}
+
+        {/* Login Button */}
+        <button 
+          onClick={handleLogin}
+          disabled={isLoading || !email || !password}
+          className={`w-full py-4 rounded-2xl font-semibold bg-gradient-to-r from-orange-500 to-yellow-300 text-black flex items-center justify-center shadow-lg ${
+            isLoading || !email || !password 
+              ? "opacity-70 cursor-not-allowed" 
+              : "hover:opacity-90 hover:shadow-xl transform hover:-translate-y-0.5 transition-all"
+          }`}
+        >
+          {isLoading ? (
+            <>
+              <Icon icon="mdi:loading" className="animate-spin mr-2" />
+              Logging in...
+            </>
+          ) : (
+            "Login"
+          )}
+        </button>
+
+        {/* Divider */}
+        <div className="flex items-center my-6">
+          <div className="flex-1 h-px bg-gray-700"></div>
+          <span className="px-3 text-xs text-gray-400">Or, sign in with</span>
+          <div className="flex-1 h-px bg-gray-700"></div>
+        </div>
+
+        {/* Social Login */}
+        <div className="flex justify-center space-x-10 mb-6">
+          <button className="text-blue-500 text-3xl hover:scale-110 transition-transform">
+            <Icon icon="logos:facebook" />
+          </button>
+          <button className="text-green-500 text-3xl hover:scale-110 transition-transform">
+            <Icon icon="logos:google-icon" />
+          </button>
+          <button className="text-gray-200 text-3xl hover:scale-110 transition-transform">
+            <Icon icon="mdi:apple" />
+          </button>
+        </div>
+
+        {/* Guest */}
+        <p className="text-center text-sm mb-4">
+          <a href="#" className="text-orange-400 hover:text-orange-300 hover:underline transition-colors">
+            Continue as guest
+          </a>
+        </p>
+
+        {/* Create Account */}
+        <p className="text-center text-sm text-gray-400">
+          New here? <a href="#" className="text-orange-400 hover:text-orange-300 hover:underline transition-colors">Create Account</a>
+        </p>
       </div>
     </div>
   );
