@@ -5,6 +5,8 @@ import { Navbar } from '@/components/layout/Navbar';
 import { ProtectedRoute } from '@/routes/ProtectedRoute';
 import { LoginPage } from '@/pages/LoginPage';
 import { DashboardPage } from '@/pages/DashboardPage';
+import ForgotPasswordPage from '@/pages/ForgotPasswordPage';
+import VerificationPage from '@/pages/VerificationPage';
 import { ROUTES } from '@/lib/constants';
 
 // Lazy load pages for better performance
@@ -46,6 +48,26 @@ function App() {
                   <Navigate to={ROUTES.DASHBOARD} replace />
                 ) : (
                   <LazyRegisterPage />
+                )
+              }
+            />
+            <Route
+              path={ROUTES.FORGOT_PASSWORD}
+              element={
+                isAuthenticated ? (
+                  <Navigate to={ROUTES.DASHBOARD} replace />
+                ) : (
+                  <ForgotPasswordPage />
+                )
+              }
+            />
+            <Route
+              path={ROUTES.VERIFICATION}
+              element={
+                isAuthenticated ? (
+                  <Navigate to={ROUTES.DASHBOARD} replace />
+                ) : (
+                  <VerificationPage />
                 )
               }
             />

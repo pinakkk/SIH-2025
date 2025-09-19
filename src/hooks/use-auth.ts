@@ -132,11 +132,24 @@ export function useAuth() {
     }
   };
 
+  // Logout function
+  const logout = async () => {
+    setIsLoading(true);
+    try {
+      await auth.signOut();
+      localStorage.removeItem("authToken");
+      setUser(null);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return {
     login,
     loginWithGoogle,
     loginWithFacebook,
     loginWithApple,
+    logout,
     isLoading,
     isAuthenticated: !!user,
     user,

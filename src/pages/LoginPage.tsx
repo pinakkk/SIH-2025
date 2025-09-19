@@ -318,8 +318,12 @@ export function LoginPage() {
             <span>Remember me</span>
           </label>
           <a
+            onClick={(e) => {
+              e.preventDefault();
+              navigate(ROUTES.FORGOT_PASSWORD);
+            }}
             href="#"
-            className="text-[#F89103] hover:underline hover:text-[#FFC008]"
+            className="text-[#F89103] hover:underline hover:text-[#FFC008] cursor-pointer"
           >
             Forgot Password?
           </a>

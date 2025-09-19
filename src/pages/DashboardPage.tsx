@@ -3,6 +3,8 @@ import { BarChart3, Users, TrendingUp, DollarSign, Activity } from 'lucide-react
 import { useAuth } from '@/hooks/use-auth';
 import { Card, CardHeader, CardContent } from '@/components/ui/Card';
 import { formatDateTime } from '@/lib/utils';
+import { useNavigate } from 'react-router-dom';
+import { Icon } from '@iconify/react';
 
 const stats = [
   {
@@ -57,19 +59,38 @@ const recentActivities = [
 ];
 
 export function DashboardPage() {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate('/login');
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-            Welcome back, {user?.name}!
-          </h1>
-          <p className="text-gray-600 dark:text-gray-400 mt-2">
-            Here's what's happening with your business today.
-          </p>
+        <div className="mb-8 flex justify-between items-start">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+              Welcome back{user?.displayName ? `, ${user.displayName}` : ''}!
+            </h1>
+            <p className="text-gray-600 dark:text-gray-400 mt-2">
+              Here's what's happening with your business today.
+            </p>
+          </div>
+          <button
+            onClick={handleLogout}
+            className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors flex items-center gap-2"
+          >
+            <Icon icon="material-symbols:logout-rounded" className="text-xl" />
+            Logout
+          </button>
         </div>
 
         {/* Stats Grid */}

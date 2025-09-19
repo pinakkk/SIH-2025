@@ -14,6 +14,8 @@ export const ROUTES = {
   DASHBOARD: '/dashboard',
   PROFILE: '/profile',
   SETTINGS: '/settings',
+  FORGOT_PASSWORD: '/forgot-password',
+  VERIFICATION: '/verification',
 } as const;
 
 
