@@ -1,28 +1,21 @@
-import React from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
-import { useAuth } from '@/hooks/use-auth';
-import { Loader } from '@/components/shared/Loader';
-import { ROUTES } from '@/lib/constants';
+import { Navigate } from "react-router-dom";
+import { useAuth } from "@/hooks/use-auth";
+import { ROUTES } from "@/lib/constants";
 
-interface ProtectedRouteProps {
-  children: React.ReactNode;
-}
+export function ProtectedRoute({ children }: { children: JSX.Element }) {
+  const { isAuthenticated, initializing } = useAuth();
 
-export function ProtectedRoute({ children }: ProtectedRouteProps) {
-  const { isAuthenticated, isLoading } = useAuth();
-  const location = useLocation();
-
-  if (isLoading) {
+  if (initializing) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <Loader size="lg" text="Loading..." />
+        <div className="animate-spin h-8 w-8 border-b-2 border-primary-600 rounded-full" />
       </div>
     );
   }
 
   if (!isAuthenticated) {
-    return <Navigate to={ROUTES.LOGIN} state={{ from: location }} replace />;
+    return <Navigate to={ROUTES.LOGIN} replace />;
   }
 
-  return <>{children}</>;
+  return children;
 }

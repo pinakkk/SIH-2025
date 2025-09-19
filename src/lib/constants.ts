@@ -16,6 +16,7 @@ export const ROUTES = {
   SETTINGS: '/settings',
 } as const;
 
+
 export const HTTP_STATUS = {
   OK: 200,
   CREATED: 201,
