@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
 import { useNavigate } from "react-router-dom";
 import verifyCodeImage from "@/assets/icons/verify-code.png";
+import { ROUTES } from "@/lib/constants";
 
 export default function VerificationPage() {
   const navigate = useNavigate();
@@ -66,10 +67,9 @@ export default function VerificationPage() {
       // Here you would make an API call to verify the code
       await new Promise(resolve => setTimeout(resolve, 1500));
       
-      // On successful verification, navigate to reset password page or another appropriate page
-      // For demo purposes, we'll just log success
+      // On successful verification, navigate to new password page
       console.log('Code verified successfully:', code);
-      // navigate('/reset-password'); // Uncomment when you have this route
+      navigate(ROUTES.NEW_PASSWORD);
     } catch (error) {
       console.error("Failed to verify code", error);
     } finally {
@@ -86,7 +86,7 @@ export default function VerificationPage() {
             onClick={() => navigate(-1)}
             className="p-2.5 rounded-full bg-[#2b2420] hover:bg-[#3b3430] transition-colors mr-3"
           >
-            <Icon icon="material-symbols:arrow-back-rounded" className="text-2xl text-white translate-y-0.5" />
+            <Icon icon="mdi:arrow-left" className="text-2xl text-white" />
           </button>
           <h1 className="text-2xl font-semibold">Verification</h1>
           <div className="flex-1"></div>
@@ -98,7 +98,7 @@ export default function VerificationPage() {
           <img
             src={verifyCodeImage}
             alt="Verification Illustration"
-            className="w-150 mx-auto relative z-10"
+            className="w-66 mx-auto relative z-10"
           />
         </div>
 
@@ -168,7 +168,7 @@ export default function VerificationPage() {
           ) : (
             <>
               <span>Verify Code</span>
-              <Icon icon="material-symbols:arrow-forward-rounded" className="text-xl" />
+              <Icon icon="mdi:arrow-right" className="text-xl" />
             </>
           )}
         </button>

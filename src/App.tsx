@@ -7,6 +7,8 @@ import { LoginPage } from '@/pages/LoginPage';
 import { DashboardPage } from '@/pages/DashboardPage';
 import ForgotPasswordPage from '@/pages/ForgotPasswordPage';
 import VerificationPage from '@/pages/VerificationPage';
+import NewPasswordPage from '@/pages/NewPasswordPage';
+import SuccessPage from '@/pages/SuccessPage';
 import { ROUTES } from '@/lib/constants';
 
 // Lazy load pages for better performance
@@ -68,6 +70,26 @@ function App() {
                   <Navigate to={ROUTES.DASHBOARD} replace />
                 ) : (
                   <VerificationPage />
+                )
+              }
+            />
+            <Route
+              path={ROUTES.NEW_PASSWORD}
+              element={
+                isAuthenticated ? (
+                  <Navigate to={ROUTES.DASHBOARD} replace />
+                ) : (
+                  <NewPasswordPage />
+                )
+              }
+            />
+            <Route
+              path={ROUTES.SUCCESS}
+              element={
+                isAuthenticated ? (
+                  <Navigate to={ROUTES.DASHBOARD} replace />
+                ) : (
+                  <SuccessPage />
                 )
               }
             />

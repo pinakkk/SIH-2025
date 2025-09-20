@@ -16,6 +16,8 @@ export const ROUTES = {
   SETTINGS: '/settings',
   FORGOT_PASSWORD: '/forgot-password',
   VERIFICATION: '/verification',
+  NEW_PASSWORD: '/new-password',
+  SUCCESS: '/success',
 } as const;
 
 
