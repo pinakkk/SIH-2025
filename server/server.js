@@ -1,11 +1,11 @@
 import express from "express";
 import dotenv from "dotenv";
 
-// import connectDB from "./config/dbconnection.js";
-// import authRoutes from "./routes/Authroutes.js"; // renamed for clarity
+import connectDB from "./config/dbconnection.js";
+import authRoutes from "./routes/Authroutes.js"; // renamed for clarity
 import cookieParser from "cookie-parser";
-// import Reportroutes from "./routes/Reportroutes.js"
-// import Verifyreport from "./routes/verifyreport.js"
+import Reportroutes from "./routes/Reportroutes.js"
+import Verifyreport from "./routes/verifyreport.js"
 
 dotenv.config();
 
@@ -20,15 +20,15 @@ app.get("/", (req, res) => {
 });
 
 // API routes
-// app.use("/api", authRoutes);
-// app.use("/api",Reportroutes);
-// app.use("/api",Verifyreport)
+app.use("/api", authRoutes);
+app.use("/api",Reportroutes);
+app.use("/api",Verifyreport)
 
 
 // Start server only after DB connects
 const startServer = async () => {
   try {
-    // await connectDB(); // ensure DB is connected
+    await connectDB(); // ensure DB is connected
     app.listen(PORT, () => {
       console.log(`✅ Server running on: http://localhost:${PORT}`);
     });

@@ -3,15 +3,32 @@ import jwt from "jsonwebtoken";
 import User from "../modules/User.js";
 import transporter from "../config/nodemailer.js";
 import admin from "firebase-admin";
-import serviceAccount from "../config/firebaseServiceKey.json" assert { type: "json" };
+// import { createRequire } from "module";
+// const require = createRequire(import.meta.url);
 
 
-if (!admin.apps.length) {
-  admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-  });
+// const serviceAccount = require("../config/firebaseServiceKey.json");
+// if (!admin.apps.length) {
+//   admin.initializeApp({
+//     credential: admin.credential.cert(serviceAccount),
+//   });
+// }
+export const Alluser = async(req,res)=>{try {
+    const users = await User.find(); // fetch all users from DB
+
+    res.status(200).json({
+      success: true,
+      data: users,
+    });
+  } catch (error) {
+    console.error("Error fetching users:", error.message);
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch users",
+    });
+  }
+
 }
-
 export const googleLogin = async (req, res) => {
   try {
     const { idToken } = req.body;
