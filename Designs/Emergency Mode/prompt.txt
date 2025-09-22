@@ -1,0 +1,8 @@
+AI Prompt for remaining pages : 
+
+
+help me generate a matching UI that aligns with my existing design style, 
+incorporating modern glass effects and glassmorphism. Keep it modern, minimal, maintaining current UI Design styles with same color pallete.
+I also need the remaining pages to be designed for the emergency mode features of my project.
+I have attached the design style of my ui. Refer to these, and do make sure to match the vibe and design style of the UI,
+also make sure to keep it responsive.
