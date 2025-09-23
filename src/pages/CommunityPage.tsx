@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/Card";
 import { MapPin, Bell, ChevronDown } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { BottomNavigation } from "@/components/layout/BottomNavigation";
