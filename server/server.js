@@ -6,6 +6,7 @@ import authRoutes from "./routes/Authroutes.js"; // renamed for clarity
 import cookieParser from "cookie-parser";
 import Reportroutes from "./routes/Reportroutes.js"
 import Verifyreport from "./routes/verifyreport.js"
+import emergencyRoutes from "./routes/emergencyRoutes.js";
 
 
 dotenv.config();
@@ -25,6 +26,7 @@ app.use("/api", authRoutes);
 app.use("/api",Reportroutes);
 app.use("/api",Verifyreport);
 
+app.use("/api", emergencyRoutes);
 
 
 
