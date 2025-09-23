@@ -1,73 +1,116 @@
-import Report from "./models/Report.js";
-import Hotspot from "./models/Hotspot.js";
-import DBSCAN from "density-clustering";
+import Report from "../modules/Report.js";
+import Hotspot from "../modules/HotspotScema.js";
+import clustering from "density-clustering";
 
-// Parameters
-const DISTANCE_THRESHOLD = 1; // in km (DBSCAN uses "units", so we convert)
-const MIN_REPORTS = 3;
+const DISTANCE_THRESHOLD = 3; // km
+const MIN_REPORTS = 2; // ✅ now only 2 reports needed
 
-// Convert meters to radians for Haversine formula
-const kmToRadians = (km) => km / 6371;
+// Haversine distance in km
+const toRad = (deg) => (deg * Math.PI) / 180;
+const haversineDistance = (p1, p2) => {
+  const [lat1, lon1] = p1;
+  const [lat2, lon2] = p2;
+  const R = 6371;
+  const dLat = toRad(lat2 - lat1);
+  const dLon = toRad(lon2 - lon1);
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2;
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
+};
 
-async function generateHotspotsDBSCAN() {
-  const reports = await Report.find({});
-  if (!reports.length) return [];
+// Handle new report
+export const handleNewReport = async (report) => {
+  const reportCoord = report.location.coordinates.slice().reverse(); // [lat, lng]
+  const hotspots = await Hotspot.find({});
 
-  // Prepare data points: [lat, lng]
-  const points = reports.map(r => r.location.coordinates.slice().reverse()); // [lat, lng]
+  // 1️⃣ Try to assign report to an existing hotspot
+  for (let hotspot of hotspots) {
+    const centerCoord = hotspot.center.coordinates.slice().reverse();
+    const distance = haversineDistance(reportCoord, centerCoord);
 
-  // DBSCAN clustering
-  const dbscan = new DBSCAN();
-  // eps in radians, minPts = MIN_REPORTS
-  const clusters = dbscan.run(points, kmToRadians(DISTANCE_THRESHOLD), MIN_REPORTS, (p1, p2) => {
-    // Haversine distance between points
-    const [lat1, lon1] = p1;
-    const [lat2, lon2] = p2;
-    const toRad = deg => (deg * Math.PI) / 180;
+    if (distance <= DISTANCE_THRESHOLD) {
+      hotspot.reports.push(report._id);
 
-    const dLat = toRad(lat2 - lat1);
-    const dLon = toRad(lon2 - lon1);
-    const a =
-      Math.sin(dLat / 2) ** 2 +
-      Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2;
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return c; // distance in radians
-  });
+      // Recalculate centroid
+      const reportsInCluster = await Report.find({ _id: { $in: hotspot.reports } });
+      const newCentroid = reportsInCluster.reduce(
+        (acc, r) => {
+          acc[0] += r.location.coordinates[0]; // lng
+          acc[1] += r.location.coordinates[1]; // lat
+          return acc;
+        },
+        [0, 0]
+      ).map(c => c / reportsInCluster.length);
 
-  const hotspots = [];
+      hotspot.center.coordinates = newCentroid;
+      await hotspot.save();
 
-  for (let cluster of clusters) {
-    const clusterReports = cluster.map(idx => reports[idx]);
+      report.inCluster = true;
+      await report.save();
 
-    // Calculate centroid
-    const centroid = clusterReports.reduce(
-      (acc, r) => {
-        acc[0] += r.location.coordinates[0]; // lng
-        acc[1] += r.location.coordinates[1]; // lat
-        return acc;
-      },
-      [0, 0]
-    ).map(coord => coord / clusterReports.length);
-
-    // Calculate factors
-    const verifiedCount = clusterReports.filter(r => r.verified).length;
-
-    const hotspot = new Hotspot({
-      center: { type: "Point", coordinates: centroid },
-      reports: clusterReports.map(r => r._id),
-      score: verifiedCount, // simple example
-      factors: {
-        reportCount: clusterReports.length,
-        verifiedCount,
-        recentFactor: 0,     // can calculate by timestamps
-        hazardTypeFactor: 0, // can calculate based on hazard type
-      },
-    });
-
-    await hotspot.save();
-    hotspots.push(hotspot);
+      console.log("✅ Report added to existing hotspot");
+      return hotspot;
+    }
   }
 
-  console.log(`${hotspots.length} hotspots generated via DBSCAN.`);
-  return hotspots;
-}
+  // 2️⃣ If not assigned, leave as pending
+  report.inCluster = false;
+  await report.save();
+  console.log("⚠️ Report not in any hotspot yet");
+
+  // 3️⃣ Try forming new hotspots from pending reports
+  const pendingReports = await Report.find({ inCluster: false });
+  if (pendingReports.length >= MIN_REPORTS) {
+    const points = pendingReports.map(r => r.location.coordinates.slice().reverse());
+    const dbscan = new clustering.DBSCAN();
+    const clusters = dbscan.run(
+      points,
+      DISTANCE_THRESHOLD / 6371, // radius in radians
+      MIN_REPORTS,
+      (p1, p2) => haversineDistance(p1, p2) / 6371
+    );
+
+    for (let cluster of clusters) {
+      const clusterReports = cluster.map(idx => pendingReports[idx]);
+
+      // Centroid
+      const centroid = clusterReports.reduce(
+        (acc, r) => {
+          acc[0] += r.location.coordinates[0];
+          acc[1] += r.location.coordinates[1];
+          return acc;
+        },
+        [0, 0]
+      ).map(c => c / clusterReports.length);
+
+      const verifiedCount = clusterReports.filter(r => r.verified).length;
+
+      const hotspot = new Hotspot({
+        center: { type: "Point", coordinates: centroid },
+        reports: clusterReports.map(r => r._id),
+        score: verifiedCount,
+        factors: {
+          reportCount: clusterReports.length,
+          verifiedCount,
+          recentFactor: 0,
+          hazardTypeFactor: 0,
+        },
+      });
+
+      await hotspot.save();
+
+      // Mark reports as clustered
+      await Report.updateMany(
+        { _id: { $in: clusterReports.map(r => r._id) } },
+        { $set: { inCluster: true } }
+      );
+
+      console.log("🔥 New hotspot created with", clusterReports.length, "reports");
+      return hotspot;
+    }
+  }
+
+  return null; // nothing formed yet
+};

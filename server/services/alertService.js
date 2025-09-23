@@ -7,7 +7,7 @@ export const generateAlertsForReport = async (reportId) => {
     // 1. Get the verified report
     const report = await Report.findById(reportId);
     console.log("Report:", report);
-    if (!report || !report.verified) return;
+  
 
     // 2. Find users within 5 km (5000 meters)
     const users = await User.find({});

@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const { Schema } = mongoose;
 
 const reportSchema = new Schema(
-  {
+  {inCluster: { type: Boolean, default: false },
     user: { type: Schema.Types.ObjectId, ref: "User", required: true },
 
     hazardType: { type: String, required: true },

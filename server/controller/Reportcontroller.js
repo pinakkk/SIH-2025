@@ -1,5 +1,7 @@
 import Report from "../modules/Report.js"
 import Comment from "../modules/Comment.js"
+import {generateAlertsForReport} from "../services/alertService.js"
+import {handleNewReport} from "../services/Hotspot.js"
 export const Postcreated = async (req, res) => {
   try {
     console.log("hel");
@@ -24,10 +26,14 @@ export const Postcreated = async (req, res) => {
     });
 
     await report.save();
+        await generateAlertsForReport(report._id)
+        await handleNewReport(report)
+    
+    
 
     res.status(201).json({
       success: true,
-      message: "Report created successfully",
+      message: "Report created successfully and alert send ",
       report,
     });
   } catch (error) {

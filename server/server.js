@@ -7,6 +7,7 @@ import cookieParser from "cookie-parser";
 import Reportroutes from "./routes/Reportroutes.js"
 import Verifyreport from "./routes/verifyreport.js"
 
+
 dotenv.config();
 
 const app = express();
@@ -22,7 +23,9 @@ app.get("/", (req, res) => {
 // API routes
 app.use("/api", authRoutes);
 app.use("/api",Reportroutes);
-app.use("/api",Verifyreport)
+app.use("/api",Verifyreport);
+
+
 
 
 // Start server only after DB connects

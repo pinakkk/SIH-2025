@@ -1,18 +1,19 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const { Schema } = mongoose;
 
 const hotspotSchema = new Schema(
   {
+    
     center: {
-      type: { type: String, enum: ["Point"], default: "Point" },
+      type: { type: String, enum: ['Point'], default: 'Point' },
       coordinates: { type: [Number], required: true }, // [lng, lat]
     },
 
     reports: [
       {
         type: Schema.Types.ObjectId,
-        ref: "Report", // reference to the hazard reports in this hotspot
+        ref: 'Report', // reference to the hazard reports in this hotspot
       },
     ],
 
@@ -29,8 +30,8 @@ const hotspotSchema = new Schema(
 );
 
 // Geo index for location queries
-hotspotSchema.index({ center: "2dsphere" });
+hotspotSchema.index({ center: '2dsphere' });
 
-const Hotspot = mongoose.model("Hotspot", hotspotSchema);
+const Hotspot = mongoose.model('Hotspot', hotspotSchema);
 
 export default Hotspot;
