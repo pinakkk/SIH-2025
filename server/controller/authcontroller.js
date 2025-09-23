@@ -13,22 +13,7 @@ import admin from "firebase-admin";
 //     credential: admin.credential.cert(serviceAccount),
 //   });
 // }
-export const Alluser = async(req,res)=>{try {
-    const users = await User.find(); // fetch all users from DB
 
-    res.status(200).json({
-      success: true,
-      data: users,
-    });
-  } catch (error) {
-    console.error("Error fetching users:", error.message);
-    res.status(500).json({
-      success: false,
-      message: "Failed to fetch users",
-    });
-  }
-
-}
 export const googleLogin = async (req, res) => {
   try {
     const { idToken } = req.body;
@@ -298,3 +283,20 @@ export const isAuthenticated = async (req, res) => {
     return res.status(500).json({ success: false, message: error.message });
   }
 };
+
+export const Alluser = async(req,res)=>{try {
+    const users = await User.find(); // fetch all users from DB
+
+    res.status(200).json({
+      success: true,
+      data: users,
+    });
+  } catch (error) {
+    console.error("Error fetching users:", error.message);
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch users",
+    });
+  }
+
+}

@@ -6,8 +6,7 @@ import authRoutes from "./routes/Authroutes.js"; // renamed for clarity
 import cookieParser from "cookie-parser";
 import Reportroutes from "./routes/Reportroutes.js"
 import Verifyreport from "./routes/verifyreport.js"
-import emergencyRoutes from "./routes/emergencyRoutes.js";
-
+import userRoute from "./routes/userRoutes.js"
 dotenv.config();
 
 const app = express();
@@ -24,7 +23,7 @@ app.get("/", (req, res) => {
 app.use("/api", authRoutes);
 app.use("/api",Reportroutes);
 app.use("/api",Verifyreport);
-app.use("/api", emergencyRoutes);
+app.use("/api",userRoute);
 
 
 // Start server only after DB connects

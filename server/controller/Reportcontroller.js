@@ -1,9 +1,13 @@
-import Report from "../modules/Report.js"
-import Comment from "../modules/Comment.js"
+import Report from "../modules/Report.js";
+import Comment from "../modules/Comment.js";
+import User from "../modules/User.js";
+import { generateAlertsForReport } from "../services/alertService.js";
+import { handleNewReport } from "../services/Hotspot.js";
+
 export const Postcreated = async (req, res) => {
+  console.log(req.userId);
+
   try {
-    console.log("hel");
-    
     const { hazardType, caption, lng, lat } = req.body;
 
     // ✅ user comes from JWT middleware
@@ -12,10 +16,11 @@ export const Postcreated = async (req, res) => {
     // extract uploaded photo URLs from Cloudinary
     const photoUrls = req.files.map((file) => file.path);
 
+    // 1️⃣ Create report
     const report = new Report({
       user: userId,
       hazardType,
-      caption, // ✅ added
+      caption,
       photos: photoUrls,
       location: {
         type: "Point",
@@ -25,9 +30,20 @@ export const Postcreated = async (req, res) => {
 
     await report.save();
 
+    // 2️⃣ Add report to user's posts array
+    await User.findByIdAndUpdate(
+      userId,
+      { $push: { posts: report._id } },
+      { new: true } // optional: return the updated user if needed
+    );
+
+    // 3️⃣ Trigger alerts & hotspot handling
+    await generateAlertsForReport(report._id);
+    await handleNewReport(report);
+
     res.status(201).json({
       success: true,
-      message: "Report created successfully",
+      message: "Report created successfully, added to user posts, and alerts sent",
       report,
     });
   } catch (error) {
@@ -35,6 +51,7 @@ export const Postcreated = async (req, res) => {
     res.status(500).json({ success: false, message: "Something went wrong" });
   }
 };
+
 
 export const commentSend = async (req, res) => {
   try {
