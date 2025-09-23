@@ -1,190 +1,484 @@
-import React from 'react';
-import { BarChart3, Users, TrendingUp, DollarSign, Activity } from 'lucide-react';
-import { useAuth } from '@/hooks/use-auth';
-import { Card, CardHeader, CardContent } from '@/components/ui/Card';
-import { formatDateTime } from '@/lib/utils';
-import { useNavigate } from 'react-router-dom';
-import { Icon } from '@iconify/react';
+// import React, { useEffect, useState } from "react";
+// import { motion } from "framer-motion";
+// import { Card, CardContent } from "@/components/ui/card";
+// import {
+//   MapPin,
+//   Phone,
+//   Info,
+//   Radio,
+//   MoreHorizontal,
+//   Bell,
+//   ChevronDown,
+// } from "lucide-react";
 
-const stats = [
-  {
-    name: 'Total Revenue',
-    value: '$45,231.89',
-    change: '+20.1%',
-    changeType: 'positive',
-    icon: DollarSign,
-  },
-  {
-    name: 'Active Users',
-    value: '2,350',
-    change: '+180.1%',
-    changeType: 'positive',
-    icon: Users,
-  },
-  {
-    name: 'Sales',
-    value: '+12,234',
-    change: '+19%',
-    changeType: 'positive',
-    icon: TrendingUp,
-  },
-  {
-    name: 'Active Now',
-    value: '573',
-    change: '+201',
-    changeType: 'positive',
-    icon: Activity,
-  },
-];
+// import { Icon } from "@iconify/react";
+// import { useAuth } from "@/hooks/use-auth";
+// import { BottomNavigation } from "@/components/layout/BottomNavigation"; // ✅ use the new navbar
 
-const recentActivities = [
-  {
-    id: '1',
-    title: 'New user registration',
-    description: 'John Smith created an account',
-    time: new Date(Date.now() - 5 * 60 * 1000), // 5 minutes ago
-  },
-  {
-    id: '2',
-    title: 'Payment received',
-    description: 'Received $299.00 from Sarah Johnson',
-    time: new Date(Date.now() - 15 * 60 * 1000), // 15 minutes ago
-  },
-  {
-    id: '3',
-    title: 'Report generated',
-    description: 'Monthly analytics report is ready',
-    time: new Date(Date.now() - 30 * 60 * 1000), // 30 minutes ago
-  },
-];
+// const SkeletonBlock = ({ className = "" }: { className?: string }) => (
+//   <div className={`bg-[#2a2a2a] animate-pulse rounded ${className}`} />
+// );
+
+// export function DashboardPage() {
+//   const [filter, setFilter] = useState("All");
+//   const [loading, setLoading] = useState(true);
+//   const [scrolled, setScrolled] = useState(false);
+//   const { user } = useAuth();
+
+//   useEffect(() => {
+//     const t = setTimeout(() => setLoading(false), 650);
+//     return () => clearTimeout(t);
+//   }, []);
+
+//   useEffect(() => {
+//     function onScroll() {
+//       setScrolled(window.scrollY > 8);
+//     }
+//     window.addEventListener("scroll", onScroll, { passive: true });
+//     return () => window.removeEventListener("scroll", onScroll);
+//   }, []);
+
+//   const filterOptions = ["All", "Marked Safe", "Need Help"];
+
+//   return (
+//     <div className="bg-[#1f1816] min-h-screen text-white pb-28 font-sans">
+//       {/* Sticky Header */}
+//       <motion.header
+//         animate={{
+//           boxShadow: scrolled
+//             ? "0 8px 20px rgba(0,0,0,0.6)"
+//             : "0 2px 6px rgba(0,0,0,0.25)",
+//           backdropFilter: "saturate(120%) blur(6px)",
+//         }}
+//         transition={{ duration: 0.2 }}
+//         className="sticky top-0 z-40 bg-[#2b2320]/55 border-b border-[#3a2f2d] px-5 py-4 flex justify-between items-center"
+//       >
+//         <div className="flex items-center gap-3">
+//           <img
+//             src="/src/assets/icons/rescue-saathi.png"
+//             alt="logo"
+//             className="w-10 h-10 rounded-md"
+//           />
+//           <div>
+//             <h1 className="font-bold text-lg">Rescue Saathi</h1>
+//             <p className="text-sm text-[#d8cdc6] flex items-center">
+//               <MapPin size={14} className="mr-1" /> Kolkata, West Bengal
+//             </p>
+//           </div>
+//         </div>
+//         <div className="flex items-center gap-3">
+//           <button className="relative w-10 h-10 rounded-full bg-[#372a28] flex items-center justify-center hover:scale-105 transition-transform">
+//             <Bell size={18} />
+//             <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full ring-1 ring-[#372a28]" />
+//           </button>
+//           <img
+//             src={user?.photoURL || "https://i.pravatar.cc/40"}
+//             alt="profile"
+//             width={44}
+//             height={44}
+//             className="rounded-full object-cover border-2 border-[#2f2523]"
+//           />
+//         </div>
+//       </motion.header>
+
+//       <div className="px-5">
+//         {/* High Wave Alert Box */}
+//         <div className="mt-5">
+//           {loading ? (
+//             <div className="mb-6">
+//               <SkeletonBlock className="h-14 w-full rounded-xl mb-3" />
+//               <SkeletonBlock className="h-48 w-full rounded-2xl" />
+//             </div>
+//           ) : (
+//             <Card className="bg-gradient-to-b from-[#2a1e1c] to-[#1e1614] border border-[#3a2f2d] rounded-2xl mb-6 shadow-lg">
+//               <CardContent className="p-4">
+//                 <div className="flex items-start mb-3">
+//                   <div className="p-2 bg-red-500/15 rounded-full mr-3 flex items-center justify-center">
+//                     <Icon icon="mdi:waves" className="text-red-400 text-2xl" />
+//                   </div>
+//                   <div className="flex-1">
+//                     <h2 className="font-semibold text-white">
+//                       High Wave Alert - Odisha Coast
+//                     </h2>
+//                     <p className="text-xs text-[#bfb2ac] mt-1">
+//                       Issued: 17 Sept 2025, 01:30 UTC
+//                     </p>
+//                   </div>
+//                   <div className="ml-3 flex items-center gap-2">
+//                     <span className="w-2.5 h-2.5 bg-red-500 rounded-full animate-pulse" />
+//                     <span className="text-xs text-red-300">Live</span>
+//                   </div>
+//                 </div>
+//                 <div className="w-full h-40 bg-[#131212] rounded-xl overflow-hidden border border-[#3a2f2d]">
+//                   <img
+//                     src="https://i.imgur.com/AYp2z2A.png"
+//                     alt="Alert location map"
+//                     className="w-full h-full object-cover"
+//                   />
+//                 </div>
+//               </CardContent>
+//             </Card>
+//           )}
+//         </div>
+
+//         {/* Quick Actions */}
+//         <div className="grid grid-cols-4 gap-3 mb-6 text-center">
+//           {[
+//             { icon: <Phone size={22} />, label: "Emergency\nHotlines" },
+//             { icon: <Info size={22} />, label: "View\nDetails" },
+//             { icon: <Radio size={22} />, label: "Report\nUpdates" },
+//             { icon: <MoreHorizontal size={22} />, label: "See\nMore" },
+//           ].map((it, idx) => (
+//             <div key={idx} className="flex flex-col items-center gap-1">
+//               <div className="p-3 rounded-full bg-[#2a2a2a] w-14 h-14 flex items-center justify-center hover:scale-105 transition-transform">
+//                 {it.icon}
+//               </div>
+//               <p className="text-xs leading-tight whitespace-pre-line text-[#d8cdc6]">
+//                 {it.label}
+//               </p>
+//             </div>
+//           ))}
+//         </div>
+
+//         {/* Community Updates */}
+//         <div className="mb-4">
+//           <h2 className="font-semibold text-lg mb-2">Community Updates</h2>
+//           <div className="flex items-center justify-between">
+//             <div className="flex gap-2">
+//               {filterOptions.map((f) => (
+//                 <button
+//                   key={f}
+//                   onClick={() => setFilter(f)}
+//                   className={`px-4 py-1 text-sm rounded-full h-auto transition-all focus:outline-none ${
+//                     filter === f
+//                       ? "bg-white text-black font-semibold shadow-[0_6px_18px_rgba(0,0,0,0.45)]"
+//                       : "bg-[#3a2f2d] text-[#e9e2dd] hover:bg-[#4a403d] hover:text-white"
+//                   }`}
+//                 >
+//                   {f}
+//                 </button>
+//               ))}
+//             </div>
+//             <button className="w-9 h-9 rounded-full bg-[#2a2a2a] flex items-center justify-center hover:bg-[#3b3230] transition-colors">
+//               <ChevronDown size={16} />
+//             </button>
+//           </div>
+//         </div>
+
+//         {!loading && (
+//           <Card className="bg-[#2a2a2a] border-0 rounded-2xl mb-4 shadow-lg">
+//             <CardContent className="p-4">
+//               <div className="flex justify-between items-center mb-3">
+//                 <div className="flex items-center gap-3">
+//                   <img
+//                     src="https://i.pravatar.cc/40?img=5"
+//                     alt="profile"
+//                     width={40}
+//                     height={40}
+//                     className="rounded-full"
+//                   />
+//                   <div>
+//                     <p className="font-medium">Pinak Kundu</p>
+//                     <p className="text-xs text-green-400 flex items-center gap-1.5">
+//                       <span className="w-2 h-2 bg-green-400 rounded-full"></span>
+//                       Marked as safe
+//                     </p>
+//                   </div>
+//                 </div>
+//                 <span className="text-xs text-gray-400">3:05 AM</span>
+//               </div>
+//               <div className="w-full h-36 bg-gray-700 rounded-xl overflow-hidden mb-3 border border-[#3a2f2d]">
+//                 <img
+//                   src="https://i.imgur.com/AYp2z2A.png"
+//                   alt="Map Preview"
+//                   className="w-full h-full object-cover"
+//                 />
+//               </div>
+//             </CardContent>
+//           </Card>
+//         )}
+//       </div>
+
+//       {/* ✅ Bottom Navigation */}
+//       <BottomNavigation />
+//     </div>
+//   );
+// }
+
+// export default DashboardPage;
+
+
+import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  MapPin,
+  Phone,
+  Info,
+  Radio,
+  MoreHorizontal,
+  Bell,
+  ChevronDown,
+} from "lucide-react";
+
+import { Icon } from "@iconify/react";
+import { useAuth } from "@/hooks/use-auth";
+import { BottomNavigation } from "@/components/layout/BottomNavigation";
+
+// ✅ Skeleton with rounded-xl by default
+const SkeletonBlock = ({ className = "" }: { className?: string }) => (
+  <div
+    className={`bg-[#2a2a2a] animate-pulse rounded-xl ${className}`}
+  />
+);
 
 export function DashboardPage() {
-  const { user, logout } = useAuth();
-  const navigate = useNavigate();
+  const [filter, setFilter] = useState("All");
+  const [loading, setLoading] = useState(true);
+  const [scrolled, setScrolled] = useState(false);
+  const { user } = useAuth();
 
-  const handleLogout = async () => {
-    try {
-      await logout();
-      navigate('/login');
-    } catch (error) {
-      console.error('Logout failed:', error);
+  useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 900);
+    return () => clearTimeout(t);
+  }, []);
+
+  useEffect(() => {
+    function onScroll() {
+      setScrolled(window.scrollY > 8);
     }
-  };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const filterOptions = ["All", "Marked Safe", "Need Help"];
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header */}
-        <div className="mb-8 flex justify-between items-start">
+    <div className="bg-[#1f1816] min-h-screen text-white pb-28 font-sans">
+      {/* Sticky Header */}
+      <motion.header
+        animate={{
+          boxShadow: scrolled
+            ? "0 8px 20px rgba(0,0,0,0.6)"
+            : "0 2px 6px rgba(0,0,0,0.25)",
+          backdropFilter: "saturate(120%) blur(6px)",
+        }}
+        transition={{ duration: 0.2 }}
+        className="sticky top-0 z-40 bg-[#2b2320]/55 border-b border-[#3a2f2d] px-5 py-4 flex justify-between items-center"
+      >
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          className="flex items-center gap-3"
+        >
+          <img
+            src="/src/assets/icons/rescue-saathi.png"
+            alt="logo"
+            className="w-10 h-10 rounded-md"
+          />
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-              Welcome back{user?.displayName ? `, ${user.displayName}` : ''}!
-            </h1>
-            <p className="text-gray-600 dark:text-gray-400 mt-2">
-              Here's what's happening with your business today.
+            <h1 className="font-bold text-lg">Rescue Saathi</h1>
+            <p className="text-sm text-[#d8cdc6] flex items-center">
+              <MapPin size={14} className="mr-1" /> Kolkata, West Bengal
             </p>
           </div>
-          <button
-            onClick={handleLogout}
-            className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors flex items-center gap-2"
-          >
-            <Icon icon="material-symbols:logout-rounded" className="text-xl" />
-            Logout
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.1 }}
+          className="flex items-center gap-3"
+        >
+          <button className="relative w-10 h-10 rounded-full bg-[#372a28] flex items-center justify-center hover:scale-105 transition-transform">
+            <Bell size={18} />
+            <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full ring-1 ring-[#372a28]" />
           </button>
-        </div>
+          <img
+            src={user?.photoURL || "https://i.pravatar.cc/40"}
+            alt="profile"
+            width={44}
+            height={44}
+            className="rounded-full object-cover border-2 border-[#2f2523]"
+          />
+        </motion.div>
+      </motion.header>
 
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          {stats.map((stat) => {
-            const Icon = stat.icon;
-            return (
-              <Card key={stat.name} glass hover className="group">
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">
-                        {stat.name}
-                      </p>
-                      <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                        {stat.value}
-                      </p>
-                      <p className="text-sm text-green-600 dark:text-green-400 flex items-center mt-1">
-                        <TrendingUp className="h-3 w-3 mr-1" />
-                        {stat.change}
+      <div className="px-5">
+        {/* High Wave Alert Box */}
+        <div className="mt-5">
+          {loading ? (
+            <div className="mb-6">
+              <SkeletonBlock className="h-14 w-full mb-3" />
+              <SkeletonBlock className="h-48 w-full" />
+            </div>
+          ) : (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4 }}
+            >
+              <Card className="bg-gradient-to-b from-[#2a1e1c] to-[#1e1614] border border-[#3a2f2d] rounded-2xl mb-6 shadow-lg">
+                <CardContent className="p-4">
+                  <div className="flex items-start mb-3">
+                    <div className="p-2 bg-red-500/15 rounded-full mr-3 flex items-center justify-center">
+                      <Icon icon="mdi:waves" className="text-red-400 text-2xl" />
+                    </div>
+                    <div className="flex-1">
+                      <h2 className="font-semibold text-white">
+                        High Wave Alert - Odisha Coast
+                      </h2>
+                      <p className="text-xs text-[#bfb2ac] mt-1">
+                        Issued: 17 Sept 2025, 01:30 UTC
                       </p>
                     </div>
-                    <div className="p-3 bg-primary-100 dark:bg-primary-900/20 rounded-lg group-hover:scale-110 transition-transform">
-                      <Icon className="h-6 w-6 text-primary-600 dark:text-primary-400" />
+                    <div className="ml-3 flex items-center gap-2">
+                      <span className="w-2.5 h-2.5 bg-red-500 rounded-full animate-pulse" />
+                      <span className="text-xs text-red-300">Live</span>
                     </div>
+                  </div>
+                  <div className="w-full h-40 bg-[#131212] rounded-xl overflow-hidden border border-[#3a2f2d]">
+                    <img
+                      src="https://i.imgur.com/AYp2z2A.png"
+                      alt="Alert location map"
+                      className="w-full h-full object-cover"
+                    />
                   </div>
                 </CardContent>
               </Card>
-            );
-          })}
+            </motion.div>
+          )}
         </div>
 
-        {/* Dashboard Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Chart Placeholder */}
-          <div className="lg:col-span-2">
-            <Card glass>
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-                    Analytics Overview
-                  </h2>
-                  <BarChart3 className="h-5 w-5 text-gray-400" />
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="h-80 bg-gradient-to-br from-primary-50 to-secondary-50 dark:from-gray-800 dark:to-gray-700 rounded-lg flex items-center justify-center">
-                  <div className="text-center">
-                    <BarChart3 className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-                    <p className="text-gray-600 dark:text-gray-400">
-                      Chart component would go here
-                    </p>
-                    <p className="text-sm text-gray-500 dark:text-gray-500 mt-2">
-                      Integrate with your favorite charting library
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+        {/* Quick Actions */}
+        {loading ? (
+          <div className="grid grid-cols-4 gap-3 mb-6">
+            {Array(4)
+              .fill(0)
+              .map((_, i) => (
+                <SkeletonBlock
+                  key={i}
+                  className="h-14 w-14 mx-auto rounded-full"
+                />
+              ))}
           </div>
+        ) : (
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={{
+              hidden: { opacity: 0, y: 20 },
+              visible: {
+                opacity: 1,
+                y: 0,
+                transition: { staggerChildren: 0.1 },
+              },
+            }}
+            className="grid grid-cols-4 gap-3 mb-6 text-center"
+          >
+            {[
+              { icon: <Phone size={22} />, label: "Emergency\nHotlines" },
+              { icon: <Info size={22} />, label: "View\nDetails" },
+              { icon: <Radio size={22} />, label: "Report\nUpdates" },
+              { icon: <MoreHorizontal size={22} />, label: "See\nMore" },
+            ].map((it, idx) => (
+              <motion.div
+                key={idx}
+                variants={{
+                  hidden: { opacity: 0, y: 20 },
+                  visible: { opacity: 1, y: 0 },
+                }}
+                className="flex flex-col items-center gap-1"
+              >
+                <div className="p-3 rounded-full bg-[#2a2a2a] w-14 h-14 flex items-center justify-center hover:scale-105 transition-transform">
+                  {it.icon}
+                </div>
+                <p className="text-xs leading-tight whitespace-pre-line text-[#d8cdc6]">
+                  {it.label}
+                </p>
+              </motion.div>
+            ))}
+          </motion.div>
+        )}
 
-          {/* Recent Activity */}
-          <Card glass>
-            <CardHeader>
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-                Recent Activity
-              </h2>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {recentActivities.map((activity) => (
-                  <div
-                    key={activity.id}
-                    className="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+        {/* Community Updates */}
+        <div className="mb-4">
+          <h2 className="font-semibold text-lg mb-2">Community Updates</h2>
+          {loading ? (
+            <SkeletonBlock className="h-10 w-2/3 mb-4" />
+          ) : (
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.35 }}
+              className="flex items-center justify-between"
+            >
+              <div className="flex gap-2">
+                {filterOptions.map((f) => (
+                  <button
+                    key={f}
+                    onClick={() => setFilter(f)}
+                    className={`px-4 py-1 text-sm rounded-full h-auto transition-all focus:outline-none ${
+                      filter === f
+                        ? "bg-white text-black font-semibold shadow-[0_6px_18px_rgba(0,0,0,0.45)]"
+                        : "bg-[#3a2f2d] text-[#e9e2dd] hover:bg-[#4a403d] hover:text-white"
+                    }`}
                   >
-                    <div className="w-2 h-2 bg-primary-500 rounded-full mt-2 flex-shrink-0" />
-                    <div className="flex-1 min-w-0">
-                      <h3 className="text-sm font-medium text-gray-900 dark:text-white">
-                        {activity.title}
-                      </h3>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">
-                        {activity.description}
-                      </p>
-                      <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
-                        {formatDateTime(activity.time)}
+                    {f}
+                  </button>
+                ))}
+              </div>
+              <button className="w-9 h-9 rounded-full bg-[#2a2a2a] flex items-center justify-center hover:bg-[#3b3230] transition-colors">
+                <ChevronDown size={16} />
+              </button>
+            </motion.div>
+          )}
+        </div>
+
+        {!loading && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.15 }}
+          >
+            <Card className="bg-[#2a2a2a] border-0 rounded-2xl mb-4 shadow-lg">
+              <CardContent className="p-4">
+                <div className="flex justify-between items-center mb-3">
+                  <div className="flex items-center gap-3">
+                    <img
+                      src="https://i.pravatar.cc/40?img=5"
+                      alt="profile"
+                      width={40}
+                      height={40}
+                      className="rounded-full"
+                    />
+                    <div>
+                      <p className="font-medium">Pinak Kundu</p>
+                      <p className="text-xs text-green-400 flex items-center gap-1.5">
+                        <span className="w-2 h-2 bg-green-400 rounded-full"></span>
+                        Marked as safe
                       </p>
                     </div>
                   </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+                  <span className="text-xs text-gray-400">3:05 AM</span>
+                </div>
+                <div className="w-full h-36 bg-gray-700 rounded-xl overflow-hidden mb-3 border border-[#3a2f2d]">
+                  <img
+                    src="https://i.imgur.com/AYp2z2A.png"
+                    alt="Map Preview"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+        )}
       </div>
+
+      {/* ✅ Bottom Navigation */}
+      <BottomNavigation />
     </div>
   );
 }
+
+export default DashboardPage;
