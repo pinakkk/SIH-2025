@@ -4,11 +4,18 @@ import { useAuth } from '@/hooks/use-auth';
 import { Navbar } from '@/components/layout/Navbar';
 import { ProtectedRoute } from '@/routes/ProtectedRoute';
 import { LoginPage } from '@/pages/LoginPage';
+import { ContactUsPage } from '@/pages/ContactUsPage';
+import FeedbackPage from '@/pages/FeedbackPage';
 import { DashboardPage } from '@/pages/DashboardPage';
 import ForgotPasswordPage from '@/pages/ForgotPasswordPage';
 import VerificationPage from '@/pages/VerificationPage';
 import NewPasswordPage from '@/pages/NewPasswordPage';
 import SuccessPage from '@/pages/SuccessPage';
+import EmergencyMode from '@/pages/EmergencyMode';
+import EmergencyCallingPage from '@/pages/EmergencyCallingPage';
+import EmergencyContactsPage from '@/pages/EmergencyContactsPage';
+import LiveLocationPage from '@/pages/LiveLocationPage';
+import EmergencySettingsPage from '@/pages/EmergencySettingsPage';
 import { ROUTES } from '@/lib/constants';
 
 // Lazy load pages for better performance
@@ -93,6 +100,14 @@ function App() {
                 )
               }
             />
+            <Route
+              path={ROUTES.CONTACT_US}
+              element={<ContactUsPage />}
+            />
+            <Route
+              path={ROUTES.FEEDBACK}
+              element={<FeedbackPage />}
+            />
 
             {/* Protected routes - with navbar */}
             <Route
@@ -103,6 +118,48 @@ function App() {
                     <Navbar />
                     <DashboardPage />
                   </>
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Emergency Mode Routes - No navbar for full screen experience */}
+            <Route
+              path={ROUTES.EMERGENCY_MODE}
+              element={
+                <ProtectedRoute>
+                  <EmergencyMode />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path={ROUTES.EMERGENCY_CALLING}
+              element={
+                <ProtectedRoute>
+                  <EmergencyCallingPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path={ROUTES.EMERGENCY_CONTACTS}
+              element={
+                <ProtectedRoute>
+                  <EmergencyContactsPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path={ROUTES.LIVE_LOCATION}
+              element={
+                <ProtectedRoute>
+                  <LiveLocationPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path={ROUTES.EMERGENCY_SETTINGS}
+              element={
+                <ProtectedRoute>
+                  <EmergencySettingsPage />
                 </ProtectedRoute>
               }
             />

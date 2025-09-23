@@ -27,6 +27,8 @@
     "multer-storage-cloudinary": "^4.0.0",
     "nodemailer": "^7.0.6",
     "nodemon": "^3.1.10",
-    "svix": "^1.76.1"
+    "svix": "^1.76.1",
+    "twilio": "^5.9.0",
+    "uuid": "^11.1.0"
   }
 }

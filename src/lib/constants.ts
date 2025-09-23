@@ -18,6 +18,13 @@ export const ROUTES = {
   VERIFICATION: '/verification',
   NEW_PASSWORD: '/new-password',
   SUCCESS: '/success',
+  CONTACT_US: '/contact-us',
+  FEEDBACK: '/feedback',
+  EMERGENCY_MODE: '/emergency-mode',
+  EMERGENCY_CALLING: '/emergency-calling',
+  EMERGENCY_CONTACTS: '/emergency-contacts',
+  LIVE_LOCATION: '/live-location',
+  EMERGENCY_SETTINGS: '/emergency-settings',
 } as const;
 
 
