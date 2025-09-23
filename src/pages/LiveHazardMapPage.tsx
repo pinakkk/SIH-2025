@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/Card";
 import { Search, RefreshCw, ShieldCheck, MapPin } from "lucide-react";
 import { Icon } from "@iconify/react";
 import { BottomNavigation } from "@/components/layout/BottomNavigation";
