@@ -5,6 +5,7 @@ import { Search, RefreshCw, ShieldCheck, MapPin } from "lucide-react";
 import { Icon } from "@iconify/react";
 import { BottomNavigation } from "@/components/layout/BottomNavigation";
 import { useAuth } from "@/hooks/use-auth";
+import AppLogo from '../assets/icons/rescue-saathi.png'
 
 const alerts = [
   {
@@ -65,7 +66,7 @@ export function LiveHazardMapPage() {
           className="flex items-center gap-3"
         >
           <img
-            src="/src/assets/icons/rescue-saathi.png"
+            src={AppLogo}
             alt="logo"
             className="w-10 h-10 rounded-md"
           />

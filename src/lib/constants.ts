@@ -13,6 +13,8 @@ export const ROUTES = {
   REGISTER: '/register',
   DASHBOARD: '/dashboard',
   LIVE_HAZARD_MAP: "/dashboard/live-hazard-map",
+  CREATE_POST: "/create-post", // ✅ NEW
+  COMMUNITY: "/community", // New
   PROFILE: '/dashboard/profile',
   SETTINGS: '/dashboard/settings',
   FORGOT_PASSWORD: '/forgot-password',

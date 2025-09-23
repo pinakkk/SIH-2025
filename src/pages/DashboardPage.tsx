@@ -14,6 +14,7 @@ import {
 import { Icon } from "@iconify/react";
 import { useAuth } from "@/hooks/use-auth";
 import { BottomNavigation } from "@/components/layout/BottomNavigation";
+import AppLogo from '../assets/icons/rescue-saathi.png'
 
 // ✅ Skeleton with rounded-xl by default
 const SkeletonBlock = ({ className = "" }: { className?: string }) => (
@@ -63,7 +64,7 @@ export function DashboardPage() {
           className="flex items-center gap-3"
         >
           <img
-            src="/src/assets/icons/rescue-saathi.png"
+            src={AppLogo}
             alt="logo"
             className="w-10 h-10 rounded-md"
           />

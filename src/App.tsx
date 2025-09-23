@@ -18,6 +18,8 @@ import LiveLocationPage from "@/pages/LiveLocationPage";
 import EmergencySettingsPage from "@/pages/EmergencySettingsPage";
 import { ROUTES } from "@/lib/constants";
 import { LiveHazardMapPage } from "./pages/LiveHazardMapPage";
+import { CreatePostPage } from "./pages/CreatePostPage";
+import CommunityPage from "./pages/CommunityPage";
 // Lazy load register
 const LazyRegisterPage = React.lazy(() =>
   import("@/pages/RegisterPage").then((module) => ({
@@ -105,6 +107,25 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            {/* Craete Post */}
+            <Route
+              path={ROUTES.CREATE_POST}
+              element={
+                <ProtectedRoute>
+                  <CreatePostPage />
+                </ProtectedRoute>
+              }
+            />
+
+{/* Community Page */}
+            <Route
+  path={ROUTES.COMMUNITY}
+  element={
+    <ProtectedRoute>
+      <CommunityPage />
+    </ProtectedRoute>
+  }
+/>
 
             {/* Emergency / special full-screen routes */}
             <Route
