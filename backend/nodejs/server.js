@@ -2,12 +2,12 @@ import express from "express";
 import dotenv from "dotenv";
 
 import connectDB from "./config/dbconnection.js";
-import authRoutes from "./routes/Authroutes.js"; // renamed for clarity
+import authRouter from "./routes/Authroutes.js"; // renamed for clarity
 import cookieParser from "cookie-parser";
 import Reportroutes from "./routes/Reportroutes.js"
 import Verifyreport from "./routes/verifyreport.js"
-import emergencyRoutes from "./routes/emergencyRoutes.js";
-
+import userRoute from "./routes/userRoutes.js"
+import UpdateRoute from "./routes/UpdateRoute.js"
 
 dotenv.config();
 
@@ -22,11 +22,11 @@ app.get("/", (req, res) => {
 });
 
 // API routes
-app.use("/api", authRoutes);
+app.use("/api", authRouter);
 app.use("/api",Reportroutes);
 app.use("/api",Verifyreport);
-
-app.use("/api", emergencyRoutes);
+app.use("/api",userRoute);
+app.use("/api",UpdateRoute);
 
 
 
