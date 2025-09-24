@@ -1,44 +1,28 @@
 from flask import Flask, request, jsonify
-from services.nlp_processor import NLPProcessor
+from flask_cors import CORS
+from services.nlp_processor import analyze_text
+from utils.geo_cluster import cluster_reports
 
-def create_app():
-    """Creates and configures the Flask application."""
-    app = Flask(__name__)
-    
-    try:
-        nlp_processor = NLPProcessor()
-    except Exception as e:
-        print(f"FATAL: Could not initialize NLPProcessor: {e}")
-        nlp_processor = None
+app = Flask(__name__)
+CORS(app)
 
-    @app.route("/health", methods=["GET"])
-    def health_check():
-        """Health check endpoint to confirm the service is running."""
-        if nlp_processor:
-            return jsonify({"status": "ok", "message": "NLP service is healthy."}), 200
-        else:
-            return jsonify({"status": "error", "message": "NLP service failed to initialize."}), 503
+@app.route("/analyze-text", methods=["POST"])
+def analyze_text_api():
+    """
+    Analyze a given text for keywords and sentiment.
+    """
+    data = request.json
+    text = data.get("text", "")
+    result = analyze_text(text)
+    return jsonify(result)
 
-    @app.route("/api/v1/analyze", methods=["POST"])
-    def analyze_text():
-        """
-        Analyzes text from a JSON payload.
-        Expects: {"text": "Your text to analyze here."}
-        """
-        if not nlp_processor:
-            return jsonify({"error": "NLP service is not available."}), 503
-
-        data = request.get_json()
-        if not data or "text" not in data:
-            return jsonify({"error": "Missing 'text' key in request body."}), 400
-
-        try:
-            result = nlp_processor.process(data["text"])
-            if "error" in result:
-                return jsonify(result), 400
-            return jsonify(result), 200
-        except Exception as e:
-            print(f"Error during analysis: {e}")
-            return jsonify({"error": "An internal server error occurred."}), 500
-            
-    return app
+@app.route("/cluster-reports", methods=["POST"])
+def cluster_reports_api():
+    """
+    Cluster reports based on geolocation.
+    Expects: {"reports": [{ "location": {"coordinates": [lng, lat]} }, ...]}
+    """
+    data = request.json
+    reports = data.get("reports", [])
+    labels = cluster_reports(reports)
+    return jsonify({"labels": labels})
