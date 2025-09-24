@@ -1,0 +1,12 @@
+# Web Framework & Server
+flask
+gunicorn
+
+# NLP Libraries
+transformers
+torch
+spacy
+nltk
+
+# Utilities
+python-dotenv
