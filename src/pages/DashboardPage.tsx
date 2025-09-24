@@ -9,6 +9,7 @@ import {
   MoreHorizontal,
   Bell,
   ChevronDown,
+  Menu,
 } from "lucide-react";
 
 import { Icon } from "@iconify/react";
@@ -16,21 +17,23 @@ import { useAuth } from "@/hooks/use-auth";
 import { BottomNavigation } from "@/components/layout/BottomNavigation";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "@/lib/constants";
-import AppLogo from '../assets/icons/rescue-saathi.png'
+import { Sidebar } from "@/components/layout/Sidebar";
+import { ProfileSidebar } from "@/components/layout/ProfileSidebar"; // ✅ Import profile sidebar
 
-// ✅ Skeleton with rounded-xl by default
+// ✅ Skeleton Block
 const SkeletonBlock = ({ className = "" }: { className?: string }) => (
-  <div
-    className={`bg-[#2a2a2a] animate-pulse rounded-xl ${className}`}
-  />
+  <div className={`bg-[#2a2a2a] animate-pulse rounded-xl ${className}`} />
 );
 
 export function DashboardPage() {
+  const navigate = useNavigate();
   const [filter, setFilter] = useState("All");
   const [loading, setLoading] = useState(true);
   const [scrolled, setScrolled] = useState(false);
   const { user } = useAuth();
-  const navigate = useNavigate();
+ const [isSidebarOpen, setSidebarOpen] = useState(false);
+  const [isProfileSidebarOpen, setProfileSidebarOpen] = useState(false);
+
 
   useEffect(() => {
     const t = setTimeout(() => setLoading(false), 900);
@@ -66,11 +69,13 @@ export function DashboardPage() {
           transition={{ duration: 0.4 }}
           className="flex items-center gap-3"
         >
-          <img
-            src={AppLogo}
-            alt="logo"
-            className="w-10 h-10 rounded-md"
-          />
+          {/* 🍔 Hamburger icon */}
+          <button
+            onClick={() => setSidebarOpen(true)}
+            className="w-10 h-10 flex items-center justify-center rounded-lg bg-[#372a28]/80 hover:bg-[#443331] transition"
+          >
+            <Menu size={22} />
+          </button>
           <div>
             <h1 className="font-bold text-lg">Rescue Saathi</h1>
             <p className="text-sm text-[#d8cdc6] flex items-center">
@@ -78,25 +83,43 @@ export function DashboardPage() {
             </p>
           </div>
         </motion.div>
+
+         {/* Right side: Notifications + Profile */}
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.1 }}
-          className="flex items-center gap-3"
+          className="flex items-center gap-3 relative"
         >
+
+           {/* 🔔 Notification */}
           <button className="relative w-10 h-10 rounded-full bg-[#372a28] flex items-center justify-center hover:scale-105 transition-transform">
             <Bell size={18} />
             <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full ring-1 ring-[#372a28]" />
           </button>
-          <img
-            src={user?.photoURL || "https://i.pravatar.cc/40"}
-            alt="profile"
-            width={44}
-            height={44}
-            className="rounded-full object-cover border-2 border-[#2f2523]"
-          />
+           {/* 👤 Profile triggers Sidebar */}
+          <button
+            onClick={() => setProfileSidebarOpen(true)}
+            className="flex items-center"
+          >
+            <img
+              src={user?.photoURL || "https://i.pravatar.cc/40"}
+              alt="profile"
+              width={44}
+              height={44}
+              className="rounded-full object-cover border-2 border-[#2f2523]"
+            />
+          </button>
         </motion.div>
       </motion.header>
+      <ProfileSidebar
+        isOpen={isProfileSidebarOpen}
+        onClose={() => setProfileSidebarOpen(false)}
+      />
+      <Sidebar
+        isOpen={isSidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+      />
 
       <div className="px-5">
         {/* High Wave Alert Box */}

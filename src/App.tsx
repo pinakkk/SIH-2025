@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "@/hooks/use-auth";
-import { Navbar } from "@/components/layout/Navbar";
+// import { Navbar } from "@/components/layout/Navbar";
 import { ProtectedRoute } from "@/routes/ProtectedRoute";
 import { LoginPage } from "@/pages/LoginPage";
 import { ContactUsPage } from "@/pages/ContactUsPage";
@@ -36,7 +36,7 @@ const LazyRegisterPage = React.lazy(() =>
 // Layout for routes that require the top Navbar (if used)
 const DashboardLayout = () => (
   <>
-    <Navbar />
+    {/* <Navbar /> */}
     <Outlet />
   </>
 );

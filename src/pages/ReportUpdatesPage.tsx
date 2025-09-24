@@ -7,61 +7,41 @@ import { Icon } from "@iconify/react";
 
 // Skeleton component
 const SkeletonBlock = ({ className = "" }: { className?: string }) => (
-  <div className={`bg-[#2a2a2a]/60 animate-pulse rounded-xl ${className}`}>
-    <div className="p-3 sm:p-4 space-y-3">
-      <div className="flex items-start space-x-3">
-        <div className="w-8 h-8 bg-[#3a3a3a]/80 rounded-lg animate-pulse"></div>
-        <div className="flex-1 space-y-2">
-          <div className="h-4 bg-[#3a3a3a]/80 rounded animate-pulse w-3/4"></div>
-          <div className="h-3 bg-[#3a3a3a]/60 rounded animate-pulse w-full"></div>
-          <div className="flex justify-between">
-            <div className="h-3 bg-[#3a3a3a]/60 rounded animate-pulse w-1/3"></div>
-            <div className="h-3 bg-[#3a3a3a]/60 rounded animate-pulse w-1/4"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+  <div className={`bg-[#2a2a2a] animate-pulse rounded-2xl ${className}`} />
 );
 
 const UpdateCard = ({ title, description, location, time, severity, icon }: any) => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
-    whileHover={{ scale: 1.01 }}
-    whileTap={{ scale: 0.99 }}
-    className="cursor-pointer"
+    whileHover={{ scale: 1.02 }}
+    className="transform transition-transform duration-300"
   >
-    <Card className="bg-gradient-to-br from-[#2a1e1c]/90 to-[#1e1614]/90 border border-[#3a2f2d]/50 rounded-xl shadow-sm hover:shadow-lg hover:border-[#3a2f2d]/70 transition-all duration-300 backdrop-blur-sm active:scale-[0.98]">
-      <CardContent className="p-3 sm:p-4">
-        <div className="flex items-start space-x-3">
-          <div className={`p-2 ${severity === 'high' ? 'bg-red-500/10 border border-red-500/20' : severity === 'medium' ? 'bg-yellow-500/10 border border-yellow-500/20' : 'bg-green-500/10 border border-green-500/20'} rounded-lg flex items-center justify-center flex-shrink-0`}>
+    <Card className="bg-gradient-to-b from-[#2a1e1c] to-[#1e1614] border border-[#3a2f2d] rounded-2xl shadow-lg hover:border-[#4a3f3d] hover:shadow-xl transition-all duration-300 cursor-pointer group">
+      <CardContent className="p-6 sm:p-7">
+        <div className="flex items-start space-x-5">
+         <div className="p-5 bg-[#372a28] rounded-2xl flex items-center justify-center group-hover:bg-[#423330] transition-colors duration-300 flex-shrink-0 mt-4">
             {icon}
           </div>
-          <div className="flex-1 min-w-0">
-            <div className="flex items-start justify-between mb-2 gap-2">
-              <h3 className="font-medium text-white text-sm sm:text-base leading-tight">{title}</h3>
-              <span className={`px-2 py-1 rounded-md text-xs font-medium flex-shrink-0 ${
-                severity === 'high' ? 'bg-red-500/15 text-red-400 border border-red-500/30' :
-                severity === 'medium' ? 'bg-yellow-500/15 text-yellow-400 border border-yellow-500/30' :
-                'bg-green-500/15 text-green-400 border border-green-500/30'
+          <div className="flex-1 min-w-0 pt-2">
+            <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
+              <h3 className="font-semibold text-white text-lg sm:text-xl leading-tight">{title}</h3>
+              <span className={`px-4 py-2 rounded-full text-xs font-medium ${
+                severity === 'high' ? 'bg-red-500/15 text-red-400' :
+                severity === 'medium' ? 'bg-yellow-500/15 text-yellow-400' :
+                'bg-green-500/15 text-green-400'
               }`}>
                 {severity.charAt(0).toUpperCase() + severity.slice(1)}
               </span>
             </div>
-            <p className="text-xs sm:text-sm text-[#bfb2ac]/90 mb-3 leading-relaxed overflow-hidden" 
-               style={{
-                 display: '-webkit-box',
-                 WebkitLineClamp: 2,
-                 WebkitBoxOrient: 'vertical'
-               }}>{description}</p>
-            <div className="flex items-center justify-between text-xs text-[#8b7e79] gap-2">
-              <span className="flex items-center gap-1 truncate">
-                <Icon icon="material-symbols:location-on-outline" className="text-xs flex-shrink-0 opacity-70" />
+            <p className="text-base sm:text-lg text-[#bfb2ac] leading-relaxed mb-3">{description}</p>
+            <div className="flex items-center justify-between text-sm text-[#8b7e79] gap-2">
+              <span className="flex items-center gap-2">
+                <Icon icon="material-symbols:location-on-outline" className="text-[#e0d5ce]" />
                 {location}
               </span>
-              <span className="flex items-center gap-1 flex-shrink-0">
-                <Icon icon="material-symbols:schedule-outline" className="text-xs opacity-70" />
+              <span className="flex items-center gap-2">
+                <Icon icon="material-symbols:schedule-outline" className="text-[#e0d5ce]" />
                 {time}
               </span>
             </div>
@@ -89,7 +69,7 @@ export function ReportUpdatesPage() {
       location: "Bay of Bengal",
       time: "2 hours ago",
       severity: "high",
-      icon: <AlertCircle size={22} className="text-red-400" />,
+      icon: <AlertCircle size={24} className="text-[#e0d5ce]" />,
     },
     {
       title: "Flood Alert Update",
@@ -97,7 +77,7 @@ export function ReportUpdatesPage() {
       location: "Krishna Basin",
       time: "4 hours ago",
       severity: "medium",
-      icon: <Radio size={22} className="text-yellow-400" />,
+      icon: <Radio size={24} className="text-[#e0d5ce]" />,
     },
     {
       title: "Weather Update",
@@ -105,7 +85,7 @@ export function ReportUpdatesPage() {
       location: "Coastal Region",
       time: "6 hours ago",
       severity: "low",
-      icon: <Radio size={22} className="text-green-400" />,
+      icon: <Radio size={24} className="text-[#e0d5ce]" />,
     },
   ];
 
@@ -119,20 +99,20 @@ export function ReportUpdatesPage() {
         animate={{
           y: 0,
           opacity: 1,
-          boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
-          backdropFilter: "saturate(120%) blur(8px)",
+          boxShadow: "0 8px 20px rgba(0,0,0,0.6)",
+          backdropFilter: "saturate(120%) blur(6px)",
         }}
         transition={{ duration: 0.3 }}
-        className="flex-shrink-0 bg-[#2b2320]/80 border-b border-[#3a2f2d]/50 px-4 py-3 sm:px-6 sm:py-4"
+        className="sticky top-0 z-40 bg-[#2b2320]/55 border-b border-[#3a2f2d] px-4 sm:px-6 py-4 flex flex-col flex-shrink-0"
       >
-        <div className="flex items-center mb-3 sm:mb-4">
+        <div className="flex items-center mb-4">
           <button 
             onClick={() => navigate(-1)}
-            className="mr-3 p-2 hover:bg-[#372a28]/60 rounded-lg transition-all duration-200 active:scale-95"
+            className="mr-3 sm:mr-4 p-2 hover:bg-[#372a28] rounded-full transition-colors duration-300"
           >
-            <Icon icon="material-symbols:arrow-back-ios-rounded" className="text-white text-lg sm:text-xl" />
+            <Icon icon="material-symbols:arrow-back-ios-rounded" className="text-white text-xl" />
           </button>
-          <h1 className="font-semibold text-base sm:text-lg text-white">Report Updates</h1>
+          <h1 className="font-bold text-lg sm:text-xl">Report Updates</h1>
         </div>
         
         {/* Filter Pills */}
@@ -141,10 +121,10 @@ export function ReportUpdatesPage() {
             <button
               key={option}
               onClick={() => setFilter(option)}
-              className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 whitespace-nowrap ${
+              className={`px-4 py-2 rounded-2xl text-sm font-medium transition-all duration-300 whitespace-nowrap ${
                 filter === option
-                  ? "bg-[#372a28] text-white shadow-sm border border-[#4a3a38]"
-                  : "text-[#8b7e79] hover:bg-[#2a1e1c]/60 hover:text-[#bfb2ac]"
+                  ? "bg-[#372a28] text-white shadow-lg border border-[#4a3f3d]"
+                  : "text-[#8b7e79] hover:bg-[#2a1e1c] hover:text-[#bfb2ac] hover:border-[#3a2f2d]"
               }`}
             >
               {option.charAt(0).toUpperCase() + option.slice(1)}
@@ -154,8 +134,8 @@ export function ReportUpdatesPage() {
       </motion.header>
 
       {/* Scrollable Content Area */}
-      <div className="flex-1 overflow-y-auto px-4 py-4 sm:px-6 sm:py-6 scrollbar-hide">
-        <div className="max-w-2xl mx-auto">
+      <div className="flex-1 overflow-y-auto px-5 sm:px-8 py-6 sm:py-8">
+        <div className="max-w-3xl mx-auto">
           {loading ? (
             <div className="space-y-3">
               {Array(3).fill(0).map((_, i) => (

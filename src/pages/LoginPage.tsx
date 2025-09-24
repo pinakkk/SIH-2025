@@ -71,10 +71,14 @@ export function LoginPage() {
   return (
     <div className="h-screen w-screen flex items-center justify-center bg-[#1b140e] bg-opacity-95">
       {/* Main card wrapper with scrollable content */}
-      <div className="w-full max-w-sm h-full sm:h-auto sm:rounded-[2rem] 
-                      bg-white/5 border border-white/10 shadow-2xl 
-                      backdrop-blur-2xl text-white 
-                      flex flex-col">
+      <div
+        className="w-full max-w-sm 
+             bg-white/5 border border-white/10 shadow-2xl 
+             backdrop-blur-2xl text-white 
+             rounded-none sm:rounded-[2rem] 
+             px-8 py-6 flex flex-col
+             min-h-screen sm:min-h-0 justify-center"
+      >
         {/* Scrollable section */}
         <div className="flex-1 overflow-y-auto px-8 py-6 sm:rounded-[2rem]">
           {/* Heading */}
@@ -181,11 +185,10 @@ export function LoginPage() {
             className={`w-full py-3 rounded-2xl font-semibold 
                         bg-gradient-to-r from-[#F57F01] via-[#F89103] to-[#FFC008] 
                         text-black flex items-center justify-center shadow-lg 
-                        ${
-                          isLoading || !email || !password
-                            ? "opacity-70 cursor-not-allowed"
-                            : "hover:opacity-90 hover:shadow-xl transform hover:-translate-y-0.5 transition-all"
-                        }`}
+                        ${isLoading || !email || !password
+                ? "opacity-70 cursor-not-allowed"
+                : "hover:opacity-90 hover:shadow-xl transform hover:-translate-y-0.5 transition-all"
+              }`}
           >
             {isLoading ? (
               <>
@@ -205,7 +208,7 @@ export function LoginPage() {
           </div>
 
           {/* Social Login */}
-          <div className="flex justify-center space-x-8 mb-5">
+          <div className="flex justify-center space-x-8 mb-0">
             <button
               onClick={handleFacebookLogin}
               className="text-blue-500 text-2xl hover:scale-110 transition-transform drop-shadow-md"
