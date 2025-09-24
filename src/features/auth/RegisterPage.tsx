@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Icon } from "@iconify/react";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "@/lib/constants";
+import AppLogo from '../../assets/icons/rescue-saathi.png'
 
 export function RegisterPage() {
   const navigate = useNavigate();
@@ -18,7 +19,7 @@ export function RegisterPage() {
         {/* Logo + Title */}
         <div className="flex flex-col items-center mb-6">
           <img
-            src="/src/assets/icons/rescue-saathi.png"
+            src= {AppLogo}
             alt="Rescue Saathi Logo"
             className="w-24 h-24 mb-2"
           />

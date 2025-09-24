@@ -4,7 +4,7 @@ import { Icon } from "@iconify/react";
 import { useAuth } from "@/hooks/use-auth";
 import { ROUTES } from "@/lib/constants";
 import { useNavigate } from "react-router-dom";
-import AppLogo from '../assets/icons/rescue-saathi.png'
+import AppLogo from '../../assets/icons/rescue-saathi.png'
 export function LoginPage() {
   const navigate = useNavigate();
   const {

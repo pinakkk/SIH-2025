@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/Card";
-import { Search, RefreshCw, ShieldCheck, MapPin } from "lucide-react";
+import { Search, RefreshCw, ShieldCheck, MapPin, Menu } from "lucide-react";
 import { Icon } from "@iconify/react";
 import { BottomNavigation } from "@/components/layout/BottomNavigation";
 import { useAuth } from "@/hooks/use-auth";
-import AppLogo from '../assets/icons/rescue-saathi.png'
+import AppLogo from '../../assets/icons/rescue-saathi.png'
 import { Sidebar } from "@/components/layout/Sidebar";
 
 const alerts = [
@@ -67,12 +67,11 @@ export function LiveHazardMapPage() {
           transition={{ duration: 0.4 }}
           className="flex items-center gap-3"
         >
-          <button onClick={() => setSidebarOpen(true)}>
-            <img
-              src={AppLogo}
-              alt="logo"
-              className="w-10 h-10 rounded-md"
-            />
+           <button
+            onClick={() => setSidebarOpen(true)}
+            className="w-10 h-10 flex items-center justify-center rounded-lg bg-[#372a28]/80 hover:bg-[#443331] transition"
+          >
+            <Menu size={22} />
           </button>
 
           <Sidebar isOpen={isSidebarOpen} onClose={() => setSidebarOpen(false)} />
@@ -117,7 +116,7 @@ export function LiveHazardMapPage() {
         )}
 
         {/* View Toggle */}
-        {loading ? (
+        {/* {loading ? (
           <SkeletonBlock className="h-10 w-full rounded-full mb-6" />
         ) : (
           <motion.div
@@ -139,7 +138,7 @@ export function LiveHazardMapPage() {
               </button>
             ))}
           </motion.div>
-        )}
+        )} */}
 
         {/* Alerts List */}
         <div className="space-y-4">

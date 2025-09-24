@@ -1,6 +1,8 @@
+// // Version 1.0 - Use GNews AS Primary, If Failed - use Currents API, If failed - use news API
+
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 interface NewsItem {
@@ -8,73 +10,51 @@ interface NewsItem {
   title: string;
   description: string;
   date: string;
-  category: "natural" | "industrial" | "infrastructure";
-  severity: "high" | "medium" | "low";
   source: string;
-  readTime: string;
+  url: string;
+  urlToImage?: string;
+  provider: string;
 }
 
-const newsData: NewsItem[] = [
-  {
-    id: "1",
-    title: "Kolkata Faces Record-Breaking Floods",
-    description: "Kolkata and surrounding areas experienced severe flooding with 251.6mm rainfall in 24 hours - the highest since 1988. At least 12 fatalities reported. Citizens advised to avoid low-lying areas and be cautious of electrical hazards.",
-    date: "September 2025",
-    category: "natural",
-    severity: "high",
-    source: "Reuters",
-    readTime: "3 min read"
-  },
-  {
-    id: "2",
-    title: "Electrocution Risk Alert: India Reports Rising Incidents",
-    description: "India records approximately 110,000 electrocution fatalities over the past decade. Recent Kolkata flooding highlighted increased risks during natural disasters.",
-    date: "August 2025",
-    category: "infrastructure",
-    severity: "high",
-    source: "The Economic Times",
-    readTime: "4 min read"
-  },
-  {
-    id: "3",
-    title: "Vaishno Devi Pilgrimage Route: Deadly Landslide",
-    description: "Heavy rains triggered a devastating landslide near the Vaishno Devi pilgrimage route in Kashmir/Jammu, resulting in over 30 casualties.",
-    date: "August 2025",
-    category: "natural",
-    severity: "high",
-    source: "Al Jazeera",
-    readTime: "2 min read"
-  },
-  {
-    id: "4",
-    title: "Uttarakhand Flash Flood Emergency",
-    description: "Dharali region in Uttarakhand hit by sudden flash flood and mudslide, causing widespread destruction and multiple missing persons reports.",
-    date: "July 2025",
-    category: "natural",
-    severity: "high",
-    source: "The Guardian",
-    readTime: "3 min read"
-  },
-  {
-    id: "5",
-    title: "Industrial Tragedy: Telangana Chemical Factory Explosion",
-    description: "Major explosion at Sigachi Industries chemical factory claims 46 lives and leaves 33 injured. Investigation ongoing into safety protocols.",
-    date: "June 2025",
-    category: "industrial",
-    severity: "high",
-    source: "Official Reports",
-    readTime: "5 min read"
-  },
-  {
-    id: "6",
-    title: "NH-7 Landslide Risk Assessment",
-    description: "The Patalganga–Langsi stretch of NH-7 is now considered high risk for landslides. Even modest rain may trigger dangerous slides affecting traffic.",
-    date: "July 2025",
-    category: "infrastructure",
-    severity: "medium",
-    source: "The Times of India",
-    readTime: "2 min read"
-  }
+const allowedKeywords = [
+  "disaster",
+  "flood",
+  "tsunami",
+  "earthquake",
+  "landslide",
+  "cyclone",
+  "storm",
+  "typhoon",
+  "hurricane",
+  "aftershock",
+  "quake",
+  "hazard",
+  "evacuation",
+  "alert",
+  "warning",
+  "rescue",
+  "surge",
+  "high waves",
+  "coastal",
+  "ocean",
+  "rainfall",
+  "mudslide",
+  "flash flood",
+];
+
+const blockedKeywords = [
+  "celebrity",
+  "fashion",
+  "lifestyle",
+  "movie",
+  "music",
+  "sport",
+  "entertainment",
+  "bollywood",
+  "hollywood",
+  "game",
+  "award",
+  "festival",
 ];
 
 const NewsAndUpdatesPage = () => {
@@ -83,55 +63,147 @@ const NewsAndUpdatesPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Simulate API call
-    setTimeout(() => {
-      setNews(newsData);
-      setLoading(false);
-    }, 1500);
+    const fetchNews = async () => {
+      try {
+        const now = new Date();
+        const to = now.toISOString();
+        const fromDate = new Date(now.getTime() - 60 * 24 * 60 * 60 * 1000); // 60 days ago
+        const from = fromDate.toISOString();
+
+        const [gnewsRes, currentsRes, newsApiRes] = await Promise.allSettled([
+          // 🔹 GNews primary (India + last 60 days)
+          fetch(
+            `https://gnews.io/api/v4/search?q=disaster OR flood OR tsunami OR earthquake OR landslide OR cyclone OR storm OR hazard&lang=en&country=in&from=${encodeURIComponent(
+              from
+            )}&to=${encodeURIComponent(to)}&max=50&token=${
+              import.meta.env.VITE_GNEWS_API_KEY
+            }`
+          ).then((res) => res.json()),
+
+          // Currents (optional, may fail if quota exceeded)
+          fetch(
+            `https://api.currentsapi.services/v1/latest-news?language=en&apiKey=${
+              import.meta.env.VITE_CURRENTS_API_KEY
+            }`
+          ).then((res) => res.json()),
+
+          // NewsAPI (backup)
+          fetch(
+            `https://newsapi.org/v2/everything?q=disaster OR flood OR tsunami OR earthquake OR landslide OR cyclone OR storm OR hazard OR "ocean hazard"&language=en&sortBy=publishedAt&pageSize=30&apiKey=${
+              import.meta.env.VITE_NEWS_API_KEY
+            }`
+          ).then((res) => res.json()),
+        ]);
+
+        let articles: NewsItem[] = [];
+
+        // ✅ GNews
+        if (
+          gnewsRes.status === "fulfilled" &&
+          gnewsRes.value.articles &&
+          gnewsRes.value.articles.length > 0
+        ) {
+          articles.push(
+            ...gnewsRes.value.articles.map((a: any, i: number) => ({
+              id: `gnews-${i}`,
+              title: a.title,
+              description: a.description,
+              date: new Date(a.publishedAt).toISOString(),
+              source: a.source?.name || "GNews",
+              url: a.url,
+              urlToImage: a.image,
+              provider: "GNews",
+            }))
+          );
+        }
+
+        // ✅ Currents (optional)
+        if (
+          currentsRes.status === "fulfilled" &&
+          currentsRes.value.news &&
+          currentsRes.value.news.length > 0
+        ) {
+          articles.push(
+            ...currentsRes.value.news.map((a: any, i: number) => ({
+              id: `currents-${i}`,
+              title: a.title,
+              description: a.description,
+              date: new Date(a.published).toISOString(),
+              source: a.author || a.source || "Currents API",
+              url: a.url,
+              urlToImage: a.image,
+              provider: "Currents",
+            }))
+          );
+        } else {
+          console.warn("Currents API unavailable or quota exceeded, skipping.");
+        }
+
+        // ✅ NewsAPI
+        if (
+          newsApiRes.status === "fulfilled" &&
+          newsApiRes.value.articles &&
+          newsApiRes.value.articles.length > 0
+        ) {
+          articles.push(
+            ...newsApiRes.value.articles.map((a: any, i: number) => ({
+              id: `newsapi-${i}`,
+              title: a.title,
+              description: a.description,
+              date: new Date(a.publishedAt).toISOString(),
+              source: a.source?.name || "NewsAPI",
+              url: a.url,
+              urlToImage: a.urlToImage,
+              provider: "NewsAPI",
+            }))
+          );
+        }
+
+        // 🔍 Filter irrelevant
+        let filtered = articles.filter((a) => {
+          const text = `${a.title} ${a.description}`.toLowerCase();
+          const isRelevant = allowedKeywords.some((kw) =>
+            text.includes(kw.toLowerCase())
+          );
+          const isBlocked = blockedKeywords.some((kw) =>
+            text.includes(kw.toLowerCase())
+          );
+          return isRelevant && !isBlocked;
+        });
+
+        // ❌ Remove duplicates
+        const seen = new Set();
+        filtered = filtered.filter((a) => {
+          const key = a.url || a.title;
+          if (seen.has(key)) return false;
+          seen.add(key);
+          return true;
+        });
+
+        // ⏰ Sort latest first
+        const sorted = filtered.sort(
+          (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+        );
+
+        setNews(sorted);
+      } catch (err) {
+        console.error("Error fetching news:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchNews();
   }, []);
 
   const containerVariants = {
     hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1
-      }
-    }
+    visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
   };
 
   const itemVariants = {
     hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1
-    }
-  };
-
-  const getCategoryColor = (category: NewsItem["category"]) => {
-    switch (category) {
-      case "natural":
-        return "bg-blue-500";
-      case "industrial":
-        return "bg-red-500";
-      case "infrastructure":
-        return "bg-yellow-500";
-      default:
-        return "bg-gray-500";
-    }
-  };
-
-  const getSeverityColor = (severity: NewsItem["severity"]) => {
-    switch (severity) {
-      case "high":
-        return "bg-red-600";
-      case "medium":
-        return "bg-yellow-500";
-      case "low":
-        return "bg-green-500";
-      default:
-        return "bg-gray-500";
-    }
+    visible: { y: 0, opacity: 1 },
   };
 
   return (
@@ -151,82 +223,76 @@ const NewsAndUpdatesPage = () => {
           </button>
           <div>
             <h1 className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-yellow-500">
-              Emergency News & Updates
+              News & Updates
             </h1>
-            <p className="text-sm text-gray-400">Stay informed about recent incidents</p>
+            <p className="text-sm text-gray-400">
+              Related updates from multiple sources
+            </p>
           </div>
         </div>
       </motion.header>
 
+      {/* News Grid */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="max-w-7xl mx-auto p-4 md:p-8 pb-24"
       >
-
         {loading ? (
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-            className="grid gap-4 sm:gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
-          >
-            {[1, 2, 3, 4, 5, 6].map((index) => (
-              <div
-                key={index}
-                className="bg-gradient-to-b from-[#2b2320] to-[#241c1a] rounded-xl p-4 sm:p-6 animate-pulse border border-[#3a2f2d] shadow-lg"
-              >
-                <div className="flex gap-2 mb-4">
-                  <div className="h-6 bg-[#3a2f2d] rounded-full w-20"></div>
-                  <div className="h-6 bg-[#3a2f2d] rounded-full w-16"></div>
-                </div>
-                <div className="h-5 bg-[#3a2f2d] rounded w-3/4 mb-3"></div>
-                <div className="h-3 bg-[#3a2f2d] rounded w-full mb-2"></div>
-                <div className="h-3 bg-[#3a2f2d] rounded w-5/6 mb-4"></div>
-                <div className="flex justify-between">
-                  <div className="h-3 bg-[#3a2f2d] rounded w-24"></div>
-                  <div className="h-3 bg-[#3a2f2d] rounded w-20"></div>
-                </div>
-              </div>
-            ))}
-          </motion.div>
+          <div className="flex justify-center items-center h-64">
+            <Loader2 className="animate-spin text-red-500" size={32} />
+          </div>
+        ) : news.length === 0 ? (
+          <p className="text-center text-gray-400">
+            No relevant disaster updates available right now.
+          </p>
         ) : (
           <motion.div
             variants={containerVariants}
             initial="hidden"
             animate="visible"
-            className="grid gap-4 sm:gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+            className="grid gap-6 sm:gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
           >
             {news.map((item) => (
-              <motion.div
+              <motion.a
                 key={item.id}
+                href={item.url}
+                target="_blank"
+                rel="noopener noreferrer"
                 variants={itemVariants}
                 whileHover={{ scale: 1.02, y: -5 }}
-                className="bg-gradient-to-b from-[#2b2320] to-[#241c1a] rounded-xl p-4 sm:p-6 hover:from-[#372a28] hover:to-[#2b2320] transition-all duration-300 backdrop-blur-sm border border-[#3a2f2d] hover:border-[#4a403d] cursor-pointer group shadow-lg"
+                className="group bg-gradient-to-b from-[#2b2320] to-[#241c1a] rounded-xl overflow-hidden border border-[#3a2f2d] hover:border-[#4a403d] shadow-lg transition-all duration-300 hover:from-[#372a28] hover:to-[#2b2320]"
               >
-                <div className="flex flex-wrap items-center gap-2 mb-4">
-                  <span className={`px-3 py-1 rounded-full text-xs font-medium ${getCategoryColor(item.category)}`}>
-                    {item.category}
-                  </span>
-                  <span className={`px-3 py-1 rounded-full text-xs font-medium ${getSeverityColor(item.severity)}`}>
-                    {item.severity} risk
-                  </span>
-                </div>
-                <h3 className="text-lg sm:text-xl font-semibold mb-3 group-hover:text-orange-400 transition-colors leading-tight">
-                  {item.title}
-                </h3>
-                <p className="text-[#d8cdc6] text-sm mb-4 line-clamp-3 leading-relaxed">
-                  {item.description}
-                </p>
-                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 text-xs text-[#a69489]">
-                  <div className="flex items-center gap-2">
-                    <span>{item.date}</span>
-                    <span>•</span>
-                    <span>{item.readTime}</span>
+                {item.urlToImage && (
+                  <div className="h-40 w-full overflow-hidden">
+                    <img
+                      src={item.urlToImage}
+                      alt={item.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
                   </div>
-                  <span className="italic">Source: {item.source}</span>
+                )}
+                <div className="p-4 sm:p-6">
+                  <h3 className="text-lg sm:text-xl font-semibold mb-3 group-hover:text-orange-400 transition-colors leading-tight">
+                    {item.title}
+                  </h3>
+                  <p className="text-[#d8cdc6] text-sm mb-4 line-clamp-3 leading-relaxed">
+                    {item.description}
+                  </p>
+                  <div className="flex justify-between items-center text-xs text-[#a69489]">
+                    <span>
+                      {new Date(item.date).toLocaleDateString("en-GB", {
+                        day: "numeric",
+                        month: "short",
+                        year: "numeric",
+                      })}
+                    </span>
+                    <span className="italic">
+                      {item.source} • {item.provider}
+                    </span>
+                  </div>
                 </div>
-              </motion.div>
+              </motion.a>
             ))}
           </motion.div>
         )}

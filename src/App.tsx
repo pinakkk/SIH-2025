@@ -3,10 +3,10 @@ import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from "react-
 import { useAuth } from "@/hooks/use-auth";
 // import { Navbar } from "@/components/layout/Navbar";
 import { ProtectedRoute } from "@/routes/ProtectedRoute";
-import { LoginPage } from "@/pages/LoginPage";
+import { LoginPage } from "@/features/auth/LoginPage";
 import { ContactUsPage } from "@/pages/ContactUsPage";
 import FeedbackPage from "@/pages/FeedbackPage";
-import { DashboardPage } from "@/pages/DashboardPage";
+import { DashboardPage } from "@/features/dashboard/DashboardPage";
 import ForgotPasswordPage from "@/pages/ForgotPasswordPage";
 import VerificationPage from "@/pages/VerificationPage";
 import NewPasswordPage from "@/pages/NewPasswordPage";
@@ -17,9 +17,9 @@ import EmergencyContactsPage from "@/pages/EmergencyContactsPage";
 import LiveLocationPage from "@/pages/LiveLocationPage";
 import EmergencySettingsPage from "@/pages/EmergencySettingsPage";
 import { ROUTES } from "@/lib/constants";
-import { LiveHazardMapPage } from "./pages/LiveHazardMapPage";
-import { CreatePostPage } from "./pages/CreatePostPage";
-import CommunityPage from "./pages/CommunityPage";
+import { LiveHazardMapPage } from "./features/dashboard/LiveHazardMapPage";
+import { CreatePostPage } from "./features/dashboard/CreatePostPage";
+import CommunityPage from "./features/dashboard/CommunityPage";
 import { EmergencyHotlinesPage } from "./pages/EmergencyHotlinesPage";
 import { ViewDetailsPage } from "./pages/ViewDetailsPage";
 import { ReportUpdatesPage } from "./pages/ReportUpdatesPage";
@@ -30,7 +30,7 @@ import { NewsAndUpdatesRoute } from "@/routes/NewsAndUpdatesRoute";
 import ChatbotPage from "@/pages/ChatbotPage";
 // Lazy load register
 const LazyRegisterPage = React.lazy(() =>
-  import("@/pages/RegisterPage").then((module) => ({
+  import("@/features/auth/RegisterPage").then((module) => ({
     default: (module as any).RegisterPage ?? (module as any).default,
   }))
 );

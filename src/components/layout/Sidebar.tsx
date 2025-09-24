@@ -33,7 +33,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
     { id: "evac", label: "Evacuation Centres", icon: <Icon icon="mdi:home-group" className="text-lg" />, route: "/evacuation" },
     { id: "ai", label: "Get info with our AI", icon: <Icon icon="mdi:robot-outline" className="text-lg" />, route: ROUTES.CHATBOT },
     { id: "help", label: "Help & Support", icon: <HelpCircle size={20} />, route: ROUTES.SUPPORT },
-    { id: "alerts", label: "Alerts & Notifications", icon: <AlertTriangle size={20} />, route: "/alerts" },
+    // { id: "alerts", label: "Alerts & Notifications", icon: <AlertTriangle size={20} />, route: "/alerts" },
     { id: "news", label: "News & Updates", icon: <Newspaper size={20} />, route: ROUTES.NEWS_AND_UPDATES },
   ];
 

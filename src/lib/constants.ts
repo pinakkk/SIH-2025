@@ -13,8 +13,8 @@ export const ROUTES = {
   REGISTER: '/register',
   DASHBOARD: '/dashboard',
   LIVE_HAZARD_MAP: "/dashboard/live-hazard-map",
-  CREATE_POST: "/create-post", // ✅ NEW
-  COMMUNITY: "/community", // New
+  CREATE_POST: "/create-post", 
+  COMMUNITY: "/community",
   PROFILE: "/profile",
   SETTINGS: '/dashboard/settings',
   FORGOT_PASSWORD: '/forgot-password',
@@ -33,8 +33,8 @@ export const ROUTES = {
   VIEW_DETAILS: '/dashboard/view-details',
   REPORT_UPDATES: '/dashboard/report-updates',
   SEE_MORE: '/dashboard/see-more',
-  NEWS_AND_UPDATES: '/news-and-updates', // ✅ NEW
-  CHATBOT: '/dashboard/chatbot', // ✅ NEW: Chatbot assistant route
+  NEWS_AND_UPDATES: '/news-and-updates', 
+  CHATBOT: '/dashboard/chatbot',
 } as const;
 
 
