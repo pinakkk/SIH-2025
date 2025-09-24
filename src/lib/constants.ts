@@ -33,6 +33,8 @@ export const ROUTES = {
   VIEW_DETAILS: '/dashboard/view-details',
   REPORT_UPDATES: '/dashboard/report-updates',
   SEE_MORE: '/dashboard/see-more',
+  NEWS_AND_UPDATES: '/news-and-updates', // ✅ NEW
+  CHATBOT: '/dashboard/chatbot', // ✅ NEW: Chatbot assistant route
 } as const;
 
 

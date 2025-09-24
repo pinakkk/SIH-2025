@@ -26,6 +26,8 @@ import { ReportUpdatesPage } from "./pages/ReportUpdatesPage";
 import { SeeMorePage } from "./pages/SeeMorePage";
 import { HelpAndSupportPage } from "@/pages/HelpAndSupportPage";
 import { ProfilePage } from "@/pages/ProfilePage";
+import { NewsAndUpdatesRoute } from "@/routes/NewsAndUpdatesRoute";
+import ChatbotPage from "@/pages/ChatbotPage";
 // Lazy load register
 const LazyRegisterPage = React.lazy(() =>
   import("@/pages/RegisterPage").then((module) => ({
@@ -107,6 +109,7 @@ function App() {
               <Route path={ROUTES.VIEW_DETAILS} element={<ViewDetailsPage />} />
               <Route path={ROUTES.REPORT_UPDATES} element={<ReportUpdatesPage />} />
               <Route path={ROUTES.SEE_MORE} element={<SeeMorePage />} />
+              <Route path={ROUTES.CHATBOT} element={<ChatbotPage />} />
             </Route>
 
             {/* Dashboard route - we intentionally render DashboardPage without Navbar to match mobile-first layout */}
@@ -147,6 +150,16 @@ function App() {
     </ProtectedRoute>
   }
 />
+
+            {/* News and Updates */}
+            <Route
+              path={ROUTES.NEWS_AND_UPDATES}
+              element={
+                <ProtectedRoute>
+                  <NewsAndUpdatesRoute />
+                </ProtectedRoute>
+              }
+            />
 
             {/* Emergency / special full-screen routes */}
             <Route
