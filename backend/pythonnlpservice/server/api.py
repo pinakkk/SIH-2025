@@ -14,9 +14,16 @@ def ping():
 def rank_posts_from_file():
     """For testing: Load sample dataset and return ranked posts."""
     try:
+        # dataset_path = os.path.join(
+        #     os.path.dirname(__file__), "..", "datasets", "sample_posts.json"
+            
+        # )
+
         dataset_path = os.path.join(
-            os.path.dirname(__file__), "..", "datasets", "sample_posts.json"
+            os.path.dirname(__file__), "../../datasets/sample_posts.json"
         )
+        dataset_path = os.path.abspath(dataset_path)
+
         with open(dataset_path, "r") as f:
             posts = json.load(f)
         ranked = rank_posts(posts)
