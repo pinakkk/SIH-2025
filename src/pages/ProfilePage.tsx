@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/Card";
 import { motion } from "framer-motion";
 import { useAuth } from "@/hooks/use-auth";
 import { ArrowLeft } from "lucide-react";
