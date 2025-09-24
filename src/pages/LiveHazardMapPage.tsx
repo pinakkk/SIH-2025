@@ -6,6 +6,7 @@ import { Icon } from "@iconify/react";
 import { BottomNavigation } from "@/components/layout/BottomNavigation";
 import { useAuth } from "@/hooks/use-auth";
 import AppLogo from '../assets/icons/rescue-saathi.png'
+import { Sidebar } from "@/components/layout/Sidebar";
 
 const alerts = [
   {
@@ -32,6 +33,7 @@ export function LiveHazardMapPage() {
   const [scrolled, setScrolled] = useState(false);
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
     const t = setTimeout(() => setLoading(false), 900);
@@ -65,11 +67,16 @@ export function LiveHazardMapPage() {
           transition={{ duration: 0.4 }}
           className="flex items-center gap-3"
         >
-          <img
-            src={AppLogo}
-            alt="logo"
-            className="w-10 h-10 rounded-md"
-          />
+          <button onClick={() => setSidebarOpen(true)}>
+            <img
+              src={AppLogo}
+              alt="logo"
+              className="w-10 h-10 rounded-md"
+            />
+          </button>
+
+          <Sidebar isOpen={isSidebarOpen} onClose={() => setSidebarOpen(false)} />
+
           <div>
             <h1 className="font-bold text-lg">Live Hazard Map</h1>
             <p className="text-sm text-[#d8cdc6] flex items-center">
@@ -123,11 +130,10 @@ export function LiveHazardMapPage() {
               <button
                 key={v}
                 onClick={() => setView(v)}
-                className={`w-1/2 py-2 text-sm font-semibold rounded-full transition-colors ${
-                  view === v
+                className={`w-1/2 py-2 text-sm font-semibold rounded-full transition-colors ${view === v
                     ? "bg-white text-black"
                     : "text-[#e9e2dd] hover:text-white"
-                }`}
+                  }`}
               >
                 {v}
               </button>
@@ -139,70 +145,70 @@ export function LiveHazardMapPage() {
         <div className="space-y-4">
           {loading
             ? Array(2)
-                .fill(0)
-                .map((_, idx) => (
-                  <div key={idx} className="mb-4">
-                    <SkeletonBlock className="h-6 w-1/2 mb-3" />
-                    <SkeletonBlock className="h-40 w-full" />
-                  </div>
-                ))
+              .fill(0)
+              .map((_, idx) => (
+                <div key={idx} className="mb-4">
+                  <SkeletonBlock className="h-6 w-1/2 mb-3" />
+                  <SkeletonBlock className="h-40 w-full" />
+                </div>
+              ))
             : alerts.map((alert, i) => (
-                <motion.div
-                  key={alert.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: i * 0.15 }}
-                >
-                  <Card className="bg-gradient-to-b from-[#2a1e1c] to-[#1e1614] border border-[#3a2f2d] rounded-2xl overflow-hidden shadow-lg">
-                    <CardContent className="p-4">
-                      <div className="flex items-start gap-3 mb-3">
-                        <div className="p-2 bg-red-500/15 rounded-full flex items-center justify-center">
-                          <Icon
-                            icon="mdi:waves"
-                            className="text-red-400 text-2xl"
-                          />
-                        </div>
-                        <div className="flex-1">
-                          <h2 className="font-semibold text-white">
-                            {alert.title}
-                          </h2>
-                          <p className="text-xs text-[#bfb2ac]">
-                            {alert.issued}
-                          </p>
-                          <div className="flex items-center gap-1.5 mt-1">
-                            <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
-                            <span className="text-xs text-red-300 font-medium">
-                              Live
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="w-full h-40 rounded-xl overflow-hidden mb-4 border border-[#3a2f2d]">
-                        <img
-                          src={alert.mapImage}
-                          alt="Map Preview"
-                          className="w-full h-full object-cover"
+              <motion.div
+                key={alert.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: i * 0.15 }}
+              >
+                <Card className="bg-gradient-to-b from-[#2a1e1c] to-[#1e1614] border border-[#3a2f2d] rounded-2xl overflow-hidden shadow-lg">
+                  <CardContent className="p-4">
+                    <div className="flex items-start gap-3 mb-3">
+                      <div className="p-2 bg-red-500/15 rounded-full flex items-center justify-center">
+                        <Icon
+                          icon="mdi:waves"
+                          className="text-red-400 text-2xl"
                         />
                       </div>
-                      <div className="flex items-center gap-3">
-                        <motion.button
-                          whileTap={{ scale: 0.97 }}
-                          className="flex-1 bg-white text-black font-semibold py-2.5 rounded-full hover:scale-[1.02] transition-transform"
-                        >
-                          View Details
-                        </motion.button>
-                        <motion.button
-                          whileTap={{ scale: 0.97 }}
-                          className="flex-1 bg-[#2b2320] border border-[#3a2f2d] text-white font-semibold py-2.5 rounded-full flex items-center justify-center gap-2 hover:bg-[#3b3230] transition-colors"
-                        >
-                          <ShieldCheck size={18} className="text-green-400" />
-                          Mark as safe
-                        </motion.button>
+                      <div className="flex-1">
+                        <h2 className="font-semibold text-white">
+                          {alert.title}
+                        </h2>
+                        <p className="text-xs text-[#bfb2ac]">
+                          {alert.issued}
+                        </p>
+                        <div className="flex items-center gap-1.5 mt-1">
+                          <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
+                          <span className="text-xs text-red-300 font-medium">
+                            Live
+                          </span>
+                        </div>
                       </div>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))}
+                    </div>
+                    <div className="w-full h-40 rounded-xl overflow-hidden mb-4 border border-[#3a2f2d]">
+                      <img
+                        src={alert.mapImage}
+                        alt="Map Preview"
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <motion.button
+                        whileTap={{ scale: 0.97 }}
+                        className="flex-1 bg-white text-black font-semibold py-2.5 rounded-full hover:scale-[1.02] transition-transform"
+                      >
+                        View Details
+                      </motion.button>
+                      <motion.button
+                        whileTap={{ scale: 0.97 }}
+                        className="flex-1 bg-[#2b2320] border border-[#3a2f2d] text-white font-semibold py-2.5 rounded-full flex items-center justify-center gap-2 hover:bg-[#3b3230] transition-colors"
+                      >
+                        <ShieldCheck size={18} className="text-green-400" />
+                        Mark as safe
+                      </motion.button>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
         </div>
       </div>
 

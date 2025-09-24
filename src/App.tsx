@@ -20,7 +20,9 @@ import { ROUTES } from "@/lib/constants";
 import { LiveHazardMapPage } from "./pages/LiveHazardMapPage";
 import { CreatePostPage } from "./pages/CreatePostPage";
 import CommunityPage from "./pages/CommunityPage";
-import { HelpAndSupportPage } from '@/pages/HelpAndSupportPage';
+import { HelpAndSupportPage } from "@/pages/HelpAndSupportPage";
+import { ProfilePage } from "@/pages/ProfilePage"; // ✅ new import
+
 // Lazy load register
 const LazyRegisterPage = React.lazy(() =>
   import("@/pages/RegisterPage").then((module) => ({
@@ -75,10 +77,7 @@ function App() {
               path={ROUTES.SUCCESS}
               element={isAuthenticated ? <Navigate to={ROUTES.DASHBOARD} replace /> : <SuccessPage />}
             />
-             <Route
-              path={ROUTES.SUPPORT}
-              element={<HelpAndSupportPage />}
-            />
+            <Route path={ROUTES.SUPPORT} element={<HelpAndSupportPage />} />
             <Route path={ROUTES.CONTACT_US} element={<ContactUsPage />} />
             <Route path={ROUTES.FEEDBACK} element={<FeedbackPage />} />
 
@@ -93,12 +92,22 @@ function App() {
               {/* Add nested protected routes that should show Navbar here */}
             </Route>
 
-            {/* Dashboard route - we intentionally render DashboardPage without Navbar to match mobile-first layout */}
+            {/* Dashboard route */}
             <Route
               path={ROUTES.DASHBOARD}
               element={
                 <ProtectedRoute>
                   <DashboardPage />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* ✅ Profile page */}
+            <Route
+              path={ROUTES.PROFILE}
+              element={
+                <ProtectedRoute>
+                  <ProfilePage />
                 </ProtectedRoute>
               }
             />
@@ -112,7 +121,8 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            {/* Craete Post */}
+
+            {/* Create Post */}
             <Route
               path={ROUTES.CREATE_POST}
               element={
@@ -122,15 +132,15 @@ function App() {
               }
             />
 
-{/* Community Page */}
+            {/* Community Page */}
             <Route
-  path={ROUTES.COMMUNITY}
-  element={
-    <ProtectedRoute>
-      <CommunityPage />
-    </ProtectedRoute>
-  }
-/>
+              path={ROUTES.COMMUNITY}
+              element={
+                <ProtectedRoute>
+                  <CommunityPage />
+                </ProtectedRoute>
+              }
+            />
 
             {/* Emergency / special full-screen routes */}
             <Route
