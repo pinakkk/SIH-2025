@@ -7,13 +7,13 @@ export function ChatbotPage() {
   const navigate = useNavigate();
 
   return (
-    <div className="bg-[#1f1816] min-h-screen text-white font-sans flex flex-col">
+    <div className="bg-[#1f1816] h-screen text-white font-sans flex flex-col overflow-hidden">
       {/* Header */}
       <motion.header
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
-        className="sticky top-0 z-40 bg-[#2b2320]/90 border-b border-[#3a2f2d] px-5 py-4 flex items-center gap-4"
+        className="z-40 bg-[#2b2320]/90 border-b border-[#3a2f2d] px-5 py-4 flex items-center gap-4"
       >
         <button
           onClick={() => navigate(-1)}
@@ -28,7 +28,7 @@ export function ChatbotPage() {
       </motion.header>
 
       {/* Chatbot area */}
-      <div className="flex-1 flex flex-col overflow-hidden">
+      <div className="flex-1 overflow-hidden">
         <Chatbot />
       </div>
     </div>

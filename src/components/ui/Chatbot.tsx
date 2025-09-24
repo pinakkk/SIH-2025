@@ -132,6 +132,7 @@ export function Chatbot() {
             "X-goog-api-key": GEMINI_API_KEY,
           },
           body: JSON.stringify({
+            
             contents: [
               {
                 parts: [

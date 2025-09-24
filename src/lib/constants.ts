@@ -35,6 +35,7 @@ export const ROUTES = {
   SEE_MORE: '/dashboard/see-more',
   NEWS_AND_UPDATES: '/news-and-updates', 
   CHATBOT: '/dashboard/chatbot',
+  EVACUATION_CENTERS: '/dashboard/evacuation-centers',
 } as const;
 
 
