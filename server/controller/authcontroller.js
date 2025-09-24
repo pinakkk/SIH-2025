@@ -158,9 +158,10 @@ export const sendVerifyOtp = async (req, res) => {
       return res.json({ success: false, message: "Account already verified" });
     }
 
-    const otp = String(Math.floor(100000 + Math.random() * 900000));
+    // Generate 4-digit OTP
+    const otp = String(Math.floor(1000 + Math.random() * 9000));
     user.verifyOtp = otp;
-    user.verifyOtpExpireAt = Date.now() + 24 * 60 * 60 * 1000; // 24h
+    user.verifyOtpExpireAt = Date.now() + 60 * 1000; // expires in 1 min (change if you want longer)
     await user.save();
 
     const mailOptions = {
