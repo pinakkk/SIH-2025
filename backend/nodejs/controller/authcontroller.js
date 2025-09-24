@@ -3,16 +3,16 @@ import jwt from "jsonwebtoken";
 import User from "../modules/User.js";
 import transporter from "../config/nodemailer.js";
 import admin from "firebase-admin";
-// import { createRequire } from "module";
-// const require = createRequire(import.meta.url);
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
 
 
-// const serviceAccount = require("../config/firebaseServiceKey.json");
-// if (!admin.apps.length) {
-//   admin.initializeApp({
-//     credential: admin.credential.cert(serviceAccount),
-//   });
-// }
+const serviceAccount = require("../config/myFirebaseKey.json");
+if (!admin.apps.length) {
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+  });
+}
 
 export const googleLogin = async (req, res) => {
   try {
