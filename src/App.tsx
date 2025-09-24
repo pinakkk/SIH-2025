@@ -20,6 +20,7 @@ import { ROUTES } from "@/lib/constants";
 import { LiveHazardMapPage } from "./pages/LiveHazardMapPage";
 import { CreatePostPage } from "./pages/CreatePostPage";
 import CommunityPage from "./pages/CommunityPage";
+import { HelpAndSupportPage } from '@/pages/HelpAndSupportPage';
 // Lazy load register
 const LazyRegisterPage = React.lazy(() =>
   import("@/pages/RegisterPage").then((module) => ({
@@ -73,6 +74,10 @@ function App() {
             <Route
               path={ROUTES.SUCCESS}
               element={isAuthenticated ? <Navigate to={ROUTES.DASHBOARD} replace /> : <SuccessPage />}
+            />
+             <Route
+              path={ROUTES.SUPPORT}
+              element={<HelpAndSupportPage />}
             />
             <Route path={ROUTES.CONTACT_US} element={<ContactUsPage />} />
             <Route path={ROUTES.FEEDBACK} element={<FeedbackPage />} />

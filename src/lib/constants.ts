@@ -21,6 +21,7 @@ export const ROUTES = {
   VERIFICATION: '/verification',
   NEW_PASSWORD: '/new-password',
   SUCCESS: '/success',
+  SUPPORT: '/support',
   CONTACT_US: '/contact-us',
   FEEDBACK: '/feedback',
   EMERGENCY_MODE: '/dashboard/emergency-mode',
