@@ -30,7 +30,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
     { id: "hazard", label: "Live Hazard Map", icon: <Map size={20} />, route: ROUTES.LIVE_HAZARD_MAP },
     { id: "community", label: "Community", icon: <Users size={20} />, route: ROUTES.COMMUNITY },
     { id: "emergency", label: "Emergency Mode", icon: <ShieldAlert size={20} />, route: ROUTES.EMERGENCY_MODE },
-    { id: "evac", label: "Evacuation Centres", icon: <Icon icon="mdi:home-group" className="text-lg" />, route: "/evacuation" },
+    { id: "evac", label: "Evacuation Centres", icon: <Icon icon="mdi:home-group" className="text-lg" />, route: ROUTES.EVACUATION_CENTERS },
     { id: "ai", label: "Get info with our AI", icon: <Icon icon="mdi:robot-outline" className="text-lg" />, route: ROUTES.CHATBOT },
     { id: "help", label: "Help & Support", icon: <HelpCircle size={20} />, route: ROUTES.SUPPORT },
     // { id: "alerts", label: "Alerts & Notifications", icon: <AlertTriangle size={20} />, route: "/alerts" },
