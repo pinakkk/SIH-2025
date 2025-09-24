@@ -398,7 +398,7 @@ export function DashboardPage() {
   useEffect(() => {
     async function fetchCommunityUpdates() {
       try {
-        const res = await fetch("http://127.0.0.1:5002/rank-posts");
+        const res = await fetch("https://sih-2025-roan.vercel.app/api/rank-posts");
         const data = await res.json();
         setCommunityUpdates(data.rankedPosts || []);
       } catch (err) {
