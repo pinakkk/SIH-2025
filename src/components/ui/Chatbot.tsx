@@ -1,4 +1,5 @@
-// // By Pinak - Bug fixes, markdown fixes
+// // // By Pinak - Bug fixes, markdown fixes
+
 import React, { useState, useRef, useEffect } from "react";
 import { Send } from "lucide-react";
 import { Icon } from "@iconify/react";
@@ -13,7 +14,7 @@ interface Message {
   id: string;
   text: string;
   sender: "user" | "bot";
-  typing?: boolean; // ✅ New flag for typing bubble
+  typing?: boolean; // for typing animation bubble
   timestamp: Date;
 }
 
@@ -41,7 +42,7 @@ const typeText = (
   }, speed);
 };
 
-// Typing indicator (3 animated dots)
+// Typing indicator (Instagram-style dots)
 const TypingIndicator = () => (
   <div className="flex space-x-1 px-2 py-1">
     <motion.span
@@ -123,7 +124,7 @@ export function Chatbot() {
 
     try {
       const response = await fetch(
-        "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent",
+        "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
         {
           method: "POST",
           headers: {
@@ -136,7 +137,10 @@ export function Chatbot() {
                 parts: [
                   {
                     text: `You are Rescue Saathi, a helpful disaster management assistant.
-Keep responses short (max 3–5 sentences), clear, and practical.
+- Always respond in a clear, human-like way.
+- Use short paragraphs or bullet points if useful.
+- Give practical, step-by-step advice where possible.
+- If the user asks for something that requires current or external info (e.g., "latest updates", "search", "today", "current situation"), tell them you're fetching real-time data and wait for the system to provide it.
 User query: ${text}`,
                   },
                 ],
@@ -185,14 +189,15 @@ User query: ${text}`,
   return (
     <div className="flex flex-col h-screen bg-gradient-to-b from-[#2a1e1c] to-[#1e1614] text-white">
       {/* Chat messages area */}
-      <div className="flex-1 overflow-y-auto px-4 pt-20 pb-6 space-y-6 custom-scrollbar">
+      <div className="flex-1 overflow-y-auto px-4 pt-24 pb-28 space-y-6 custom-scrollbar">
+
         {/* Suggested Questions */}
         {!initialLoading && messages.length === 1 && (
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
-            className="grid grid-cols-2 gap-3 sm:grid-cols-3 mt-2"
+            className="grid grid-cols-2 gap-3 sm:grid-cols-3"
           >
             {suggestedQuestions.map((q, i) => (
               <motion.button
@@ -217,9 +222,8 @@ User query: ${text}`,
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className={`flex w-full ${
-                msg.sender === "user" ? "justify-end" : "justify-start"
-              }`}
+              className={`flex w-full ${msg.sender === "user" ? "justify-end" : "justify-start"
+                }`}
             >
               {msg.sender === "user" ? (
                 <div className="flex items-end gap-2 max-w-[70%]">
@@ -263,8 +267,8 @@ User query: ${text}`,
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Input area fixed at bottom */}
-      <div className="border-t border-[#3a2f2d] px-4 py-3 bg-[#1f1816]/90">
+      {/* Input area pinned FIXED at bottom */}
+      <div className="fixed bottom-0 left-0 w-full border-t border-[#3a2f2d] px-4 py-3 bg-[#1f1816]/95 backdrop-blur-sm">
         <div className="flex items-center gap-3 max-w-4xl mx-auto">
           <textarea
             ref={textareaRef}
@@ -279,11 +283,10 @@ User query: ${text}`,
             onClick={() => handleSend()}
             disabled={loading || !input.trim()}
             whileTap={{ scale: 0.95 }}
-            className={`w-10 h-10 rounded-full flex items-center justify-center transition ${
-              !input.trim()
+            className={`w-10 h-10 rounded-full flex items-center justify-center transition ${!input.trim()
                 ? "bg-[#404040] text-gray-500 cursor-not-allowed"
                 : "bg-gradient-to-b from-[#2a1e1c] to-[#1e1614] text-white shadow-md hover:shadow-lg"
-            }`}
+              }`}
           >
             {loading ? (
               <motion.div
