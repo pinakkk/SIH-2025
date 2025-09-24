@@ -1,30 +1,58 @@
-import spacy
+# import spacy
 
-# Load SpaCy NLP model once
-try:
-    nlp = spacy.load("en_core_web_sm")
-except Exception as e:
-    nlp = None
-    print("⚠️ SpaCy model not loaded. Run: python -m spacy download en_core_web_sm")
+# # Load SpaCy NLP model once
+# try:
+#     nlp = spacy.load("en_core_web_sm")
+# except Exception as e:
+#     nlp = None
+#     print("⚠️ SpaCy model not loaded. Run: python -m spacy download en_core_web_sm")
+
+# def analyze_text(text: str):
+#     """Extract keywords and simple sentiment from text"""
+#     if not text:
+#         return {"error": "No text provided"}
+
+#     if nlp is None:
+#         return {"error": "SpaCy model not available"}
+
+#     doc = nlp(text)
+#     keywords = [token.text for token in doc if token.is_alpha and not token.is_stop]
+
+#     # Very basic sentiment (can replace with real ML model later)
+#     sentiment = "positive" if any(word in text.lower() for word in ["safe", "ok", "calm"]) else "neutral"
+#     if any(word in text.lower() for word in ["danger", "flood", "tsunami", "alert", "high waves"]):
+#         sentiment = "negative"
+
+#     return {
+#         "original_text": text,
+#         "keywords": keywords[:5],
+#         "sentiment": sentiment
+#     }
+
+
+# Lite version 
+
+from textblob import TextBlob
 
 def analyze_text(text: str):
-    """Extract keywords and simple sentiment from text"""
+    """
+    Lightweight NLP analysis using TextBlob.
+    Returns sentiment polarity and classification.
+    """
     if not text:
-        return {"error": "No text provided"}
+        return {"sentiment": "neutral", "polarity": 0.0}
 
-    if nlp is None:
-        return {"error": "SpaCy model not available"}
+    blob = TextBlob(text)
+    polarity = blob.sentiment.polarity  # -1 (neg) to +1 (pos)
 
-    doc = nlp(text)
-    keywords = [token.text for token in doc if token.is_alpha and not token.is_stop]
-
-    # Very basic sentiment (can replace with real ML model later)
-    sentiment = "positive" if any(word in text.lower() for word in ["safe", "ok", "calm"]) else "neutral"
-    if any(word in text.lower() for word in ["danger", "flood", "tsunami", "alert", "high waves"]):
+    if polarity < -0.2:
         sentiment = "negative"
+    elif polarity > 0.2:
+        sentiment = "positive"
+    else:
+        sentiment = "neutral"
 
     return {
-        "original_text": text,
-        "keywords": keywords[:5],
-        "sentiment": sentiment
+        "sentiment": sentiment,
+        "polarity": round(polarity, 3)
     }
