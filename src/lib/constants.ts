@@ -28,6 +28,10 @@ export const ROUTES = {
   EMERGENCY_CONTACTS: '/dashboard/emergency-contacts',
   LIVE_LOCATION: '/dashboard/live-location',
   EMERGENCY_SETTINGS: '/dashboard/emergency-settings',
+  EMERGENCY_HOTLINES: '/dashboard/emergency-hotlines',
+  VIEW_DETAILS: '/dashboard/view-details',
+  REPORT_UPDATES: '/dashboard/report-updates',
+  SEE_MORE: '/dashboard/see-more',
 } as const;
 
 

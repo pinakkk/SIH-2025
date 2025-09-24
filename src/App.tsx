@@ -20,6 +20,10 @@ import { ROUTES } from "@/lib/constants";
 import { LiveHazardMapPage } from "./pages/LiveHazardMapPage";
 import { CreatePostPage } from "./pages/CreatePostPage";
 import CommunityPage from "./pages/CommunityPage";
+import { EmergencyHotlinesPage } from "./pages/EmergencyHotlinesPage";
+import { ViewDetailsPage } from "./pages/ViewDetailsPage";
+import { ReportUpdatesPage } from "./pages/ReportUpdatesPage";
+import { SeeMorePage } from "./pages/SeeMorePage";
 // Lazy load register
 const LazyRegisterPage = React.lazy(() =>
   import("@/pages/RegisterPage").then((module) => ({
@@ -85,7 +89,20 @@ function App() {
                 </ProtectedRoute>
               }
             >
-              {/* Add nested protected routes that should show Navbar here */}
+            </Route>
+
+            {/* Protected standalone routes */}
+            <Route
+              element={
+                <ProtectedRoute>
+                  <Outlet />
+                </ProtectedRoute>
+              }
+            >
+              <Route path={ROUTES.EMERGENCY_HOTLINES} element={<EmergencyHotlinesPage />} />
+              <Route path={ROUTES.VIEW_DETAILS} element={<ViewDetailsPage />} />
+              <Route path={ROUTES.REPORT_UPDATES} element={<ReportUpdatesPage />} />
+              <Route path={ROUTES.SEE_MORE} element={<SeeMorePage />} />
             </Route>
 
             {/* Dashboard route - we intentionally render DashboardPage without Navbar to match mobile-first layout */}

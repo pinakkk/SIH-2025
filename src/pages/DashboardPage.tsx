@@ -14,6 +14,8 @@ import {
 import { Icon } from "@iconify/react";
 import { useAuth } from "@/hooks/use-auth";
 import { BottomNavigation } from "@/components/layout/BottomNavigation";
+import { useNavigate } from "react-router-dom";
+import { ROUTES } from "@/lib/constants";
 import AppLogo from '../assets/icons/rescue-saathi.png'
 
 // ✅ Skeleton with rounded-xl by default
@@ -28,6 +30,7 @@ export function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [scrolled, setScrolled] = useState(false);
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const t = setTimeout(() => setLoading(false), 900);
@@ -168,10 +171,26 @@ export function DashboardPage() {
             className="grid grid-cols-4 gap-3 mb-6 text-center"
           >
             {[
-              { icon: <Phone size={22} />, label: "Emergency\nHotlines" },
-              { icon: <Info size={22} />, label: "View\nDetails" },
-              { icon: <Radio size={22} />, label: "Report\nUpdates" },
-              { icon: <MoreHorizontal size={22} />, label: "See\nMore" },
+              { 
+                icon: <Phone size={22} />, 
+                label: "Emergency\nHotlines",
+                path: ROUTES.EMERGENCY_HOTLINES
+              },
+              { 
+                icon: <Info size={22} />, 
+                label: "View\nDetails",
+                path: ROUTES.VIEW_DETAILS
+              },
+              { 
+                icon: <Radio size={22} />, 
+                label: "Report\nUpdates",
+                path: ROUTES.REPORT_UPDATES
+              },
+              { 
+                icon: <MoreHorizontal size={22} />, 
+                label: "See\nMore",
+                path: ROUTES.SEE_MORE
+              },
             ].map((it, idx) => (
               <motion.div
                 key={idx}
@@ -181,9 +200,12 @@ export function DashboardPage() {
                 }}
                 className="flex flex-col items-center gap-1"
               >
-                <div className="p-3 rounded-full bg-[#2a2a2a] w-14 h-14 flex items-center justify-center hover:scale-105 transition-transform">
+                <button 
+                  onClick={() => navigate(it.path)} 
+                  className="p-3 rounded-full bg-[#2a2a2a] w-14 h-14 flex items-center justify-center hover:scale-105 transition-transform"
+                >
                   {it.icon}
-                </div>
+                </button>
                 <p className="text-xs leading-tight whitespace-pre-line text-[#d8cdc6]">
                   {it.label}
                 </p>
