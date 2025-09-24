@@ -15,12 +15,13 @@ export const ROUTES = {
   LIVE_HAZARD_MAP: "/dashboard/live-hazard-map",
   CREATE_POST: "/create-post", // ✅ NEW
   COMMUNITY: "/community", // New
-  PROFILE: '/dashboard/profile',
+  PROFILE: "/profile",
   SETTINGS: '/dashboard/settings',
   FORGOT_PASSWORD: '/forgot-password',
   VERIFICATION: '/verification',
   NEW_PASSWORD: '/new-password',
   SUCCESS: '/success',
+  SUPPORT: '/support',
   CONTACT_US: '/contact-us',
   FEEDBACK: '/feedback',
   EMERGENCY_MODE: '/dashboard/emergency-mode',
