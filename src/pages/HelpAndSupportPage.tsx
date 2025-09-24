@@ -66,55 +66,55 @@ export function HelpAndSupportPage() {
   );
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#111111] px-4">
-      <div className="w-full max-w-sm text-left backdrop-blur-2xl bg-[#1b140e]/95 border border-[#F57C00]/30 shadow-2xl p-8 rounded-[2rem]">
+    <div className="min-h-screen flex items-center justify-center bg-[#111111] px-3">
+      <div className="w-full max-w-xs text-left backdrop-blur-2xl bg-[#1b140e]/95 border border-[#F57C00]/30 shadow-2xl p-4 rounded-xl">
 
         {/* Header */}
-        <header className="flex items-center mb-6">
-          <button onClick={() => navigate(-1)} className="p-2 mr-4 rounded-full hover:bg-[#F57C00]/30 transition-colors">
-            <ArrowLeft className="w-6 h-6 text-[#FFC107]" />
+        <header className="flex items-center mb-4">
+          <button onClick={() => navigate(-1)} className="p-1.5 mr-3 rounded-full hover:bg-[#F57C00]/30 transition-colors">
+            <ArrowLeft className="w-5 h-5 text-[#FFC107]" />
           </button>
-          <h1 className="text-2xl font-bold text-[#FCFCFA] drop-shadow-md text-left">Help & Support</h1>
+          <h1 className="text-lg font-bold text-[#FCFCFA] drop-shadow-md text-left">Help & Support</h1>
         </header>
 
         {/* Search Bar */}
-        <div className="relative mb-6">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[#FFEBB4] w-5 h-5" />
+        <div className="relative mb-4">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[#FFEBB4] w-4 h-4" />
           <input
             type="text"
             placeholder="Search Your Query"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-12 pr-4 py-4 rounded-[2rem] bg-[#FFF3E0]/10 backdrop-blur-xl border border-[#FFC107]/40 text-sm text-[#FCFCFA] placeholder-[#FFEBB4] focus:outline-none focus:ring-1 focus:ring-[#F57C00] transition-all duration-300 ease-in-out text-left"
+            className="w-full pl-10 pr-3 py-3 rounded-xl bg-[#FFF3E0]/10 backdrop-blur-xl border border-[#FFC107]/40 text-xs text-[#FCFCFA] placeholder-[#FFEBB4] focus:outline-none focus:ring-1 focus:ring-[#F57C00] transition-all duration-300 ease-in-out text-left"
           />
         </div>
 
         {/* Divider */}
-        <div className="h-[2px] w-full bg-gradient-to-r from-[#F57C00] via-[#FFC107] to-[#FFEBB4] rounded-full mb-6"></div>
+        <div className="h-[1px] w-full bg-gradient-to-r from-[#F57C00] via-[#FFC107] to-[#FFEBB4] rounded-full mb-4"></div>
 
         {/* FAQ Accordion */}
-        <div className="space-y-4 text-left">
+        <div className="space-y-3 text-left">
           {filteredSections.map(section => (
             <div
               key={section.id}
-              className="bg-[#FFF3E0]/10 backdrop-blur-xl rounded-[2rem] p-4 transform transition-transform duration-300 hover:scale-[1.02] hover:shadow-xl text-left"
+              className="bg-[#FFF3E0]/10 backdrop-blur-xl rounded-xl p-3 transform transition-transform duration-300 hover:scale-[1.01] hover:shadow-lg text-left"
             >
               <Accordion type="multiple">
                 <AccordionItem value={section.id} className="border-none">
-                  <AccordionTrigger className="hover:no-underline px-2 text-left">
-                    <div className="flex items-center gap-3 text-left">
-                      <HelpCircle className="w-6 h-6 text-[#FFC107]" />
-                      <span className="text-lg text-[#FCFCFA] text-left">{section.title}</span>
+                  <AccordionTrigger className="hover:no-underline px-1 text-left">
+                    <div className="flex items-center gap-2 text-left">
+                      <HelpCircle className="w-5 h-5 text-[#FFC107]" />
+                      <span className="text-sm font-medium text-[#FCFCFA] text-left">{section.title}</span>
                     </div>
                   </AccordionTrigger>
-                  <AccordionContent className="pl-4 transition-all duration-300 ease-in-out text-left">
-                    <Accordion type="multiple" className="ml-6 border-l border-[#F57C00]/40 pl-4 text-left">
+                  <AccordionContent className="pl-2 transition-all duration-300 ease-in-out text-left">
+                    <Accordion type="multiple" className="ml-4 border-l border-[#F57C00]/40 pl-3 text-left">
                       {section.questions.map(q => (
                         <AccordionItem key={q.id} value={q.id} className="border-b-0 text-left">
-                          <AccordionTrigger className="text-base text-[#FFEBB4] py-2 hover:no-underline hover:text-[#FFC107] transition-colors duration-200 text-left">
+                          <AccordionTrigger className="text-xs text-[#FFEBB4] py-1.5 hover:no-underline hover:text-[#FFC107] transition-colors duration-200 text-left">
                             {q.question}
                           </AccordionTrigger>
-                          <AccordionContent className="pb-2 text-[#FFF3E0] transition-colors duration-200 text-left">
+                          <AccordionContent className="pb-1.5 text-xs text-[#FFF3E0] transition-colors duration-200 text-left">
                             {q.answer}
                           </AccordionContent>
                         </AccordionItem>
@@ -128,21 +128,21 @@ export function HelpAndSupportPage() {
         </div>
 
         {/* Floating Action Button */}
-        <div className="fixed bottom-6 right-6 flex flex-col items-end gap-3 text-left">
+        <div className="fixed bottom-4 right-4 flex flex-col items-end gap-2 text-left">
           {/* Secondary buttons */}
           {fabOpen && (
             <>
               <button
                 onClick={() => alert('Join Community Forum clicked')}
-                className="flex items-center gap-2 bg-gradient-to-r from-[#F57C00] via-[#FFC107] to-[#FFEBB4] text-[#111111] font-medium rounded-[2rem] p-3 shadow-lg hover:opacity-90 transition-all duration-300 text-left"
+                className="flex items-center gap-2 bg-gradient-to-r from-[#F57C00] via-[#FFC107] to-[#FFEBB4] text-[#111111] font-medium rounded-xl p-2 shadow-lg hover:opacity-90 transition-all duration-300 text-left text-xs"
               >
-                <Users className="w-5 h-5" /> Join Community
+                <Users className="w-4 h-4" /> Join Community
               </button>
               <button
                 onClick={() => alert('Contact Us clicked')}
-                className="flex items-center gap-2 bg-gradient-to-r from-[#F57C00] via-[#FFC107] to-[#FFEBB4] text-[#111111] font-medium rounded-[2rem] p-3 shadow-lg hover:opacity-90 transition-all duration-300 text-left"
+                className="flex items-center gap-2 bg-gradient-to-r from-[#F57C00] via-[#FFC107] to-[#FFEBB4] text-[#111111] font-medium rounded-xl p-2 shadow-lg hover:opacity-90 transition-all duration-300 text-left text-xs"
               >
-                <Mail className="w-5 h-5" /> Contact Us
+                <Mail className="w-4 h-4" /> Contact Us
               </button>
             </>
           )}
@@ -150,10 +150,10 @@ export function HelpAndSupportPage() {
           {/* Main FAB */}
           <button
             onClick={() => setFabOpen(!fabOpen)}
-            className="w-16 h-16 rounded-full bg-[#F57C00] flex items-center justify-center text-[#FCFCFA] text-3xl shadow-xl hover:scale-105 transition-transform duration-300"
+            className="w-12 h-12 rounded-full bg-[#F57C00] flex items-center justify-center text-[#FCFCFA] shadow-xl hover:scale-105 transition-transform duration-300"
           >
-            {fabOpen ? <X className="w-8 h-8" /> : (
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="#FCFCFA" xmlns="http://www.w3.org/2000/svg">
+            {fabOpen ? <X className="w-6 h-6" /> : (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="#FCFCFA" xmlns="http://www.w3.org/2000/svg">
                 <rect x="4" y="4" width="6" height="6" rx="1" />
                 <rect x="14" y="4" width="6" height="6" rx="1" />
                 <rect x="4" y="14" width="6" height="6" rx="1" />
