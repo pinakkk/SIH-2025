@@ -6,4 +6,4 @@ if ROOT not in sys.path:
     sys.path.append(ROOT)
 
 # Import the Flask app from server/api.py
-from backend.python-nlp-service.server.api import app
+from backend.pythonnlpservice.server.api import app
