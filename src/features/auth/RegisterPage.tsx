@@ -167,14 +167,14 @@ export function RegisterPage() {
         </button>
 
         {/* Divider */}
-        <div className="flex items-center my-5">
+        {/* <div className="flex items-center my-5">
           <div className="flex-1 h-px bg-gray-700"></div>
           <span className="px-3 text-xs text-gray-400">Or, sign up with</span>
           <div className="flex-1 h-px bg-gray-700"></div>
-        </div>
+        </div> */}
 
         {/* Social Login */}
-        <div className="flex justify-center space-x-8 mb-5">
+        {/* <div className="flex justify-center space-x-8 mb-5">
           <button className="text-blue-500 text-3xl hover:scale-110 transition-transform">
             <Icon icon="logos:facebook" />
           </button>
@@ -184,7 +184,7 @@ export function RegisterPage() {
           <button className="text-gray-200 text-3xl hover:scale-110 transition-transform">
             <Icon icon="mdi:apple" />
           </button>
-        </div>
+        </div> */}
 
         {/* Login Redirect */}
         <p className="text-center text-sm text-gray-400 mt-2">
