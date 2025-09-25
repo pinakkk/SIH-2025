@@ -4,10 +4,6 @@ import { Card, CardContent } from "@/components/ui/Card";
 import {
   MapPin,
   Menu,
-  Phone,
-  Info,
-  Radio,
-  MoreHorizontal,
 } from "lucide-react";
 import axios from "axios";
 
@@ -104,6 +100,22 @@ export function DashboardPage() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // ✅ Map severity to marker colors
+  const getSeverityColor = (severity: string) => {
+    switch (severity) {
+      case "critical":
+        return "red";
+      case "high":
+        return "orange";
+      case "medium":
+        return "yellow";
+      case "low":
+        return "green";
+      default:
+        return "blue";
+    }
+  };
+
   return (
     <div className="bg-[#1f1816] min-h-screen text-white pb-28 font-sans">
       {/* Sticky Header */}
@@ -191,9 +203,18 @@ export function DashboardPage() {
               const severityColor =
                 alert.severity === "critical"
                   ? "bg-red-500"
-                  : alert.severity === "moderate"
+                  : alert.severity === "high"
+                  ? "bg-orange-500"
+                  : alert.severity === "medium"
                   ? "bg-yellow-500"
                   : "bg-green-500";
+
+              // ✅ Map URL
+              const markerColor = getSeverityColor(alert.severity);
+              const mapUrl =
+                alert.postLocation?.coordinates && GOOGLE_MAPS_API_KEY
+                  ? `https://maps.googleapis.com/maps/api/staticmap?center=${alert.postLocation.coordinates[1]},${alert.postLocation.coordinates[0]}&zoom=14&size=600x300&markers=color:${markerColor}%7C${alert.postLocation.coordinates[1]},${alert.postLocation.coordinates[0]}&${darkMapStyleQuery}&key=${GOOGLE_MAPS_API_KEY}`
+                  : null;
 
               return (
                 <motion.div
@@ -240,13 +261,16 @@ export function DashboardPage() {
                           </span>
                         </div>
                       </div>
-                      <div className="w-full h-44 bg-[#131212] rounded-xl overflow-hidden border border-[#3a2f2d] shadow-inner">
-                        <img
-                          src="https://i.imgur.com/AYp2z2A.png"
-                          alt="Alert location map"
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
+
+                      {mapUrl && (
+                        <div className="w-full h-44 bg-[#131212] rounded-xl overflow-hidden border border-[#3a2f2d] shadow-inner">
+                          <img
+                            src={mapUrl}
+                            alt="Alert location map"
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                      )}
                     </CardContent>
                   </Card>
                 </motion.div>
@@ -256,7 +280,7 @@ export function DashboardPage() {
         </div>
 
         {/* Community Updates */}
-         <div className="mb-4 mt-8">
+        <div className="mb-4 mt-8">
           <h2 className="font-semibold text-lg mb-4">Community Updates</h2>
         </div>
 
@@ -283,7 +307,10 @@ export function DashboardPage() {
 
               const markerColor =
                 update.status === "Marked Safe" ? "green" : "red";
-              const mapUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${update.location.coordinates[1]},${update.location.coordinates[0]}&zoom=13&size=600x300&markers=color:${markerColor}%7C${update.location.coordinates[1]},${update.location.coordinates[0]}&${darkMapStyleQuery}&key=${GOOGLE_MAPS_API_KEY}`;
+              const mapUrl =
+                update.location?.coordinates && GOOGLE_MAPS_API_KEY
+                  ? `https://maps.googleapis.com/maps/api/staticmap?center=${update.location.coordinates[1]},${update.location.coordinates[0]}&zoom=13&size=600x300&markers=color:${markerColor}%7C${update.location.coordinates[1]},${update.location.coordinates[0]}&${darkMapStyleQuery}&key=${GOOGLE_MAPS_API_KEY}`
+                  : null;
 
               return (
                 <motion.div
@@ -331,7 +358,7 @@ export function DashboardPage() {
                         {update.caption}
                       </p>
 
-                      {update.location?.coordinates && GOOGLE_MAPS_API_KEY && (
+                      {mapUrl && (
                         <div className="w-full h-40 bg-[#131212] rounded-xl overflow-hidden mb-4 border border-[#3a2f2d]">
                           <img
                             src={mapUrl}
