@@ -1,23 +1,18 @@
-// Version 2.0 - needs minor fix
+// Version 3.0 - Cleaned (Direct API Call)
 import { useState } from "react";
 import { Icon } from "@iconify/react";
-import { useAuth } from "@/hooks/use-auth";
 import { ROUTES } from "@/lib/constants";
 import { useNavigate } from "react-router-dom";
-import AppLogo from '../../assets/icons/rescue-saathi.png'
+import axios from "axios";
+import AppLogo from "../../assets/icons/rescue-saathi.png";
+
 export function LoginPage() {
   const navigate = useNavigate();
-  const {
-    login,
-    loginWithGoogle,
-    loginWithFacebook,
-    loginWithApple,
-    isLoading,
-  } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -26,42 +21,27 @@ export function LoginPage() {
     }
 
     try {
+      setIsLoading(true);
       setError(null);
-      await login({ email, password });
-      // ❌ Do not navigate here, App.tsx handles redirect
-    } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : "Login failed. Please check your credentials."
+
+      const { data } = await axios.post(
+        "http://localhost:5002/api/login", // change to production url later
+        { email, password },
+        { withCredentials: true }
       );
-    }
-  };
 
-  const handleGoogleLogin = async () => {
-    try {
-      setError(null);
-      await loginWithGoogle();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Google login failed.");
-    }
-  };
+      console.log("✅ Login Success:", data);
 
-  const handleFacebookLogin = async () => {
-    try {
-      setError(null);
-      await loginWithFacebook();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Facebook login failed.");
-    }
-  };
-
-  const handleAppleLogin = async () => {
-    try {
-      setError(null);
-      await loginWithApple();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Apple login failed.");
+      // redirect to dashboard/home after login
+      navigate(ROUTES.DASHBOARD);
+    } catch (err: any) {
+      setError(
+        err.response?.data?.message ||
+          err.message ||
+          "Login failed. Please check your credentials."
+      );
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -194,35 +174,6 @@ export function LoginPage() {
           )}
         </button>
 
-        {/* Divider */}
-        <div className="flex items-center my-6">
-          <div className="flex-1 h-px bg-white/20"></div>
-          <span className="px-3 text-xs text-gray-400">Or, sign in with</span>
-          <div className="flex-1 h-px bg-white/20"></div>
-        </div>
-
-        {/* Social Login */}
-        <div className="flex justify-center space-x-10 mb-6">
-          <button
-            onClick={handleFacebookLogin}
-            className="text-blue-500 text-3xl hover:scale-110 transition-transform drop-shadow-md"
-          >
-            <Icon icon="logos:facebook" />
-          </button>
-          <button
-            onClick={handleGoogleLogin}
-            className="text-green-500 text-3xl hover:scale-110 transition-transform drop-shadow-md"
-          >
-            <Icon icon="logos:google-icon" />
-          </button>
-          <button
-            onClick={handleAppleLogin}
-            className="text-gray-200 text-3xl hover:scale-110 transition-transform drop-shadow-md"
-          >
-            <Icon icon="mdi:apple" />
-          </button>
-        </div>
-
         {/* Guest */}
         <p className="text-center text-sm mb-4">
           <a
@@ -243,8 +194,6 @@ export function LoginPage() {
             Create Account
           </a>
         </p>
-
-        
       </div>
     </div>
   );

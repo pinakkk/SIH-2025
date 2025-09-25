@@ -38,6 +38,8 @@ export const googleLogin = async (req, res) => {
 };
 
 export const registered = async (req, res) => {
+  console.log("hello");
+  
   const { username, email, password, location } = req.body;
 
   if (!username || !email || !password) {
@@ -95,18 +97,28 @@ export const registered = async (req, res) => {
 // =========================
 // Login Controller
 // =========================
+
 export const login = async (req, res) => {
-  const { idToken } = req.body; // from frontend (Firebase)
+  
+  const { email, password } = req.body;
 
   try {
-    // 1. Verify token with Firebase
-    const decoded = await admin.auth().verifyIdToken(idToken);
-    const { email } = decoded;
-
-    // 2. Check if user exists in your DB
+    // 1. Check if user exists
     const user = await User.findOne({ email });
     if (!user) {
-      return res.json({ success: false, message: "User not found. Please register first." });
+      return res.status(404).json({
+        success: false,
+        message: "User not found. Please register first.",
+      });
+    }
+
+    // 2. Compare password
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid password.",
+      });
     }
 
     // 3. Issue your own JWT
@@ -119,16 +131,26 @@ export const login = async (req, res) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
 
-    return res.json({ success: true, message: "Google login successful", user });
+    return res.json({
+      success: true,
+      message: "Login successful",
+      user: {
+        id: user._id,
+        email: user.email,
+        name: user.name,
+      },
+    });
   } catch (error) {
-    console.error("Google login error:", error);
-    return res.status(400).json({ success: false, message: "Invalid Google token" });
+    console.error("Login error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
   }
 };
-
 // =========================
 // Logout Controller
 // =========================

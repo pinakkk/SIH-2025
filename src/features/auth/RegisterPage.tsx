@@ -1,29 +1,94 @@
 import { useState } from "react";
 import { Icon } from "@iconify/react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import { ROUTES } from "@/lib/constants";
-import AppLogo from '../../assets/icons/rescue-saathi.png'
+import AppLogo from "../../assets/icons/rescue-saathi.png";
 
 export function RegisterPage() {
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+
+  const handleRegister = async () => {
+    setLoading(true);
+    setErrorMsg("");
+
+    if (!navigator.geolocation) {
+      setErrorMsg("Geolocation is not supported by your browser");
+      setLoading(false);
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const { latitude, longitude } = position.coords;
+
+        try {
+          const { data } = await axios.post(
+            "http://localhost:5002/api/registered",
+            {
+              username: name,
+              email,
+              password,
+              location: {
+                type: "Point", // ✅ required for GeoJSON
+                coordinates: [longitude, latitude], // ✅ [lng, lat] order
+              },
+            },
+            { withCredentials: true }
+          );
+
+          if (data.success) {
+            alert("✅ Registered Successfully!");
+            navigate(ROUTES.LOGIN);
+          } else {
+            setErrorMsg(data.message || "Registration failed");
+          }
+        } catch (err) {
+          if (axios.isAxiosError(err)) {
+            setErrorMsg(
+              err.response?.data?.message ||
+                err.message ||
+                "Something went wrong, please try again."
+            );
+          } else {
+            setErrorMsg("Unexpected error occurred. Please try again.");
+          }
+        } finally {
+          setLoading(false);
+        }
+      },
+      (error) => {
+        setErrorMsg(
+          "Location access denied. Please allow location to continue."
+        );
+        setLoading(false);
+      }
+    );
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#1b140e] bg-opacity-95 px-4">
       <div className="w-full max-w-sm text-white backdrop-blur-sm p-6 rounded-3xl border border-gray-800/50">
         {/* Heading */}
-        <h1 className="text-center text-xl font-semibold mb-5 text-orange-100">Sign Up</h1>
+        <h1 className="text-center text-xl font-semibold mb-5 text-orange-100">
+          Sign Up
+        </h1>
 
         {/* Logo + Title */}
         <div className="flex flex-col items-center mb-6">
           <img
-            src= {AppLogo}
+            src={AppLogo}
             alt="Rescue Saathi Logo"
             className="w-24 h-24 mb-2"
           />
-          <h2 className="text-2xl font-bold bg-gradient-to-r from-orange-400 to-yellow-300 text-transparent bg-clip-text">RESCUE SAATHI</h2>
+          <h2 className="text-2xl font-bold bg-gradient-to-r from-orange-400 to-yellow-300 text-transparent bg-clip-text">
+            RESCUE SAATHI
+          </h2>
           <p className="text-sm text-gray-300 mt-1 text-center">
             India's First SocialApp For Disaster Safety
           </p>
@@ -31,9 +96,14 @@ export function RegisterPage() {
 
         {/* Name Input */}
         <div className="mb-4">
-          <label className="block text-sm text-gray-300 mb-1.5 font-medium pl-1">Full Name</label>
+          <label className="block text-sm text-gray-300 mb-1.5 font-medium pl-1">
+            Full Name
+          </label>
           <div className="relative">
-            <Icon icon="mdi:account-outline" className="absolute top-3 left-3 text-gray-400 text-xl" />
+            <Icon
+              icon="mdi:account-outline"
+              className="absolute top-3 left-3 text-gray-400 text-xl"
+            />
             <input
               type="text"
               placeholder="Enter Your Name"
@@ -46,9 +116,14 @@ export function RegisterPage() {
 
         {/* Email Input */}
         <div className="mb-4">
-          <label className="block text-sm text-gray-300 mb-1.5 font-medium pl-1">Email</label>
+          <label className="block text-sm text-gray-300 mb-1.5 font-medium pl-1">
+            Email
+          </label>
           <div className="relative">
-            <Icon icon="mdi:email-outline" className="absolute top-3 left-3 text-gray-400 text-xl" />
+            <Icon
+              icon="mdi:email-outline"
+              className="absolute top-3 left-3 text-gray-400 text-xl"
+            />
             <input
               type="text"
               placeholder="Email or Phone Number"
@@ -61,9 +136,14 @@ export function RegisterPage() {
 
         {/* Password Input */}
         <div className="mb-4">
-          <label className="block text-sm text-gray-300 mb-1.5 font-medium pl-1">Password</label>
+          <label className="block text-sm text-gray-300 mb-1.5 font-medium pl-1">
+            Password
+          </label>
           <div className="relative">
-            <Icon icon="mdi:lock-outline" className="absolute top-3 left-3 text-gray-400 text-xl" />
+            <Icon
+              icon="mdi:lock-outline"
+              className="absolute top-3 left-3 text-gray-400 text-xl"
+            />
             <input
               type="password"
               placeholder="Password"
@@ -74,22 +154,16 @@ export function RegisterPage() {
           </div>
         </div>
 
-        {/* Terms & Conditions */}
-        <div className="flex items-start text-xs mb-5">
-          <input type="checkbox" className="accent-orange-500 w-4 h-4 mt-1" />
-          <span className="ml-2 text-xs">
-            Before proceeding, I agree to the
-            <a href="#" className="text-orange-400 hover:underline ml-1 hover:text-orange-300 transition-colors">
-              terms & conditions
-            </a>
-          </span>
-        </div>
+        {/* Error message */}
+        {errorMsg && <p className="text-red-400 text-xs mb-3">{errorMsg}</p>}
 
         {/* Sign Up Button */}
-        <button 
-          className="w-full py-3.5 rounded-2xl font-semibold bg-gradient-to-r from-orange-500 to-yellow-300 text-black flex items-center justify-center shadow-lg hover:opacity-90 hover:shadow-xl transform hover:-translate-y-0.5 transition-all"
+        <button
+          onClick={handleRegister}
+          disabled={loading}
+          className="w-full py-3.5 rounded-2xl font-semibold bg-gradient-to-r from-orange-500 to-yellow-300 text-black flex items-center justify-center shadow-lg hover:opacity-90 hover:shadow-xl transform hover:-translate-y-0.5 transition-all disabled:opacity-50"
         >
-          Sign Up
+          {loading ? "Signing Up..." : "Sign Up"}
         </button>
 
         {/* Divider */}
@@ -115,7 +189,7 @@ export function RegisterPage() {
         {/* Login Redirect */}
         <p className="text-center text-sm text-gray-400 mt-2">
           Already have an account?
-          <a 
+          <a
             onClick={() => navigate(ROUTES.LOGIN)}
             className="text-orange-400 hover:text-orange-300 hover:underline ml-1 transition-colors cursor-pointer"
           >
