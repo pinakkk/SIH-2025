@@ -117,7 +117,9 @@ export function CommunityPage() {
     unreadCount,
     markAsRead,
     markAsUnread,
-    deleteNotification
+    deleteNotification,
+    clearAll,
+    markAllAsRead
   } = useNotifications();
 
   // Handle scroll effect for header
@@ -760,6 +762,8 @@ export function CommunityPage() {
         onMarkAsRead={markAsRead}
         onMarkAsUnread={markAsUnread}
         onDelete={deleteNotification}
+        onClearAll={clearAll}
+        onMarkAllAsRead={markAllAsRead}
         unreadCount={unreadCount}
       />
     </div>

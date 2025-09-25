@@ -56,6 +56,8 @@ export function DashboardPage() {
     markAsRead,
     markAsUnread,
     deleteNotification,
+    clearAll,
+    markAllAsRead,
   } = useNotifications();
 
   // Fetch community updates
@@ -376,6 +378,8 @@ export function DashboardPage() {
         onMarkAsRead={markAsRead}
         onMarkAsUnread={markAsUnread}
         onDelete={deleteNotification}
+        onClearAll={clearAll}
+        onMarkAllAsRead={markAllAsRead}
         unreadCount={unreadCount}
       />
     </div>

@@ -13,6 +13,7 @@ import {
   Trash2,
   Eye,
   EyeOff,
+  RefreshCw,
 } from "lucide-react";
 import { Icon } from "@iconify/react";
 import type { Notification, NotificationAction } from "@/types/notification";
@@ -24,6 +25,8 @@ interface NotificationPanelProps {
   onMarkAsRead: (id: string) => void;
   onMarkAsUnread: (id: string) => void;
   onDelete: (id: string) => void;
+  onClearAll?: () => void;
+  onMarkAllAsRead?: () => void;
   onAction?: (notification: Notification, action: NotificationAction) => void;
   unreadCount?: number;
 }
@@ -92,13 +95,24 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
   onDelete,
 }) => {
   const [showActions, setShowActions] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  
+  // Handle delete with animation
+  const handleDelete = () => {
+    setIsDeleting(true);
+    setTimeout(() => {
+      onDelete(notification.id);
+    }, 300);
+  };
 
   return (
     <motion.div
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: 20 }}
+      exit={{ opacity: 0, x: 20, height: 0, marginBottom: 0 }}
+      transition={{ duration: 0.3 }}
       layout
+      className={isDeleting ? "opacity-50" : ""}
     >
       <div className={`bg-gradient-to-r from-[#2a1e1c] to-[#1e1614] border border-[#3a2f2d] rounded-xl ${getPriorityColor(notification.priority)} border-l-4 hover:bg-[#2c211f] transition-colors`}>
         <div className="p-5">
@@ -168,11 +182,12 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
                   {notification.isRead ? 'Mark Unread' : 'Mark Read'}
                 </button>
                 <button
-                  onClick={() => onDelete(notification.id)}
-                  className="flex items-center gap-2 px-3 py-2 text-sm text-red-400 hover:text-red-300 bg-[#2a2a2a] hover:bg-[#3a3330] rounded-lg transition-colors"
+                  onClick={handleDelete}
+                  disabled={isDeleting}
+                  className="flex items-center gap-2 px-3 py-2 text-sm text-red-400 hover:text-red-300 bg-[#2a2a2a] hover:bg-[#3a3330] rounded-lg transition-colors disabled:opacity-50"
                 >
-                  <Trash2 size={12} />
-                  Delete
+                  <Trash2 size={12} className={isDeleting ? "animate-spin" : ""} />
+                  {isDeleting ? "Deleting..." : "Delete"}
                 </button>
               </motion.div>
             )}
@@ -190,9 +205,23 @@ export const NotificationPanel: React.FC<NotificationPanelProps> = ({
   onMarkAsRead,
   onMarkAsUnread,
   onDelete,
+  onClearAll,
+  onMarkAllAsRead,
   unreadCount = 0,
 }) => {
   const panelRef = useRef<HTMLDivElement>(null);
+  const [isClearingAll, setIsClearingAll] = useState(false);
+  
+  // Handle clearing all notifications with animation
+  const handleClearAll = () => {
+    if (!notifications.length || !onClearAll) return;
+    
+    setIsClearingAll(true);
+    setTimeout(() => {
+      onClearAll();
+      setIsClearingAll(false);
+    }, 300);
+  };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -257,9 +286,18 @@ export const NotificationPanel: React.FC<NotificationPanelProps> = ({
                   )}
                 </div>
                 <div className="flex items-center gap-2">
-                  {/* <button className="p-2.5 text-[#bfb2ac] hover:text-white hover:bg-[#3a3330] rounded-xl transition-colors">
-                    <Settings size={16} />
-                  </button> */}
+                  {notifications.length > 0 && (
+                    <motion.button
+                      onClick={handleClearAll}
+                      className="flex items-center gap-1 px-2.5 py-1.5 text-sm text-[#bfb2ac] hover:text-white bg-[#3a2f2d] hover:bg-[#4a3e3c] rounded-lg transition-colors"
+                      whileTap={{ scale: 0.95 }}
+                      disabled={isClearingAll}
+                      title="Clear all notifications"
+                    >
+                      <Trash2 size={14} className={isClearingAll ? "animate-spin" : ""} />
+                      {isClearingAll ? "Clearing..." : "Clear All"}
+                    </motion.button>
+                  )}
                   <button
                     onClick={onClose}
                     className="p-2.5 text-[#bfb2ac] hover:text-white hover:bg-[#3a3330] rounded-xl transition-colors"
@@ -272,27 +310,47 @@ export const NotificationPanel: React.FC<NotificationPanelProps> = ({
 
             {/* Content */}
             <div className="flex-1 overflow-y-auto overscroll-contain px-4 sm:px-6 py-4">
-              {notifications.length === 0 ? (
-                <div className="text-center py-12 sm:py-16">
-                  <div className="w-16 h-16 sm:w-20 sm:h-20 bg-[#3a2f2d] rounded-full flex items-center justify-center mx-auto mb-5 sm:mb-6">
-                    <Bell size={24} className="text-[#9d9188] sm:w-7 sm:h-7" />
-                  </div>
-                  <h3 className="font-medium text-white mb-3 text-base sm:text-lg">No notifications</h3>
-                  <p className="text-[#bfb2ac] text-sm sm:text-base max-w-xs mx-auto leading-relaxed">
-                    You're all caught up! New notifications will appear here.
-                  </p>
-                </div>
-              ) : (
-                <div className="space-y-6">
+                {notifications.length === 0 ? (
+                  <motion.div 
+                    key="empty-state"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="text-center py-12 sm:py-16"
+                  >
+                    <div className="w-16 h-16 sm:w-20 sm:h-20 bg-[#3a2f2d] rounded-full flex items-center justify-center mx-auto mb-5 sm:mb-6">
+                      <Bell size={24} className="text-[#9d9188] sm:w-7 sm:h-7" />
+                    </div>
+                    <h3 className="font-medium text-white mb-3 text-base sm:text-lg">No notifications</h3>
+                    <p className="text-[#bfb2ac] text-sm sm:text-base max-w-xs mx-auto leading-relaxed">
+                      You're all caught up! New notifications will appear here.
+                    </p>
+                  </motion.div>
+                ) : (
+                <motion.div 
+                  key="notifications-list"
+                  initial={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="space-y-6">
                   {/* Unread Notifications */}
                   {unreadNotifications.length > 0 && (
                     <div>
                       <h3 className="font-semibold text-white text-sm sm:text-base mb-4 flex items-center gap-3 sticky top-0 bg-gradient-to-r from-[#2b2320] to-[#1f1816] py-2 z-10">
                         <div className="w-2 h-2 bg-orange-500 rounded-full animate-pulse" />
                         New ({unreadNotifications.length})
+                        {unreadNotifications.length > 0 && onMarkAllAsRead && (
+                          <button 
+                            onClick={onMarkAllAsRead}
+                            className="ml-auto text-xs text-orange-400 hover:text-orange-300 transition-colors"
+                          >
+                            Mark all as read
+                          </button>
+                        )}
                       </h3>
-                      <AnimatePresence>
-                        <div className="space-y-4">
+                      <div className="space-y-4">
+                        <AnimatePresence initial={false}>
                           {unreadNotifications.map(notification => (
                             <NotificationItem
                               key={notification.id}
@@ -302,8 +360,8 @@ export const NotificationPanel: React.FC<NotificationPanelProps> = ({
                               onDelete={onDelete}
                             />
                           ))}
-                        </div>
-                      </AnimatePresence>
+                        </AnimatePresence>
+                      </div>
                     </div>
                   )}
 
@@ -313,8 +371,8 @@ export const NotificationPanel: React.FC<NotificationPanelProps> = ({
                       <h3 className="font-semibold text-[#bfb2ac] text-sm sm:text-base mb-4 sticky top-0 bg-gradient-to-r from-[#2b2320] to-[#1f1816] py-2 z-10">
                         Earlier
                       </h3>
-                      <AnimatePresence>
-                        <div className="space-y-4">
+                      <div className="space-y-4">
+                        <AnimatePresence initial={false}>
                           {readNotifications.map(notification => (
                             <NotificationItem
                               key={notification.id}
@@ -324,11 +382,11 @@ export const NotificationPanel: React.FC<NotificationPanelProps> = ({
                               onDelete={onDelete}
                             />
                           ))}
-                        </div>
-                      </AnimatePresence>
+                        </AnimatePresence>
+                      </div>
                     </div>
                   )}
-                </div>
+                </motion.div>
               )}
             </div>
           </motion.div>
