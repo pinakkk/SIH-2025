@@ -66,20 +66,20 @@ export function SeeMorePage() {
       title: "Hazard Map",
       description: "View real-time hazard zones and safe areas",
       icon: <Map size={24} className="text-[#e0d5ce]" />,
-      path: "/hazard-map"
+      path: "/dashboard/live-hazard-map"
     },
-    {
-      title: "Emergency Contacts",
-      description: "Manage your emergency contact list",
-      icon: <Phone size={24} className="text-[#e0d5ce]" />,
-      path: "/emergency-contacts"
-    },
-    {
-      title: "Alert History",
-      description: "View past emergency alerts and notifications",
-      icon: <Bell size={24} className="text-[#e0d5ce]" />,
-      path: "/alerts"
-    }
+    // {
+    //   title: "Emergency Contacts",
+    //   description: "Manage your emergency contact list",
+    //   icon: <Phone size={24} className="text-[#e0d5ce]" />,
+    //   path: "/emergency-contacts"
+    // },
+    // {
+    //   title: "Alert History",
+    //   description: "View past emergency alerts and notifications",
+    //   icon: <Bell size={24} className="text-[#e0d5ce]" />,
+    //   path: "/alerts"
+    // }
   ];
 
   return (

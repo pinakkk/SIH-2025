@@ -15,6 +15,7 @@ import {
 import { Icon } from "@iconify/react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { ROUTES } from "@/lib/constants";
+import AppLogo from '../../assets/icons/rescue-saathi.png'
 
 interface SidebarProps {
   isOpen: boolean;
@@ -81,7 +82,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
               <div className="flex justify-between items-start mb-6 p-5">
                 <div className="flex flex-col items-start">
                   <img
-                    src="/src/assets/icons/rescue-saathi.png"
+                    src={AppLogo}
                     alt="App Logo"
                     className="w-12 h-12 mb-2"
                   />
@@ -129,7 +130,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                       whileTap={{ scale: 0.97 }}
                       className={`flex items-center gap-3 w-full px-4 py-3 rounded-xl transition-all ${
                         isActive
-                          ? "bg-yellow-400 text-black font-semibold shadow-lg"
+                          ? " bg-gradient-to-b from-[#f57f01] to-[#f89103] text-black font-semibold shadow-lg"
                           : "bg-transparent text-[#e9e2dd] hover:bg-[#3a2f2d]"
                       }`}
                     >

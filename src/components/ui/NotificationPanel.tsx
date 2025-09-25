@@ -257,9 +257,9 @@ export const NotificationPanel: React.FC<NotificationPanelProps> = ({
                   )}
                 </div>
                 <div className="flex items-center gap-2">
-                  <button className="p-2.5 text-[#bfb2ac] hover:text-white hover:bg-[#3a3330] rounded-xl transition-colors">
+                  {/* <button className="p-2.5 text-[#bfb2ac] hover:text-white hover:bg-[#3a3330] rounded-xl transition-colors">
                     <Settings size={16} />
-                  </button>
+                  </button> */}
                   <button
                     onClick={onClose}
                     className="p-2.5 text-[#bfb2ac] hover:text-white hover:bg-[#3a3330] rounded-xl transition-colors"
