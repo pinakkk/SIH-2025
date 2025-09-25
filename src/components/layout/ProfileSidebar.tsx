@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, User, Settings, LogOut, MessageSquareText } from "lucide-react";
+import { X, User, Settings, LogOut, MessageSquareText, BadgeCheck } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ROUTES } from "@/lib/constants";
+import { Icon } from "@iconify/react";
 
 interface ProfileSidebarProps {
   isOpen: boolean;
@@ -23,6 +24,7 @@ export const ProfileSidebar: React.FC<ProfileSidebarProps> = ({
   onClose,
 }) => {
   const [user, setUser] = useState<UserData | null>(null);
+  const [showVerifyOptions, setShowVerifyOptions] = useState(false);
   const navigate = useNavigate();
 
   // 🔥 Fetch user data when sidebar opens
@@ -129,6 +131,39 @@ export const ProfileSidebar: React.FC<ProfileSidebarProps> = ({
               >
                 <MessageSquareText size={18} /> AI Assistant
               </button>
+              <button
+                onClick={() => setShowVerifyOptions(!showVerifyOptions)}
+                className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-[#2a2a2a] transition text-left"
+              >
+                <BadgeCheck size={18} /> Verify as Official
+              </button>
+              
+              {/* Verification Options */}
+              {showVerifyOptions && (
+                <div className="ml-8 mt-1 mb-2 flex flex-col gap-2">
+                  <button
+                    onClick={() => {
+                      navigate(ROUTES.VERIFY_GOVERNMENT);
+                      onClose();
+                    }}
+                    className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#2a2a2a]/50 hover:bg-[#2a2a2a] transition text-left text-sm"
+                  >
+                    <Icon icon="mdi:government" className="text-lg text-yellow-400" />
+                    <span>Verify as Government Official</span>
+                  </button>
+                  <button
+                    onClick={() => {
+                      navigate(ROUTES.VERIFY_NGO);
+                      onClose();
+                    }}
+                    className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#2a2a2a]/50 hover:bg-[#2a2a2a] transition text-left text-sm"
+                  >
+                    <Icon icon="mdi:hand-heart" className="text-lg text-yellow-400" />
+                    <span>Verify as NGO</span>
+                  </button>
+                </div>
+              )}
+              
               <button
                 className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-[#2a2a2a] transition text-left"
               >

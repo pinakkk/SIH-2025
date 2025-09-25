@@ -40,6 +40,8 @@ export const ROUTES = {
   NEWS_AND_UPDATES: '/news-and-updates', 
   CHATBOT: '/dashboard/chatbot',
   EVACUATION_CENTERS: '/dashboard/evacuation-centers',
+  VERIFY_GOVERNMENT: '/verify-as-official/government',
+  VERIFY_NGO: '/verify-as-official/ngo',
 } as const;
 
 

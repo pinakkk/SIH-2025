@@ -28,6 +28,8 @@ import { HelpAndSupportPage } from "@/pages/HelpAndSupportPage";
 import { ProfilePage } from "@/pages/ProfilePage";
 import { NewsAndUpdatesRoute } from "@/routes/NewsAndUpdatesRoute";
 import ChatbotPage from "@/pages/ChatbotPage";
+import { GovernmentOfficial } from "@/pages/Verify_as_official/GovernmentOfficial";
+import { NgoOfficial } from "@/pages/Verify_as_official/NgoOfficial";
 import { GroupsPage } from "@/pages/GroupsPage";
 import EvacuationCentersPage from "@/pages/EvacuationCentersPage";
 // Lazy load register
@@ -98,6 +100,8 @@ function App() {
               <Route path={ROUTES.SUPPORT} element={<HelpAndSupportPage />} />
               <Route path={ROUTES.PROFILE} element={<ProfilePage />} />
               <Route path={ROUTES.EVACUATION_CENTERS} element={<EvacuationCentersPage />} />
+              <Route path={ROUTES.VERIFY_GOVERNMENT} element={<GovernmentOfficial />} />
+              <Route path={ROUTES.VERIFY_NGO} element={<NgoOfficial />} />
             </Route>
 
             {/* Protected standalone routes */}
