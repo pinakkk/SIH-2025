@@ -86,7 +86,6 @@ export function ProfilePage() {
             <div className="w-10 h-10 flex items-center justify-center rounded-lg bg-[#372a28]/80 hover:bg-[#443331] transition">
               <ArrowLeft size={16} />
             </div>
-            <span className="text-xs font-medium">Back</span>
           </motion.button>
 
           <motion.h1 

@@ -1,46 +1,100 @@
+/// <reference types="@types/google.maps" />
+
+// Working 
+
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/Card";
-import { Search, RefreshCw, ShieldCheck, MapPin, Menu } from "lucide-react";
-import { Icon } from "@iconify/react";
+import { Search, RefreshCw, MapPin, Menu } from "lucide-react";
 import { BottomNavigation } from "@/components/layout/BottomNavigation";
 import { useAuth } from "@/hooks/use-auth";
-import AppLogo from '../../assets/icons/rescue-saathi.png'
 import { Sidebar } from "@/components/layout/Sidebar";
 import { useUserLocation } from "@/hooks/use-user-location";
+import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 
-
-const alerts = [
-  {
-    id: 1,
-    title: "High Wave Alert – Odisha Coast",
-    issued: "Issued: 17 Sept 2025, 01:30 UTC",
-    mapImage: "https://i.imgur.com/AYp2z2A.png",
-  },
-  {
-    id: 2,
-    title: "Swell Surge – Kerala",
-    issued: "Issued: 19 Sept 2025, 02:30 UTC",
-    mapImage: "https://i.imgur.com/AYp2z2A.png",
-  },
-];
-
-// ✅ Skeleton with rounded-xl by default
 const SkeletonBlock = ({ className = "" }: { className?: string }) => (
   <div className={`bg-[#2a2a2a] animate-pulse rounded-xl ${className}`} />
 );
 
+// ✅ Google Maps Dark Mode Style
+const darkMapStyle = [
+  { elementType: "geometry", stylers: [{ color: "#212121" }] },
+  { elementType: "labels.icon", stylers: [{ visibility: "off" }] },
+  { elementType: "labels.text.fill", stylers: [{ color: "#757575" }] },
+  { elementType: "labels.text.stroke", stylers: [{ color: "#212121" }] },
+  {
+    featureType: "road",
+    elementType: "geometry.fill",
+    stylers: [{ color: "#2c2c2c" }],
+  },
+  {
+    featureType: "road",
+    elementType: "labels.text.fill",
+    stylers: [{ color: "#8a8a8a" }],
+  },
+  {
+    featureType: "water",
+    elementType: "geometry",
+    stylers: [{ color: "#000000" }],
+  },
+  {
+    featureType: "water",
+    elementType: "labels.text.fill",
+    stylers: [{ color: "#3d3d3d" }],
+  },
+];
+
 export function LiveHazardMapPage() {
   const userLocation = useUserLocation();
-  const [view, setView] = useState("List View");
   const [scrolled, setScrolled] = useState(false);
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
   const [isSidebarOpen, setSidebarOpen] = useState(false);
+  const [hotspots, setHotspots] = useState<any[]>([]);
+
+  // ✅ Load Google Maps
+  const { isLoaded } = useJsApiLoader({
+    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string,
+  });
 
   useEffect(() => {
-    const t = setTimeout(() => setLoading(false), 900);
-    return () => clearTimeout(t);
+    async function fetchHotspots() {
+      try {
+        setLoading(true);
+        const res = await fetch("https://sih-2025-l3ur.onrender.com/api/all-hotspot");
+        const data = await res.json();
+        if (data.success) {
+          const formatted = data.data.map((h: any) => {
+            const hazardTypes = [
+              ...new Set(h.reports.map((r: any) => r.hazardType)),
+            ];
+            let title = "";
+            if (hazardTypes.length > 1) {
+              title = "Most Reported Hotspot";
+            } else {
+              title = hazardTypes[0] || "Hazard Alert";
+            }
+
+            return {
+              id: h._id,
+              title,
+              createdAt: h.createdAt,
+              updatedAt: h.updatedAt,
+              location: h.center?.coordinates, // [lng, lat]
+              isLive: h.reports.length > 0,
+              reports: h.reports.length,
+            };
+          });
+          setHotspots(formatted);
+        }
+      } catch (err) {
+        console.error("Error fetching hotspots:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchHotspots();
   }, []);
 
   useEffect(() => {
@@ -64,13 +118,8 @@ export function LiveHazardMapPage() {
         transition={{ duration: 0.25 }}
         className="sticky top-0 z-40 bg-[#2b2320]/55 border-b border-[#3a2f2d] px-5 py-4 flex justify-between items-center"
       >
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-          className="flex items-center gap-3"
-        >
-           <button
+        <div className="flex items-center gap-3">
+          <button
             onClick={() => setSidebarOpen(true)}
             className="w-10 h-10 flex items-center justify-center rounded-lg bg-[#372a28]/80 hover:bg-[#443331] transition"
           >
@@ -82,13 +131,14 @@ export function LiveHazardMapPage() {
           <div>
             <h1 className="font-bold text-lg">Live Hazard Map</h1>
             <p className="text-sm text-[#d8cdc6] flex items-center">
-              <MapPin size={14} className="mr-1" />{userLocation}
+              <MapPin size={14} className="mr-1" /> {userLocation}
             </p>
           </div>
-        </motion.div>
+        </div>
         <motion.button
           whileTap={{ scale: 0.9 }}
           whileHover={{ scale: 1.05 }}
+          onClick={() => window.location.reload()}
           className="relative w-10 h-10 rounded-full bg-[#372a28] flex items-center justify-center transition-transform"
         >
           <RefreshCw size={18} />
@@ -96,125 +146,109 @@ export function LiveHazardMapPage() {
       </motion.header>
 
       <div className="px-5 mt-5">
-        {/* Search Bar */}
-        {loading ? (
-          <SkeletonBlock className="h-12 w-full rounded-full mb-5" />
-        ) : (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
-            className="relative mb-5"
-          >
-            <Search
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
-              size={20}
-            />
-            <input
-              type="text"
-              placeholder="Search"
-              className="w-full bg-[#2b2320]/70 border border-[#3a2f2d] rounded-full py-3 pl-12 pr-4 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400"
-            />
-          </motion.div>
-        )}
-
-        {/* View Toggle */}
-        {/* {loading ? (
-          <SkeletonBlock className="h-10 w-full rounded-full mb-6" />
-        ) : (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.1 }}
-            className="flex items-center bg-[#2b2320]/70 border border-[#3a2f2d] rounded-full p-1 mb-6"
-          >
-            {["Map View", "List View"].map((v) => (
-              <button
-                key={v}
-                onClick={() => setView(v)}
-                className={`w-1/2 py-2 text-sm font-semibold rounded-full transition-colors ${view === v
-                    ? "bg-white text-black"
-                    : "text-[#e9e2dd] hover:text-white"
-                  }`}
-              >
-                {v}
-              </button>
-            ))}
-          </motion.div>
-        )} */}
-
-        {/* Alerts List */}
-        <div className="space-y-4">
+        {/* Hotspots List */}
+        <div className="space-y-6">
           {loading
             ? Array(2)
-              .fill(0)
-              .map((_, idx) => (
-                <div key={idx} className="mb-4">
-                  <SkeletonBlock className="h-6 w-1/2 mb-3" />
-                  <SkeletonBlock className="h-40 w-full" />
-                </div>
-              ))
-            : alerts.map((alert, i) => (
-              <motion.div
-                key={alert.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: i * 0.15 }}
-              >
-                <Card className="bg-gradient-to-b from-[#2a1e1c] to-[#1e1614] border border-[#3a2f2d] rounded-2xl overflow-hidden shadow-lg">
-                  <CardContent className="p-4">
-                    <div className="flex items-start gap-3 mb-3">
-                      <div className="p-2 bg-red-500/15 rounded-full flex items-center justify-center">
-                        <Icon
-                          icon="mdi:waves"
-                          className="text-red-400 text-2xl"
-                        />
+                .fill(0)
+                .map((_, idx) => (
+                  <div key={idx} className="mb-4">
+                    <SkeletonBlock className="h-6 w-1/2 mb-3" />
+                    <SkeletonBlock className="h-40 w-full" />
+                  </div>
+                ))
+            : hotspots.map((h, i) => (
+                <motion.div
+                  key={h.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: i * 0.1 }}
+                >
+                  <Card className="bg-gradient-to-b from-[#2a1e1c] to-[#1e1614] border border-[#3a2f2d] rounded-2xl overflow-hidden shadow-lg">
+                    <CardContent className="p-4">
+                      <h2 className="font-semibold text-white capitalize mt-4 mb-3">
+                        {h.title}
+                      </h2>
+                      <p className="text-xs text-[#bfb2ac]">
+                        Reports: {h.reports}
+                      </p>
+                      <p className="text-xs text-[#bfb2ac]">
+                        Detected: {new Date(h.createdAt).toLocaleString()}
+                      </p>
+                      <p className="text-xs text-[#bfb2ac] mb-2">
+                        Updated: {new Date(h.updatedAt).toLocaleString()}
+                      </p>
+                      <div className="flex items-center gap-1.5 mt-1 mb-3">
+                        <span
+                          className={`w-2 h-2 rounded-full ${
+                            h.isLive ? "bg-red-500 animate-pulse" : "bg-gray-500"
+                          }`}
+                        ></span>
+                        <span
+                          className={`text-xs font-medium ${
+                            h.isLive ? "text-red-300" : "text-gray-400"
+                          }`}
+                        >
+                          {h.isLive ? "Live" : "Not Live"}
+                        </span>
                       </div>
-                      <div className="flex-1">
-                        <h2 className="font-semibold text-white">
-                          {alert.title}
-                        </h2>
-                        <p className="text-xs text-[#bfb2ac]">
-                          {alert.issued}
-                        </p>
-                        <div className="flex items-center gap-1.5 mt-1">
-                          <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
-                          <span className="text-xs text-red-300 font-medium">
-                            Live
-                          </span>
-                        </div>
+
+                      {/* ✅ Dark Mode Map with Marker */}
+                      {isLoaded &&
+                        h.location &&
+                        h.location.length === 2 && (
+                          <div className="w-full h-52 rounded-xl overflow-hidden mb-4 border border-[#3a2f2d]">
+                            <GoogleMap
+                              mapContainerStyle={{
+                                width: "100%",
+                                height: "100%",
+                              }}
+                              center={{
+                                lat: Number(h.location[1]) || 12.9716,
+                                lng: Number(h.location[0]) || 77.5946,
+                              }}
+                              zoom={15}
+                              options={{
+                                styles: darkMapStyle,
+                                disableDefaultUI: true,
+                                zoomControl: false,
+                                draggable: false,
+                                scrollwheel: false,
+                              }}
+                            >
+                              <Marker
+                                position={{
+                                  lat: Number(h.location[1]),
+                                  lng: Number(h.location[0]),
+                                }}
+                              />
+                            </GoogleMap>
+                          </div>
+                        )}
+
+                      {/* ✅ Action Buttons */}
+                      <div className="flex gap-3 mt-3">
+                        <motion.button
+                          whileTap={{ scale: 0.97 }}
+                          className="flex-1 bg-white text-black font-semibold py-2.5 rounded-full hover:scale-[1.02] transition-transform"
+                        >
+                          View Details
+                        </motion.button>
+                        <motion.button
+                          whileTap={{ scale: 0.97 }}
+                          className="flex-1 bg-[#2b2320] border border-[#3a2f2d] text-white font-semibold py-2.5 rounded-full hover:bg-[#3b3230] transition-colors"
+                        >
+                          View on Map
+                        </motion.button>
                       </div>
-                    </div>
-                    <div className="w-full h-40 rounded-xl overflow-hidden mb-4 border border-[#3a2f2d]">
-                      <img
-                        src={alert.mapImage}
-                        alt="Map Preview"
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <motion.button
-                        whileTap={{ scale: 0.97 }}
-                        className="flex-1 bg-white text-black font-semibold py-2.5 rounded-full hover:scale-[1.02] transition-transform"
-                      >
-                        View Details
-                      </motion.button>
-                      <motion.button
-                        whileTap={{ scale: 0.97 }}
-                        className="flex-1 bg-[#2b2320] border border-[#3a2f2d] text-white font-semibold py-2.5 rounded-full flex items-center justify-center gap-2 hover:bg-[#3b3230] transition-colors"
-                      >
-                        <ShieldCheck size={18} className="text-green-400" />
-                        Mark as safe
-                      </motion.button>
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
         </div>
       </div>
 
-      {/* ✅ Reusable Navbar */}
+      {/* ✅ Bottom Navigation */}
       <BottomNavigation />
     </div>
   );
