@@ -20,7 +20,7 @@ const PORT = process.env.PORT || 5002;
 // CORS configuration for production
 app.use(cors({
   origin: [
-    "https://pythonn-bcdd.onrender.com",
+    "https://fast-api-f789.onrender.com",
     "http://localhost:5173", 
     "https://sih-2025-roan.vercel.app" // Replace with your actual Vercel URL
   ],

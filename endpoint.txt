@@ -1,0 +1,75 @@
+==================================================================================================
+                                Rescue Saathi API Endpoints
+==================================================================================================
+
+This document outlines all the available API endpoints for the Rescue Saathi project,
+categorized by service.
+
+--------------------------------------------------------------------------------------------------
+I. Backend API (Node.js / Express)
+--------------------------------------------------------------------------------------------------
+Base URL (Dev): http://localhost:5002
+Base URL (Prod): https://sih-2025-l3ur.onrender.com
+
+--- Health Check ---
+METHOD | ENDPOINT                  | DESCRIPTION
+-------|---------------------------|-------------------------------------------------------------
+GET    | /                         | Health check for the main backend server.
+
+--- Authentication (/api) ---
+METHOD | ENDPOINT                  | DESCRIPTION
+-------|---------------------------|-------------------------------------------------------------
+POST   | /registered               | Register a new user.
+POST   | /login                    | Log in an existing user.
+POST   | /google-login             | Authenticate user via Google OAuth.
+POST   | /logout                   | Log out the current user.
+POST   | /send-verify-otp          | (Auth) Send an OTP to the user's contact for verification.
+POST   | /verify-account           | (Auth) Verify the user's account using the OTP.
+POST   | /is-auth                  | (Auth) Check if the current user is authenticated.
+POST   | /send-reset-otp           | Send an OTP for password reset.
+POST   | /rest-password            | Reset the user's password using the OTP.
+GET    | /all-user                 | Get a list of all registered users.
+
+--- Reports & Verification (/api) ---
+METHOD | ENDPOINT                  | DESCRIPTION
+-------|---------------------------|-------------------------------------------------------------
+POST   | /verify-report            | Mark a report as verified and trigger alerts.
+GET    | /all-reports              | Get all reports with user and comment data.
+(TBD)  | /...                      | Additional CRUD endpoints for reports via Reportroutes.js.
+
+--- Emergency Services (/emergency) ---
+METHOD | ENDPOINT                  | DESCRIPTION
+-------|---------------------------|-------------------------------------------------------------
+GET    | /contacts                 | Get all emergency contacts for the user.
+POST   | /contacts                 | Create a new emergency contact.
+PUT    | /contacts/:contactId      | Update an existing emergency contact.
+DELETE | /contacts/:contactId      | Delete an emergency contact.
+GET    | /settings                 | Get emergency settings for the user.
+PUT    | /settings                 | Update emergency settings.
+POST   | /call                     | Initiate an emergency call.
+
+
+--------------------------------------------------------------------------------------------------
+II. Hazard Ranking API (Python / FastAPI)
+--------------------------------------------------------------------------------------------------
+
+METHOD | ENDPOINT                  | DESCRIPTION
+-------|---------------------------|-------------------------------------------------------------
+GET    | /                         | Get API information and available endpoints.
+GET    | /ping                     | Health check for the Python service (returns "pong").
+GET    | /rank-posts               | Fetches reports from the backend, ranks them, and returns.
+POST   | /rank-posts               | Accepts a list of posts in the body and returns them ranked.
+
+
+--------------------------------------------------------------------------------------------------
+III. External API Integrations (Client-side)
+--------------------------------------------------------------------------------------------------
+
+SERVICE      | METHOD | BASE URL / ENDPOINT
+-------------|--------|---------------------------------------------------------------------------
+Gemini AI    | POST   | https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest
+GNews API    | GET    | https://gnews.io/api/v4/search
+Currents API | GET    | https://api.currentsapi.services/v1/latest-news
+NewsAPI      | GET    | https://newsapi.org/v2/everything
+
+==================================================================================================

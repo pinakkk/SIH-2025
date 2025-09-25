@@ -326,11 +326,11 @@ export function DashboardPage() {
                       
                       <p className="text-sm text-[#e0d6d0] mb-4 leading-snug">{update.caption}</p>
 
-                      {update.photos && update.photos.length > 0 && (
+                      {/* {update.photos && update.photos.length > 0 && (
                         <div className="w-full h-44 bg-[#131212] rounded-xl overflow-hidden mb-4 border border-[#3a2f2d]">
                           <img src={update.photos[0]} alt="Report media" className="w-full h-full object-cover"/>
                         </div>
-                      )}
+                      )} */}
 
                       {update.location?.coordinates && GOOGLE_MAPS_API_KEY && (
                         <div className="w-full h-40 bg-[#131212] rounded-xl overflow-hidden mb-4 border border-[#3a2f2d]">
@@ -343,8 +343,8 @@ export function DashboardPage() {
                       )}
 
                       <div className="flex gap-3">
-                         <button className="flex-1 py-2 rounded-xl bg-[#2e2a28] text-white font-medium text-sm border border-[#3a2f2d] hover:bg-[#403633] transition">Confirm Safe</button>
-                         <button className="flex-1 py-2 rounded-xl bg-[#2e2a28] text-white font-medium text-sm border border-[#3a2f2d] hover:bg-[#403633] transition">Report Issue</button>
+                         <button className="flex-1 py-2 rounded-xl bg-[#2e2a28] text-white font-medium text-sm border border-[#3a2f2d] hover:bg-[#403633] transition">✅ Safe</button>
+                         <button className="flex-1 py-2 rounded-xl bg-[#2e2a28] text-white font-medium text-sm border border-[#3a2f2d] hover:bg-[#403633] transition">⚠️ Not Safe</button>
                          <button onClick={() => navigate(`/community/${update.id || idx}`, { state: update })} className="flex-1 py-2 rounded-xl bg-[#2e2a28] text-white font-medium text-sm border border-[#3a2f2d] hover:bg-[#403633] transition">View Details</button>
                       </div>
                     </CardContent>
