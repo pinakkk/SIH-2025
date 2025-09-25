@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/Card";
-import { 
-  MapPin, 
-  ChevronDown, 
-  Menu, 
-  MessageCircle, 
-  Heart, 
-  Plus, 
+import {
+  MapPin,
+  ChevronDown,
+  Menu,
+  MessageCircle,
+  Heart,
+  Plus,
   ArrowRight,
   Users,
   Bell,
@@ -22,6 +22,7 @@ import { ProfileSidebar } from "@/components/layout/ProfileSidebar";
 import { NotificationButton, NotificationPanel } from "@/components/ui/NotificationPanel";
 import { useNotifications } from "@/hooks/use-notifications";
 import { ROUTES } from "@/lib/constants";
+import { useUserLocation } from "@/hooks/use-user-location";
 
 // Skeleton Block
 const SkeletonBlock = ({ className = "" }: { className?: string }) => (
@@ -96,6 +97,7 @@ const mockPosts: CommunityPost[] = [
 ];
 
 export function CommunityPage() {
+  const userLocation = useUserLocation();
   const navigate = useNavigate();
   const { user } = useAuth();
   const [loading, setLoading] = useState(true);
@@ -108,14 +110,14 @@ export function CommunityPage() {
   const [trendingGroups, setTrendingGroups] = useState<CommunityGroup[]>([]);
   const [newsItems, setNewsItems] = useState<NewsItem[]>([]);
   const [newsLoading, setNewsLoading] = useState(true);
-  
+
   // Notification hook
-  const { 
-    notifications, 
-    unreadCount, 
-    markAsRead, 
-    markAsUnread, 
-    deleteNotification 
+  const {
+    notifications,
+    unreadCount,
+    markAsRead,
+    markAsUnread,
+    deleteNotification
   } = useNotifications();
 
   // Handle scroll effect for header
@@ -135,7 +137,7 @@ export function CommunityPage() {
         // const response = await fetch('https://api.example.com/community-posts');
         // const data = await response.json();
         // setPosts(data);
-        
+
         // For now, use mock data
         setTimeout(() => {
           setPosts(mockPosts);
@@ -147,7 +149,7 @@ export function CommunityPage() {
         setLoading(false);
       }
     };
-    
+
     fetchPosts();
   }, []);
 
@@ -159,7 +161,7 @@ export function CommunityPage() {
         // const response = await fetch('https://api.example.com/trending-groups');
         // const data = await response.json();
         // setTrendingGroups(data);
-        
+
         // For now, use mock data
         setTimeout(() => {
           setTrendingGroups([
@@ -193,7 +195,7 @@ export function CommunityPage() {
         console.error("Error fetching groups:", error);
       }
     };
-    
+
     fetchGroups();
   }, []);
 
@@ -202,38 +204,37 @@ export function CommunityPage() {
     const fetchNews = async () => {
       try {
         setNewsLoading(true);
-        
+
         // Using real GNews API with key from .env
         const now = new Date();
         const to = now.toISOString();
         const fromDate = new Date(now.getTime() - 15 * 24 * 60 * 60 * 1000); // 15 days ago
         const from = fromDate.toISOString();
-        
+
         // Fetch from GNews API
         const response = await fetch(
           `https://gnews.io/api/v4/search?q=disaster OR flood OR tsunami OR earthquake OR landslide OR cyclone OR storm OR hazard&lang=en&country=in&from=${encodeURIComponent(
             from
-          )}&to=${encodeURIComponent(to)}&max=10&token=${
-            import.meta.env.VITE_GNEWS_API_KEY
+          )}&to=${encodeURIComponent(to)}&max=10&token=${import.meta.env.VITE_GNEWS_API_KEY
           }`
         );
-        
+
         const data = await response.json();
-        
+
         if (data.articles && data.articles.length > 0) {
           // Filter for disaster-related news
           const allowedKeywords = [
-            "disaster", "flood", "tsunami", "earthquake", "landslide", 
+            "disaster", "flood", "tsunami", "earthquake", "landslide",
             "cyclone", "storm", "typhoon", "hurricane", "aftershock",
-            "quake", "hazard", "evacuation", "alert", "warning", 
+            "quake", "hazard", "evacuation", "alert", "warning",
             "rescue", "surge", "high waves", "coastal", "ocean"
           ];
-          
+
           const blockedKeywords = [
-            "celebrity", "fashion", "lifestyle", "movie", "music", 
+            "celebrity", "fashion", "lifestyle", "movie", "music",
             "sport", "entertainment", "bollywood", "hollywood"
           ];
-          
+
           const processedArticles = data.articles.map((a: any, i: number) => ({
             id: `gnews-${i}`,
             title: a.title,
@@ -244,7 +245,7 @@ export function CommunityPage() {
             urlToImage: a.image,
             provider: "GNews"
           }));
-          
+
           // Filter relevant news
           const filteredNews = processedArticles.filter((a: NewsItem) => {
             const text = `${a.title} ${a.description}`.toLowerCase();
@@ -252,7 +253,7 @@ export function CommunityPage() {
             const isBlocked = blockedKeywords.some((kw) => text.includes(kw.toLowerCase()));
             return isRelevant && !isBlocked;
           });
-          
+
           // Take only 2 for the community page
           setNewsItems(filteredNews.slice(0, 2));
         } else {
@@ -309,7 +310,7 @@ export function CommunityPage() {
         setNewsLoading(false);
       }
     };
-    
+
     fetchNews();
   }, []);
 
@@ -317,17 +318,17 @@ export function CommunityPage() {
   const handleLikePost = (postId: string | number) => {
     setPosts(posts.map(post => {
       if (post.id === postId) {
-        return {...post, likes: post.likes + 1};
+        return { ...post, likes: post.likes + 1 };
       }
       return post;
     }));
   };
-  
+
   // Toggle join group
   const handleJoinGroup = (groupId: string) => {
     setTrendingGroups(groups => groups.map(group => {
       if (group.id === groupId) {
-        return {...group, isJoined: !group.isJoined};
+        return { ...group, isJoined: !group.isJoined };
       }
       return group;
     }));
@@ -366,7 +367,8 @@ export function CommunityPage() {
           <div>
             <h1 className="font-bold text-lg">Community</h1>
             <p className="text-sm text-[#d8cdc6] flex items-center">
-              <MapPin size={14} className="mr-1" /> Coastal India
+              <MapPin size={14} className="mr-1" />
+              {userLocation}
             </p>
           </div>
         </motion.div>
@@ -409,7 +411,7 @@ export function CommunityPage() {
               <Users size={20} className="text-orange-400" />
               Trending Groups
             </h2>
-            <button 
+            <button
               onClick={() => navigate(ROUTES.GROUPS)}
               className="text-sm text-orange-400 flex items-center hover:text-orange-300 transition-colors"
             >
@@ -448,9 +450,9 @@ export function CommunityPage() {
                       <div className="flex flex-col items-center space-y-4">
                         {/* Avatar - perfectly circular, reduced top gap */}
                         <div className="h-20 w-20 rounded-full bg-[#1a1614] overflow-hidden border-4 border-orange-400/40 shadow-xl ring-2 ring-[#1d1514] flex items-center justify-center mt-0">
-                          <img 
-                            src={group.avatar} 
-                            alt={group.name} 
+                          <img
+                            src={group.avatar}
+                            alt={group.name}
                             className="w-full h-full object-cover rounded-full"
                             loading="lazy"
                           />
@@ -462,11 +464,10 @@ export function CommunityPage() {
                       </div>
                       <button
                         onClick={() => handleJoinGroup(group.id)}
-                        className={`w-full py-3 rounded-lg text-sm font-semibold flex items-center justify-center gap-2 transition-all shadow-md mt-2 ${
-                          group.isJoined 
-                            ? "bg-[#3a2f2d] text-[#d8cdc6] hover:bg-[#4a403d] border border-[#4a403d]" 
+                        className={`w-full py-3 rounded-lg text-sm font-semibold flex items-center justify-center gap-2 transition-all shadow-md mt-2 ${group.isJoined
+                            ? "bg-[#3a2f2d] text-[#d8cdc6] hover:bg-[#4a403d] border border-[#4a403d]"
                             : "bg-gradient-to-r from-orange-500 to-red-500 text-white hover:brightness-110 hover:shadow-lg"
-                        }`}
+                          }`}
                       >
                         {group.isJoined ? (
                           <>
@@ -493,8 +494,8 @@ export function CommunityPage() {
               <Bell size={15} className="text-red-400" />
               News Updates
             </h2>
-            <button 
-              onClick={() => navigate('/news-and-updates')} 
+            <button
+              onClick={() => navigate('/news-and-updates')}
               className="text-sm text-red-400 flex items-center hover:text-red-300 transition-colors"
             >
               View All <ArrowRight size={14} className="ml-1" />
@@ -539,55 +540,55 @@ export function CommunityPage() {
                   className="cursor-pointer"
                 >
                   <Card className="bg-[#1E1614] border border-[#3a2f2d] rounded-xl hover:border-[#4a403d] hover:shadow-[0_8px_25px_rgba(0,0,0,0.5)] transition-all shadow-lg overflow-hidden h-[290px] flex flex-col">
-                      {/* Image at the very top - No padding */}
-                      <div className="h-28 w-full bg-[#1a1614] overflow-hidden flex-shrink-0">
-                        {item.urlToImage ? (
-                          <img
-                            src={item.urlToImage}
-                            alt={item.title}
-                            className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-                            loading="lazy"
-                            onError={(e) => {
-                              const target = e.target as HTMLImageElement;
-                              target.style.display = 'none';
-                              target.parentElement?.classList.add('bg-gradient-to-br', 'from-[#2a1f1d]', 'to-[#1a1614]');
-                            }}
-                          />
-                        ) : (
-                          <div className="w-full h-full bg-gradient-to-br from-[#2a1f1d] to-[#1a1614] flex items-center justify-center">
-                            <Icon icon="mdi:image-off" className="text-[#4a403d]" width={32} height={32} />
-                          </div>
-                        )}
-                      </div>
-                      {/* Content section with reduced gap and padding */}
-                      <div className="p-3 flex-1 flex flex-col justify-between">
-                        <div className="space-y-1">
-                          {/* Source (Red Pill) Centered */}
-                          <div className="flex items-center justify-center mb-1">
-                            <span className="inline-block bg-red-500 text-white text-xs font-semibold px-2.5 py-1 rounded-full">
-                              {item.source || 'News Source'}
-                            </span>
-                          </div>
-                          {/* Title - Bold, 2 lines max */}
-                          <h3 className="font-bold text-white text-sm leading-tight line-clamp-2 hover:text-orange-100 transition-colors text-center">
-                            {item.title}
-                          </h3>
-                          {/* Date - Small text, replaces description */}
-                          <p className="text-[#bfb2ac] text-xs text-center">
-                            {new Date(item.date).toLocaleDateString("en-US", { month: 'short', day: 'numeric', year: 'numeric' })}
-                          </p>
+                    {/* Image at the very top - No padding */}
+                    <div className="h-28 w-full bg-[#1a1614] overflow-hidden flex-shrink-0">
+                      {item.urlToImage ? (
+                        <img
+                          src={item.urlToImage}
+                          alt={item.title}
+                          className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                          loading="lazy"
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.style.display = 'none';
+                            target.parentElement?.classList.add('bg-gradient-to-br', 'from-[#2a1f1d]', 'to-[#1a1614]');
+                          }}
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-gradient-to-br from-[#2a1f1d] to-[#1a1614] flex items-center justify-center">
+                          <Icon icon="mdi:image-off" className="text-[#4a403d]" width={32} height={32} />
                         </div>
-                        {/* Read More link at bottom - no extra gap */}
-                        <div className="pt-0.5 border-t border-[#3a2f2d]">
-                          <button 
-                            onClick={() => item.url.startsWith("http") ? window.open(item.url, "_blank") : navigate('/news-and-updates')}
-                            className="inline-flex items-center gap-2 text-orange-400 hover:text-orange-300 text-xs font-semibold transition-colors"
-                          >
-                            Read More
-                            <Icon icon="mdi:arrow-right" width={14} height={14} />
-                          </button>
+                      )}
+                    </div>
+                    {/* Content section with reduced gap and padding */}
+                    <div className="p-3 flex-1 flex flex-col justify-between">
+                      <div className="space-y-1">
+                        {/* Source (Red Pill) Centered */}
+                        <div className="flex items-center justify-center mb-1">
+                          <span className="inline-block bg-red-500 text-white text-xs font-semibold px-2.5 py-1 rounded-full">
+                            {item.source || 'News Source'}
+                          </span>
                         </div>
+                        {/* Title - Bold, 2 lines max */}
+                        <h3 className="font-bold text-white text-sm leading-tight line-clamp-2 hover:text-orange-100 transition-colors text-center">
+                          {item.title}
+                        </h3>
+                        {/* Date - Small text, replaces description */}
+                        <p className="text-[#bfb2ac] text-xs text-center">
+                          {new Date(item.date).toLocaleDateString("en-US", { month: 'short', day: 'numeric', year: 'numeric' })}
+                        </p>
                       </div>
+                      {/* Read More link at bottom - no extra gap */}
+                      <div className="pt-0.5 border-t border-[#3a2f2d]">
+                        <button
+                          onClick={() => item.url.startsWith("http") ? window.open(item.url, "_blank") : navigate('/news-and-updates')}
+                          className="inline-flex items-center gap-2 text-orange-400 hover:text-orange-300 text-xs font-semibold transition-colors"
+                        >
+                          Read More
+                          <Icon icon="mdi:arrow-right" width={14} height={14} />
+                        </button>
+                      </div>
+                    </div>
                   </Card>
                 </motion.div>
               )) : (
@@ -604,7 +605,7 @@ export function CommunityPage() {
         </div>
 
         {/* Post Something Button */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.3, delay: 0.4 }}
@@ -630,8 +631,8 @@ export function CommunityPage() {
                 onClick={() => setFilter(f)}
                 whileTap={{ scale: 0.95 }}
                 className={`px-5 py-2.5 text-sm rounded-full transition-all whitespace-nowrap ${filter === f
-                    ? "bg-white text-black font-semibold shadow-[0_4px_12px_rgba(0,0,0,0.25)]"
-                    : "bg-[#3a2f2d] text-[#e9e2dd] hover:bg-[#4a403d] hover:text-white"
+                  ? "bg-white text-black font-semibold shadow-[0_4px_12px_rgba(0,0,0,0.25)]"
+                  : "bg-[#3a2f2d] text-[#e9e2dd] hover:bg-[#4a403d] hover:text-white"
                   }`}
               >
                 {f}
@@ -688,14 +689,14 @@ export function CommunityPage() {
                           </div>
                           <p
                             className={`text-xs flex items-center gap-1.5 ${post.status === "Marked Safe"
-                                ? "text-green-400"
-                                : "text-red-400"
+                              ? "text-green-400"
+                              : "text-red-400"
                               }`}
                           >
                             <span
                               className={`w-2 h-2 rounded-full ${post.status === "Marked Safe"
-                                  ? "bg-green-400"
-                                  : "bg-red-400"
+                                ? "bg-green-400"
+                                : "bg-red-400"
                                 }`}
                             />
                             {post.status}
@@ -726,7 +727,7 @@ export function CommunityPage() {
                       </div>
                     </div>
                     <div className="border-t border-[#3a2f2d] pt-3 mt-1 flex gap-2">
-                      <button 
+                      <button
                         onClick={() => handleLikePost(post.id)}
                         className="flex-1 py-2 rounded-xl bg-[#2e2a28] text-white font-medium text-sm border border-[#3a2f2d] hover:bg-[#403633] transition flex items-center justify-center gap-1.5"
                       >
@@ -750,7 +751,7 @@ export function CommunityPage() {
 
       {/* Bottom Navigation */}
       <BottomNavigation />
-      
+
       {/* Notification Panel */}
       <NotificationPanel
         isOpen={isNotificationPanelOpen}

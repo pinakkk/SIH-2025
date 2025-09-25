@@ -19,6 +19,7 @@ import { ProfileSidebar } from "@/components/layout/ProfileSidebar";
 import { ROUTES } from "@/lib/constants";
 import { NotificationButton, NotificationPanel } from "@/components/ui/NotificationPanel";
 import { useNotifications } from "@/hooks/use-notifications";
+import { useUserLocation } from "@/hooks/use-user-location";
 
 // Skeleton Block
 const SkeletonBlock = ({ className = "" }: { className?: string }) => (
@@ -27,6 +28,7 @@ const SkeletonBlock = ({ className = "" }: { className?: string }) => (
 
 
 export function DashboardPage() {
+  const userLocation = useUserLocation();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [scrolled, setScrolled] = useState(false);
@@ -114,7 +116,7 @@ export function DashboardPage() {
           <div>
             <h1 className="font-bold text-lg">Rescue Saathi</h1>
             <p className="text-sm text-[#d8cdc6] flex items-center">
-              <MapPin size={14} className="mr-1" /> Kolkata, West Bengal
+              <MapPin size={14} className="mr-1" /> {userLocation}
             </p>
           </div>
         </motion.div>

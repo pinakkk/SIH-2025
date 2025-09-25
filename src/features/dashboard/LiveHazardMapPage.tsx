@@ -7,6 +7,8 @@ import { BottomNavigation } from "@/components/layout/BottomNavigation";
 import { useAuth } from "@/hooks/use-auth";
 import AppLogo from '../../assets/icons/rescue-saathi.png'
 import { Sidebar } from "@/components/layout/Sidebar";
+import { useUserLocation } from "@/hooks/use-user-location";
+
 
 const alerts = [
   {
@@ -29,6 +31,7 @@ const SkeletonBlock = ({ className = "" }: { className?: string }) => (
 );
 
 export function LiveHazardMapPage() {
+  const userLocation = useUserLocation();
   const [view, setView] = useState("List View");
   const [scrolled, setScrolled] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -79,7 +82,7 @@ export function LiveHazardMapPage() {
           <div>
             <h1 className="font-bold text-lg">Live Hazard Map</h1>
             <p className="text-sm text-[#d8cdc6] flex items-center">
-              <MapPin size={14} className="mr-1" /> India, Coastal Regions
+              <MapPin size={14} className="mr-1" />{userLocation}
             </p>
           </div>
         </motion.div>
