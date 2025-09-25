@@ -1,5 +1,4 @@
 import express from "express";
-import dotenv from "dotenv";
 import cors from "cors";
 import connectDB from "./config/dbconnection.js";
 import authRouter from "./routes/Authroutes.js";
@@ -9,7 +8,11 @@ import Verifyreport from "./routes/verifyreport.js"
 import userRoute from "./routes/userRoutes.js"
 import UpdateRoute from "./routes/UpdateRoute.js"
 
-dotenv.config();
+// Only load dotenv in development
+if (process.env.NODE_ENV !== 'production') {
+  const dotenv = await import('dotenv');
+  dotenv.config();
+}
 
 const app = express();
 const PORT = process.env.PORT || 5002;
@@ -17,9 +20,9 @@ const PORT = process.env.PORT || 5002;
 // CORS configuration for production
 app.use(cors({
   origin: [
-    "http://localhost:3000",
+    "https://pythonn-bcdd.onrender.com",
     "http://localhost:5173", 
-    "https://sih-2025-roan.vercel.app/" // Replace with your actual Vercel URL
+    "https://sih-2025-roan.vercel.app" // Replace with your actual Vercel URL
   ],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
@@ -57,7 +60,7 @@ app.use((err, req, res, next) => {
 });
 
 // 404 handler
-app.use('*', (req, res) => {
+app.use((req, res) => {
   res.status(404).json({ 
     success: false, 
     message: 'API endpoint not found' 

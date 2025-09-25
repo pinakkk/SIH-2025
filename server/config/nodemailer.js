@@ -1,6 +1,10 @@
 import nodemailer from 'nodemailer';
-import dotenv from "dotenv";
-dotenv.config();
+
+// Only load dotenv in development
+if (process.env.NODE_ENV !== 'production') {
+  const dotenv = await import('dotenv');
+  dotenv.config();
+}
 
 const transporter = nodemailer.createTransport({
     host:"smtp-relay.brevo.com",
