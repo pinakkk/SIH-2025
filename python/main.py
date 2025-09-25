@@ -6,7 +6,7 @@ import httpx
 app = FastAPI(title="Hazard Ranking API", version="2.0")
 
 # URL for your Node.js backend endpoint to fetch all reports
-BACKEND_API_URL = "http://localhost:5002/api/all-Reports"
+BACKEND_API_URL = "https://sih-2025-l3ur.onrender.com/api/all-reports"
 
 # Enable CORS
 app.add_middleware(
