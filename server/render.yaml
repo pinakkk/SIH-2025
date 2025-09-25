@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: rescue-saathi-api
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        fromDatabase:
+          name: rescue-saathi-db
+          property: connectionString
+    healthCheckPath: /

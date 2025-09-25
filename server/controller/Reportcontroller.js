@@ -81,3 +81,63 @@ export const commentSend = async (req, res) => {
     res.status(500).json({ success: false, message: "Something went wrong" });
   }
 };
+
+
+export const upvoteReport = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const report = await Report.findByIdAndUpdate(
+      id,
+      { $inc: { upvotes: 1 } },
+      { new: true }
+    );
+    res.json({ success: true, report });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+};
+
+
+export const removeUpvote = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const report = await Report.findByIdAndUpdate(
+      id,
+      { $inc: { upvotes: -1 } },
+      { new: true }
+    );
+    res.json({ success: true, report });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+};
+
+
+export const downvoteReport = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const report = await Report.findByIdAndUpdate(
+      id,
+      { $inc: { downvotes: 1 } },
+      { new: true }
+    );
+    res.json({ success: true, report });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+};
+
+
+export const removeDownvote = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const report = await Report.findByIdAndUpdate(
+      id,
+      { $inc: { downvotes: -1 } },
+      { new: true }
+    );
+    res.json({ success: true, report });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+};

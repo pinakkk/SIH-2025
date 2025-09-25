@@ -38,7 +38,7 @@ export const googleLogin = async (req, res) => {
 };
 
 export const registered = async (req, res) => {
-  const { username, email, password, profilePic, location } = req.body;
+  const { username, email, password, location } = req.body;
 
   if (!username || !email || !password) {
     return res.json({ success: false, message: "Missing details" });
@@ -62,7 +62,6 @@ export const registered = async (req, res) => {
       username,
       email,
       password: hashedPassword,
-      profilePic,
       location: parsedLocation, // assign location here
     });
 

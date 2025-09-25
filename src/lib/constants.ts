@@ -1,4 +1,7 @@
-export const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+export const API_BASE_URL = import.meta.env.VITE_API_URL || 
+  (import.meta.env.PROD 
+    ? 'https://your-render-app-name.onrender.com' 
+    : 'http://localhost:5002');
 
 export const STORAGE_KEYS = {
   TOKEN: 'auth_token',
