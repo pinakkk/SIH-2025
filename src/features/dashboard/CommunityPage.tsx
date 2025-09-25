@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/Card";
-import { MapPin, Bell, ChevronDown } from "lucide-react";
+import { MapPin, ChevronDown } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { BottomNavigation } from "@/components/layout/BottomNavigation";
 import { Sidebar } from "@/components/layout/Sidebar";
+import { NotificationButton, NotificationPanel } from "@/components/ui/NotificationPanel";
+import { useNotifications } from "@/hooks/use-notifications";
 
 const SkeletonBlock = ({ className = "" }: { className?: string }) => (
   <div className={`bg-[#2a2a2a] animate-pulse rounded ${className}`} />
@@ -38,6 +40,16 @@ export function CommunityPage() {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("All");
   const [isSidebarOpen, setSidebarOpen] = useState(false);
+  const [isNotificationPanelOpen, setNotificationPanelOpen] = useState(false);
+  
+  // Notification hook
+  const { 
+    notifications, 
+    unreadCount, 
+    markAsRead, 
+    markAsUnread, 
+    deleteNotification 
+  } = useNotifications();
 
   useEffect(() => {
     const t = setTimeout(() => setLoading(false), 900);
@@ -76,10 +88,10 @@ export function CommunityPage() {
             </p>
           </div>
         </div>
-        <button className="relative w-10 h-10 rounded-full bg-[#372a28] flex items-center justify-center hover:scale-105 transition-transform">
-          <Bell size={18} />
-          <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full ring-1 ring-[#372a28]" />
-        </button>
+        <NotificationButton
+          unreadCount={unreadCount}
+          onClick={() => setNotificationPanelOpen(true)}
+        />
       </motion.header>
 
       <div className="px-5 mt-5">
@@ -176,6 +188,17 @@ export function CommunityPage() {
 
       {/* ✅ Bottom Navigation */}
       <BottomNavigation />
+      
+      {/* Notification Panel */}
+      <NotificationPanel
+        isOpen={isNotificationPanelOpen}
+        onClose={() => setNotificationPanelOpen(false)}
+        notifications={notifications}
+        onMarkAsRead={markAsRead}
+        onMarkAsUnread={markAsUnread}
+        onDelete={deleteNotification}
+        unreadCount={unreadCount}
+      />
     </div>
   );
 }
