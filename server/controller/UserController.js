@@ -57,6 +57,11 @@ export const AllReport = async (req, res) => {
   }
 };
 
+
+
+
+
+
 export const Allhotspot = async (req, res) => {
   try {
     const hotspots = await Hotspot.find()
@@ -91,24 +96,85 @@ export const Allhotspot = async (req, res) => {
     });
   }
 };
-
 export const AlluserAlert = async (req, res) => {
   const userId = req.userId;
 
   try {
-   
+    // ✅ Find alerts for this user, sorted by newest first
     const alerts = await Alert.find({ user: userId })
-      .sort({ createdAt: -1 }); 
+      .populate({
+        path: "report",
+        select: "hazardType caption location photos verified createdAt",
+        populate: {
+          path: "user",
+          select: "username email profilePic",
+        },
+      })
+      .populate({
+        path: "user",
+        select: "username email profilePic role location",
+      })
+      .sort({ createdAt: -1 });
+
+    if (!alerts || alerts.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "No alerts found for this user",
+      });
+    }
 
     res.status(200).json({
       success: true,
-      data: alerts
+      count: alerts.length,
+      alerts,
     });
   } catch (error) {
     console.error("Error fetching alerts:", error);
     res.status(500).json({
       success: false,
       message: "Failed to fetch alerts",
+      error: error.message,
+    });
+  }
+};
+
+
+export const UserReports = async (req, res) => {
+  try {
+    const id = req.userId; // userId from route like /api/reports/:userId
+    console.log(id);
+    
+
+    const reports = await Report.findById(id)
+      .populate({
+        path: "user",
+        select: "username email profilePic"
+      })
+      .populate({
+        path: "comments",
+        populate: {
+          path: "user",
+          select: "username email profilePic"
+        }
+      })
+      .sort({ createdAt: -1 }); // newest first
+
+    if (!reports || reports.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "No reports found for this user"
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: reports
+    });
+  } catch (error) {
+    console.error("Error fetching user reports:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch user reports",
       error: error.message
     });
   }
