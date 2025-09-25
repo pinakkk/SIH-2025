@@ -32,6 +32,10 @@ import { GovernmentOfficial } from "@/pages/Verify_as_official/GovernmentOfficia
 import { NgoOfficial } from "@/pages/Verify_as_official/NgoOfficial";
 import { GroupsPage } from "@/pages/GroupsPage";
 import EvacuationCentersPage from "@/pages/EvacuationCentersPage";
+
+import { HazardDetailsPage } from "@/pages/HazardDetailsPage";
+import { HazardFullMapPage } from "@/pages/HazardFullMapPage";
+
 // Lazy load register
 const LazyRegisterPage = React.lazy(() =>
   import("@/features/auth/RegisterPage").then((module) => ({
@@ -138,6 +142,26 @@ function App() {
                 </ProtectedRoute>
               }
             />
+
+            <Route
+  path={ROUTES.HAZARD_DETAILS}
+  element={
+    <ProtectedRoute>
+      <HazardDetailsPage />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path={ROUTES.HAZARD_MAP}
+  element={
+    <ProtectedRoute>
+      <HazardFullMapPage />
+    </ProtectedRoute>
+  }
+/>
+
+            
             {/* Craete Post */}
             <Route
               path={ROUTES.CREATE_POST}

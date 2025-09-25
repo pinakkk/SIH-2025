@@ -42,6 +42,8 @@ export const ROUTES = {
   EVACUATION_CENTERS: '/dashboard/evacuation-centers',
   VERIFY_GOVERNMENT: '/verify-as-official/government',
   VERIFY_NGO: '/verify-as-official/ngo',
+  HAZARD_DETAILS: '/dashboard/hazard/:id/details',
+  HAZARD_MAP: '/dashboard/hazard/:id/map',
 } as const;
 
 
