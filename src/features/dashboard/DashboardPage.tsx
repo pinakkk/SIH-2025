@@ -48,7 +48,7 @@ export function DashboardPage() {
   useEffect(() => {
     async function fetchCommunityUpdates() {
       try {
-        const res = await fetch("https://pythonn-bcdd.onrender.com/rank-posts");
+        const res = await fetch("https://fast-api-f789.onrender.com/rank-posts");
         const data = await res.json();
         setCommunityUpdates(data.rankedPosts || []);
       } catch (err) {
