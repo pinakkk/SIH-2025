@@ -81,7 +81,8 @@ export function DashboardPage() {
     async function fetchAlerts() {
       try {
         const res = await axios.get(
-          "http://localhost:5002/api/all-users-alert",
+          // "http://localhost:5002/api/all-users-alert", // Local host 
+          "https://sih-2025-l3ur.onrender.com/all-users-alert", // production
           {
             withCredentials: true,
           }

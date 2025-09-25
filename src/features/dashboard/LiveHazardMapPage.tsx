@@ -3,7 +3,7 @@
 // import React, { useState, useEffect } from "react";
 // import { motion } from "framer-motion";
 // import { Card, CardContent } from "@/components/ui/Card";
-// import { Search, RefreshCw, MapPin, Menu } from "lucide-react";
+// import { RefreshCw, MapPin, Menu } from "lucide-react";
 // import { BottomNavigation } from "@/components/layout/BottomNavigation";
 // import { useAuth } from "@/hooks/use-auth";
 // import { Sidebar } from "@/components/layout/Sidebar";
@@ -50,7 +50,7 @@
 //   const { user } = useAuth();
 //   const [isSidebarOpen, setSidebarOpen] = useState(false);
 //   const [hotspots, setHotspots] = useState<any[]>([]);
-//   const navigate = useNavigate(); // ✅ Fix: added navigate hook
+//   const navigate = useNavigate();
 
 //   // ✅ Load Google Maps
 //   const { isLoaded } = useJsApiLoader({
@@ -116,12 +116,12 @@
 //           backdropFilter: "saturate(120%) blur(6px)",
 //         }}
 //         transition={{ duration: 0.25 }}
-//         className="sticky top-0 z-40 bg-[#2b2320]/55 border-b border-[#3a2f2d] px-5 py-4 flex justify-between items-center"
+//         className="sticky top-0 z-40 bg-[#2b2320]/55 border-b border-[#3a2f2d] px-4 sm:px-6 py-3 sm:py-4 flex justify-between items-center"
 //       >
 //         <div className="flex items-center gap-3">
 //           <button
 //             onClick={() => setSidebarOpen(true)}
-//             className="w-10 h-10 flex items-center justify-center rounded-lg bg-[#372a28]/80 hover:bg-[#443331] transition"
+//             className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-lg bg-[#372a28]/80 hover:bg-[#443331] transition"
 //           >
 //             <Menu size={22} />
 //           </button>
@@ -129,8 +129,8 @@
 //           <Sidebar isOpen={isSidebarOpen} onClose={() => setSidebarOpen(false)} />
 
 //           <div>
-//             <h1 className="font-bold text-lg">Live Hazard Map</h1>
-//             <p className="text-sm text-[#d8cdc6] flex items-center">
+//             <h1 className="font-bold text-base sm:text-lg">Live Hazard Map</h1>
+//             <p className="text-xs sm:text-sm text-[#d8cdc6] flex items-center">
 //               <MapPin size={14} className="mr-1" /> {userLocation}
 //             </p>
 //           </div>
@@ -139,13 +139,13 @@
 //           whileTap={{ scale: 0.9 }}
 //           whileHover={{ scale: 1.05 }}
 //           onClick={() => window.location.reload()}
-//           className="relative w-10 h-10 rounded-full bg-[#372a28] flex items-center justify-center transition-transform"
+//           className="relative w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#372a28] flex items-center justify-center transition-transform"
 //         >
 //           <RefreshCw size={18} />
 //         </motion.button>
 //       </motion.header>
 
-//       <div className="px-5 mt-5">
+//       <div className="px-4 sm:px-6 mt-5 max-w-5xl mx-auto w-full">
 //         {/* Hotspots List */}
 //         <div className="space-y-6">
 //           {loading
@@ -154,7 +154,7 @@
 //                 .map((_, idx) => (
 //                   <div key={idx} className="mb-4">
 //                     <SkeletonBlock className="h-6 w-1/2 mb-3" />
-//                     <SkeletonBlock className="h-40 w-full" />
+//                     <SkeletonBlock className="h-40 sm:h-52 w-full" />
 //                   </div>
 //                 ))
 //             : hotspots.map((h, i) => (
@@ -165,20 +165,17 @@
 //                   transition={{ duration: 0.4, delay: i * 0.1 }}
 //                 >
 //                   <Card className="bg-gradient-to-b from-[#2a1e1c] to-[#1e1614] border border-[#3a2f2d] rounded-2xl overflow-hidden shadow-lg">
-//                     <CardContent className="p-4">
-//                       <h2 className="font-semibold text-white capitalize mt-2 mb-2">
+//                     <CardContent className="p-4 sm:p-5">
+//                       <h2 className="font-semibold text-white capitalize mt-1 mb-2 text-sm sm:text-base md:text-lg">
 //                         {h.title}
 //                       </h2>
-//                       <p className="text-xs text-[#bfb2ac]">
-//                         Reports: {h.reports}
-//                       </p>
-//                       <p className="text-xs text-[#bfb2ac]">
-//                         Detected: {new Date(h.createdAt).toLocaleString()}
-//                       </p>
-//                       <p className="text-xs text-[#bfb2ac] mb-2">
-//                         Updated: {new Date(h.updatedAt).toLocaleString()}
-//                       </p>
-//                       <div className="flex items-center gap-1.5 mt-1 mb-3">
+//                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-1 gap-x-3 text-xs sm:text-sm text-[#bfb2ac]">
+//                         <p>Reports: {h.reports}</p>
+//                         <p>Detected: {new Date(h.createdAt).toLocaleString()}</p>
+//                         <p>Updated: {new Date(h.updatedAt).toLocaleString()}</p>
+//                       </div>
+
+//                       <div className="flex items-center gap-1.5 mt-2 mb-3">
 //                         <span
 //                           className={`w-2 h-2 rounded-full ${
 //                             h.isLive ? "bg-red-500 animate-pulse" : "bg-gray-500"
@@ -193,11 +190,11 @@
 //                         </span>
 //                       </div>
 
-//                       {/* ✅ Dark Mode Map with Marker */}
+//                       {/* ✅ Responsive Map */}
 //                       {isLoaded &&
 //                         h.location &&
 //                         h.location.length === 2 && (
-//                           <div className="w-full h-52 rounded-xl overflow-hidden mb-4 border border-[#3a2f2d]">
+//                           <div className="w-full h-40 sm:h-52 md:h-64 lg:h-72 rounded-xl overflow-hidden mb-4 border border-[#3a2f2d]">
 //                             <GoogleMap
 //                               mapContainerStyle={{
 //                                 width: "100%",
@@ -226,8 +223,8 @@
 //                           </div>
 //                         )}
 
-//                       {/* ✅ Action Buttons (fixed alignment) */}
-//                       <div className="flex gap-3 mt-3">
+//                       {/* ✅ Responsive Action Buttons */}
+//                       <div className="flex flex-col sm:flex-row gap-3 mt-3">
 //                         <motion.button
 //                           whileTap={{ scale: 0.97 }}
 //                           className="flex-1 flex items-center justify-center bg-white text-black font-semibold py-2.5 rounded-full hover:scale-[1.02] transition-transform"
@@ -284,26 +281,10 @@ const darkMapStyle = [
   { elementType: "labels.icon", stylers: [{ visibility: "off" }] },
   { elementType: "labels.text.fill", stylers: [{ color: "#757575" }] },
   { elementType: "labels.text.stroke", stylers: [{ color: "#212121" }] },
-  {
-    featureType: "road",
-    elementType: "geometry.fill",
-    stylers: [{ color: "#2c2c2c" }],
-  },
-  {
-    featureType: "road",
-    elementType: "labels.text.fill",
-    stylers: [{ color: "#8a8a8a" }],
-  },
-  {
-    featureType: "water",
-    elementType: "geometry",
-    stylers: [{ color: "#000000" }],
-  },
-  {
-    featureType: "water",
-    elementType: "labels.text.fill",
-    stylers: [{ color: "#3d3d3d" }],
-  },
+  { featureType: "road", elementType: "geometry.fill", stylers: [{ color: "#2c2c2c" }] },
+  { featureType: "road", elementType: "labels.text.fill", stylers: [{ color: "#8a8a8a" }] },
+  { featureType: "water", elementType: "geometry", stylers: [{ color: "#000000" }] },
+  { featureType: "water", elementType: "labels.text.fill", stylers: [{ color: "#3d3d3d" }] },
 ];
 
 export function LiveHazardMapPage() {
@@ -328,15 +309,8 @@ export function LiveHazardMapPage() {
         const data = await res.json();
         if (data.success) {
           const formatted = data.data.map((h: any) => {
-            const hazardTypes = [
-              ...new Set(h.reports.map((r: any) => r.hazardType)),
-            ];
-            let title = "";
-            if (hazardTypes.length > 1) {
-              title = "Most Reported Hotspot";
-            } else {
-              title = hazardTypes[0] || "Hazard Alert";
-            }
+            const hazardTypes = [...new Set(h.reports.map((r: any) => r.hazardType))];
+            let title = hazardTypes.length > 1 ? "Most Reported Hotspot" : hazardTypes[0] || "Hazard Alert";
 
             return {
               id: h._id,
@@ -367,6 +341,15 @@ export function LiveHazardMapPage() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  // ✅ Function to redirect to Google Maps
+  const openInMaps = (h: any) => {
+    if (h?.location?.length === 2) {
+      const [lng, lat] = h.location;
+      const url = `https://www.google.com/maps/place/${lat},${lng}/@${lat},${lng},15z/data=!3m1!1e3`;
+      window.open(url, "_blank", "noopener,noreferrer");
+    }
+  };
 
   return (
     <div className="bg-[#1f1816] min-h-screen text-white font-sans pb-28">
@@ -453,19 +436,16 @@ export function LiveHazardMapPage() {
                         </span>
                       </div>
 
-                      {/* ✅ Responsive Map */}
+                      {/* ✅ Responsive Map Preview */}
                       {isLoaded &&
                         h.location &&
                         h.location.length === 2 && (
                           <div className="w-full h-40 sm:h-52 md:h-64 lg:h-72 rounded-xl overflow-hidden mb-4 border border-[#3a2f2d]">
                             <GoogleMap
-                              mapContainerStyle={{
-                                width: "100%",
-                                height: "100%",
-                              }}
+                              mapContainerStyle={{ width: "100%", height: "100%" }}
                               center={{
-                                lat: Number(h.location[1]) || 12.9716,
-                                lng: Number(h.location[0]) || 77.5946,
+                                lat: Number(h.location[1]),
+                                lng: Number(h.location[0]),
                               }}
                               zoom={15}
                               options={{
@@ -475,12 +455,14 @@ export function LiveHazardMapPage() {
                                 draggable: false,
                                 scrollwheel: false,
                               }}
+                              onClick={() => openInMaps(h)}
                             >
                               <Marker
                                 position={{
                                   lat: Number(h.location[1]),
                                   lng: Number(h.location[0]),
                                 }}
+                                onClick={() => openInMaps(h)}
                               />
                             </GoogleMap>
                           </div>
@@ -500,9 +482,7 @@ export function LiveHazardMapPage() {
                         <motion.button
                           whileTap={{ scale: 0.97 }}
                           className="flex-1 flex items-center justify-center bg-[#2b2320] border border-[#3a2f2d] text-white font-semibold py-2.5 rounded-full hover:bg-[#3b3230] transition-colors"
-                          onClick={() =>
-                            navigate(`/dashboard/hazard/${h.id}/map`)
-                          }
+                          onClick={() => openInMaps(h)} // ✅ Directly open Google Maps
                         >
                           View on Map
                         </motion.button>

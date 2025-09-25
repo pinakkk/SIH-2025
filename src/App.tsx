@@ -34,7 +34,7 @@ import { GroupsPage } from "@/pages/GroupsPage";
 import EvacuationCentersPage from "@/pages/EvacuationCentersPage";
 
 import { HazardDetailsPage } from "@/pages/HazardDetailsPage";
-import { HazardFullMapPage } from "@/pages/HazardFullMapPage";
+// import { HazardFullMapPage } from "@/pages/HazardFullMapPage";
 
 // Lazy load register
 const LazyRegisterPage = React.lazy(() =>
@@ -152,14 +152,14 @@ function App() {
   }
 />
 
-<Route
+{/* <Route
   path={ROUTES.HAZARD_MAP}
   element={
     <ProtectedRoute>
       <HazardFullMapPage />
     </ProtectedRoute>
   }
-/>
+/> */}
 
             
             {/* Craete Post */}

@@ -1,4 +1,5 @@
-const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+// const BASE_URL = "http://localhost:5000";
+const BASE_URL ="https://sih-2025-l3ur.onrender.com"; // production
 
 export async function apiRequest(endpoint: string, method: string = "GET", body?: any) {
   const options: RequestInit = {

@@ -159,8 +159,8 @@
 
 
 
-// working with login
-// // src/hooks/use-auth.ts
+// // working with login
+// // // src/hooks/use-auth.ts
 // import { useState, useEffect } from "react";
 // import axios from "axios";
 // import {
@@ -263,7 +263,6 @@
 // }
 
 
-
 import { useState, useEffect } from "react";
 import axios from "axios";
 import {
@@ -272,52 +271,30 @@ import {
   facebookProvider,
   appleProvider,
 } from "@/lib/firebase";
-import { signInWithPopup, onAuthStateChanged, User } from "firebase/auth";
+import { signInWithPopup, User } from "firebase/auth";
+
+const API_BASE_URL = "https://sih-2025-l3ur.onrender.com"; // ✅ Production backend
 
 export function useAuth() {
   const [user, setUser] = useState<any | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [initializing, setInitializing] = useState(true);
 
-  // 🔑 Restore user from localStorage (API login)
+  // Restore session
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
     if (savedUser) {
       setUser(JSON.parse(savedUser));
-      setInitializing(false);
-      return; // API session exists, no need for Firebase listener
     }
-
-    // 🔑 Firebase listener (social login)
-    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-      if (firebaseUser) {
-        const idToken = await firebaseUser.getIdToken();
-        const fbUser = {
-          uid: firebaseUser.uid,
-          displayName: firebaseUser.displayName,
-          email: firebaseUser.email,
-          photoURL: firebaseUser.photoURL,
-          provider: firebaseUser.providerId,
-          idToken,
-        };
-        setUser(fbUser);
-        localStorage.setItem("user", JSON.stringify(fbUser));
-      } else {
-        setUser(null);
-        localStorage.removeItem("user");
-      }
-      setInitializing(false);
-    });
-
-    return () => unsubscribe();
+    setInitializing(false);
   }, []);
 
-  // 📌 API login (email + password)
+  // 📌 API Login
   const login = async ({ email, password }: { email: string; password: string }) => {
     setIsLoading(true);
     try {
       const { data } = await axios.post(
-        "http://localhost:5002/api/login",
+        `${API_BASE_URL}/api/login`,
         { email, password },
         { withCredentials: true }
       );
@@ -331,7 +308,7 @@ export function useAuth() {
     }
   };
 
-  // 📌 Firebase social logins
+  // 📌 Social logins
   const loginWithGoogle = async (): Promise<User> => {
     setIsLoading(true);
     try {
@@ -362,16 +339,9 @@ export function useAuth() {
     }
   };
 
-  // 📌 Logout clears both API + Firebase sessions
-  const logout = async () => {
-    setIsLoading(true);
-    try {
-      await auth.signOut().catch(() => {}); // ignore if not Firebase user
-      localStorage.removeItem("user");
-      setUser(null);
-    } finally {
-      setIsLoading(false);
-    }
+  const logout = () => {
+    localStorage.removeItem("user");
+    setUser(null);
   };
 
   return {

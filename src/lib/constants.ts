@@ -43,7 +43,7 @@ export const ROUTES = {
   VERIFY_GOVERNMENT: '/verify-as-official/government',
   VERIFY_NGO: '/verify-as-official/ngo',
   HAZARD_DETAILS: '/dashboard/hazard/:id/details',
-  HAZARD_MAP: '/dashboard/hazard/:id/map',
+  // HAZARD_MAP: '/dashboard/hazard/:id/map',
 } as const;
 
 
