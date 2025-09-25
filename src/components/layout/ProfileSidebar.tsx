@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, User, Settings, LogOut, Bot, MessageSquareText } from "lucide-react";
-import { useAuth } from "@/hooks/use-auth";
+import { X, User, Settings, LogOut, MessageSquareText } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import { ROUTES } from "@/lib/constants";
 
 interface ProfileSidebarProps {
@@ -10,12 +10,53 @@ interface ProfileSidebarProps {
   onClose: () => void;
 }
 
+interface UserData {
+  _id: string;
+  username: string;
+  email: string;
+  profilePic?: string;
+  role?: string;
+}
+
 export const ProfileSidebar: React.FC<ProfileSidebarProps> = ({
   isOpen,
   onClose,
 }) => {
-  const { user, logout } = useAuth();
+  const [user, setUser] = useState<UserData | null>(null);
   const navigate = useNavigate();
+
+  // 🔥 Fetch user data when sidebar opens
+  useEffect(() => {
+    if (isOpen) {
+      axios
+        .get("http://localhost:5002/api/user-data", {
+          withCredentials: true, // send cookies
+        })
+        .then((res) => {
+          if (res.data.success) {
+            setUser(res.data.data);
+          }
+        })
+        .catch((err) => {
+          console.error("Failed to fetch user data:", err);
+        });
+    }
+  }, [isOpen]);
+
+  const handleLogout = async () => {
+    try {
+      await axios.post(
+        "http://localhost:5002/api/logout",
+        {},
+        { withCredentials: true }
+      );
+      setUser(null);
+      onClose();
+      navigate(ROUTES.LOGIN, { replace: true });
+    } catch (err) {
+      console.error("Logout failed:", err);
+    }
+  };
 
   return (
     <AnimatePresence>
@@ -53,12 +94,19 @@ export const ProfileSidebar: React.FC<ProfileSidebarProps> = ({
             {/* User Info */}
             <div className="flex flex-col items-center py-6 border-b border-[#3a2f2d]">
               <img
-                src={user?.photoURL || "https://i.pravatar.cc/80"}
+                src={user?.profilePic || "https://i.pravatar.cc/80"}
                 alt="profile"
                 className="w-20 h-20 rounded-full object-cover border-2 border-[#2f2523]"
               />
-              <h3 className="mt-3 font-semibold">{user?.displayName || "Guest User"}</h3>
-              <p className="text-sm text-gray-400">{user?.email || "No email"}</p>
+              <h3 className="mt-3 font-semibold">
+                {user?.username || "Guest User"}
+              </h3>
+              <p className="text-sm text-gray-400">
+                {user?.email || "No email"}
+              </p>
+              {user?.role && (
+                <p className="text-xs text-gray-500 mt-1">Role: {user.role}</p>
+              )}
             </div>
 
             {/* Options */}
@@ -87,11 +135,7 @@ export const ProfileSidebar: React.FC<ProfileSidebarProps> = ({
                 <Settings size={18} /> Settings
               </button>
               <button
-                onClick={() => {
-                  logout();
-                  onClose();
-                  navigate(ROUTES.LOGIN, { replace: true });
-                }}
+                onClick={handleLogout}
                 className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-red-600/20 transition text-left text-red-400"
               >
                 <LogOut size={18} /> Logout
