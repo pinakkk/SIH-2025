@@ -21,8 +21,36 @@ const alertSchema = new Schema(
       default: "medium",
     },
     seen: { type: Boolean, default: false },
+
+    // ✅ coordinates storage
+    userLocation: {
+      type: {
+        type: String,
+        enum: ["Point"],
+        default: "Point",
+      },
+      coordinates: {
+        type: [Number], // [lng, lat]
+        required: true,
+      },
+    },
+    postLocation: {
+      type: {
+        type: String,
+        enum: ["Point"],
+        default: "Point",
+      },
+      coordinates: {
+        type: [Number], // [lng, lat]
+        required: true,
+      },
+    },
   },
   { timestamps: true }
 );
+
+// ✅ Add 2dsphere indexes for geospatial queries
+alertSchema.index({ userLocation: "2dsphere" });
+alertSchema.index({ postLocation: "2dsphere" });
 
 export default mongoose.model("Alert", alertSchema);

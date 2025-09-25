@@ -18,7 +18,7 @@ export const generateAlertsForReport = async (reportId) => {
         $geoNear: {
           near: { type: "Point", coordinates: report.location.coordinates },
           distanceField: "dist.calculated",
-          maxDistance: 5000,
+          maxDistance: 5000, // 5 km
           spherical: true,
         },
       },
@@ -29,7 +29,7 @@ export const generateAlertsForReport = async (reportId) => {
       return;
     }
 
-    // 3. Create alerts with distance + severity
+    // 3. Create alerts with distance + severity + locations
     const alerts = usersNearby.map((u) => {
       const distanceMeters = u.dist.calculated;
       const distanceKm = (distanceMeters / 1000).toFixed(2);
@@ -38,8 +38,7 @@ export const generateAlertsForReport = async (reportId) => {
       let severity = "low";
       if (distanceMeters <= 1000) severity = "critical";
       else if (distanceMeters <= 2000) severity = "high";
-      else if (distanceMeters <= 3500) severity = "medium";
-
+      else if (distanceMeters <= 3500) severity = "medium";     
       return {
         report: report._id,
         user: u._id,
@@ -47,12 +46,21 @@ export const generateAlertsForReport = async (reportId) => {
         alertType: "hazard",
         distance: distanceMeters,
         severity,
+        userLocation: {
+          type: "Point",
+          coordinates: u.location.coordinates, // ✅ from user schema
+        },
+        postLocation: {
+          type: "Point",
+          coordinates: report.location.coordinates, // ✅ from report schema
+        },
       };
     });
 
+    // 4. Insert alerts
     const insertedAlerts = await Alert.insertMany(alerts);
 
-    // 4. Link alerts to users
+    // 5. Link alerts to users
     await Promise.all(
       insertedAlerts.map((alert) =>
         User.findByIdAndUpdate(alert.user, { $push: { alerts: alert._id } })
