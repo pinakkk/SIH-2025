@@ -28,6 +28,7 @@ import { HelpAndSupportPage } from "@/pages/HelpAndSupportPage";
 import { ProfilePage } from "@/pages/ProfilePage";
 import { NewsAndUpdatesRoute } from "@/routes/NewsAndUpdatesRoute";
 import ChatbotPage from "@/pages/ChatbotPage";
+import { GroupsPage } from "@/pages/GroupsPage";
 import EvacuationCentersPage from "@/pages/EvacuationCentersPage";
 // Lazy load register
 const LazyRegisterPage = React.lazy(() =>
@@ -152,6 +153,16 @@ function App() {
     </ProtectedRoute>
   }
 />
+
+            {/* Groups Page */}
+            <Route
+              path={ROUTES.GROUPS}
+              element={
+                <ProtectedRoute>
+                  <GroupsPage />
+                </ProtectedRoute>
+              }
+            />
 
             {/* News and Updates */}
             <Route

@@ -28,6 +28,7 @@ export const ROUTES = {
   CONTACT_US: '/contact-us',
   FEEDBACK: '/feedback',
   EMERGENCY_MODE: '/dashboard/emergency-mode',
+  GROUPS: '/groups',
   EMERGENCY_CALLING: '/dashboard/emergency-calling',
   EMERGENCY_CONTACTS: '/dashboard/emergency-contacts',
   LIVE_LOCATION: '/dashboard/live-location',
