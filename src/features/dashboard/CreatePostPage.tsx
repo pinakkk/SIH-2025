@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { MapPin, ArrowLeft, ImagePlus, Video, Loader2 } from "lucide-react";
+import { MapPin, ArrowLeft, ImagePlus, Loader2 } from "lucide-react";
 import { BottomNavigation } from "@/components/layout/BottomNavigation";
 import { useNavigate } from "react-router-dom";
 
@@ -61,40 +61,26 @@ export function CreatePostPage() {
           />
         </motion.div>
 
-        {/* Media Upload */}
+        {/* Media Upload (Photo only) */}
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
           className="bg-[#2b2320]/70 border border-[#3a2f2d] rounded-2xl p-4 shadow-lg"
         >
-          <p className="text-sm mb-3 text-gray-300">Attach Media</p>
-          <div className="flex gap-3">
-            <label className="flex-1 cursor-pointer flex items-center justify-center border-2 border-dashed border-[#3a2f2d] rounded-xl p-6 hover:bg-[#3a2f2d]/40 transition">
-              <input
-                type="file"
-                accept="image/*"
-                className="hidden"
-                onChange={handleMediaChange}
-              />
-              <div className="flex flex-col items-center text-gray-400">
-                <ImagePlus size={22} />
-                <span className="text-xs mt-1">Photo</span>
-              </div>
-            </label>
-            <label className="flex-1 cursor-pointer flex items-center justify-center border-2 border-dashed border-[#3a2f2d] rounded-xl p-6 hover:bg-[#3a2f2d]/40 transition">
-              <input
-                type="file"
-                accept="video/*"
-                className="hidden"
-                onChange={handleMediaChange}
-              />
-              <div className="flex flex-col items-center text-gray-400">
-                <Video size={22} />
-                <span className="text-xs mt-1">Video</span>
-              </div>
-            </label>
-          </div>
+          <p className="text-sm mb-3 text-gray-300">Attach Photo</p>
+          <label className="cursor-pointer flex items-center justify-center border-2 border-dashed border-[#3a2f2d] rounded-xl p-6 hover:bg-[#3a2f2d]/40 transition">
+            <input
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handleMediaChange}
+            />
+            <div className="flex flex-col items-center text-gray-400">
+              <ImagePlus size={22} />
+              <span className="text-xs mt-1">Photo</span>
+            </div>
+          </label>
           {media && (
             <div className="mt-3 text-xs text-gray-400">
               Selected: {media.name}

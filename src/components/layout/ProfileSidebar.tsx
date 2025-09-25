@@ -81,7 +81,7 @@ export const ProfileSidebar: React.FC<ProfileSidebarProps> = ({
               >
                 <MessageSquareText size={18} /> AI Assistant
               </button>
-              <button 
+              <button
                 className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-[#2a2a2a] transition text-left"
               >
                 <Settings size={18} /> Settings
@@ -90,6 +90,7 @@ export const ProfileSidebar: React.FC<ProfileSidebarProps> = ({
                 onClick={() => {
                   logout();
                   onClose();
+                  navigate(ROUTES.LOGIN, { replace: true });
                 }}
                 className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-red-600/20 transition text-left text-red-400"
               >

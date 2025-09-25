@@ -1,9 +1,10 @@
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/use-auth";
 import { ROUTES } from "@/lib/constants";
 
 export function ProtectedRoute({ children }: { children: JSX.Element }) {
   const { isAuthenticated, initializing } = useAuth();
+  const location = useLocation();
 
   if (initializing) {
     return (
@@ -13,7 +14,7 @@ export function ProtectedRoute({ children }: { children: JSX.Element }) {
     );
   }
 
-  if (!isAuthenticated) {
+  if (!isAuthenticated && location.pathname !== ROUTES.LOGIN) {
     return <Navigate to={ROUTES.LOGIN} replace />;
   }
 
