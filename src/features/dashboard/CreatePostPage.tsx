@@ -3,12 +3,13 @@ import { motion } from "framer-motion";
 import { MapPin, ArrowLeft, ImagePlus, Loader2 } from "lucide-react";
 import { BottomNavigation } from "@/components/layout/BottomNavigation";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export function CreatePostPage() {
   const navigate = useNavigate();
 
   const [caption, setCaption] = useState("");
-  const [location, setLocation] = useState("");
+  const [hazardType, setHazardType] = useState("");
   const [media, setMedia] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -19,11 +20,48 @@ export function CreatePostPage() {
   };
 
   const handleSubmit = () => {
+    if (!caption || !hazardType || !media) {
+      alert("Please add caption, hazard type, and a photo.");
+      return;
+    }
+
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      navigate(-1); // go back to previous page
-    }, 1500);
+
+    // 🔥 Get user's current location
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        const { latitude, longitude } = pos.coords;
+
+        try {
+          const formData = new FormData();
+          formData.append("caption", caption);
+          formData.append("hazardType", hazardType);
+          formData.append("lng", longitude.toString());
+          formData.append("lat", latitude.toString());
+          formData.append("photos", media); // 👈 must match backend key name
+
+          const res = await axios.post(
+            "http://localhost:5002/api/create-post",
+            formData,
+            {
+              withCredentials: true,
+              headers: { "Content-Type": "multipart/form-data" },
+            }
+          );
+
+          console.log("✅ Post Created:", res.data);
+          setLoading(false);
+          navigate(-1);
+        } catch (err) {
+          console.error("❌ Error creating post:", err);
+          setLoading(false);
+        }
+      },
+      (err) => {
+        alert("Failed to fetch location. Please allow location access.");
+        setLoading(false);
+      }
+    );
   };
 
   return (
@@ -61,7 +99,34 @@ export function CreatePostPage() {
           />
         </motion.div>
 
-        {/* Media Upload (Photo only) */}
+        {/* Hazard Type Dropdown */}
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15 }}
+          className="bg-[#2b2320]/70 border border-[#3a2f2d] rounded-2xl p-4 shadow-lg"
+        >
+          <label className="block text-sm text-gray-300 mb-2">
+            Select Hazard Type
+          </label>
+          <select
+            value={hazardType}
+            onChange={(e) => setHazardType(e.target.value)}
+            className="w-full bg-[#372a28] border border-[#3a2f2d] rounded-xl px-3 py-2 text-sm text-gray-200 outline-none"
+          >
+            <option value="">-- Choose Hazard --</option>
+            <option value="Tsunami">🌊 Tsunami</option>
+            <option value="Cyclone">🌪️ Cyclone</option>
+            <option value="Storm Surge">🌊 Storm Surge</option>
+            <option value="Rip Current">🌊 Rip Current</option>
+            <option value="Coastal Flood">🌊 Coastal Flood</option>
+            <option value="Oil Spill">🛢️ Oil Spill</option>
+            <option value="Marine Pollution">♻️ Marine Pollution</option>
+            <option value="Other">⚠️ Other</option>
+          </select>
+        </motion.div>
+
+        {/* Media Upload */}
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
@@ -88,27 +153,11 @@ export function CreatePostPage() {
           )}
         </motion.div>
 
-        {/* Location */}
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="bg-[#2b2320]/70 border border-[#3a2f2d] rounded-2xl p-4 shadow-lg flex items-center gap-3"
-        >
-          <MapPin size={18} className="text-gray-400" />
-          <input
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-            placeholder="Add a location"
-            className="flex-1 bg-transparent outline-none placeholder-gray-400 text-sm"
-          />
-        </motion.div>
-
         {/* Submit */}
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
+          transition={{ delay: 0.3 }}
           className="pt-2"
         >
           <button
@@ -116,15 +165,13 @@ export function CreatePostPage() {
             disabled={loading}
             className="w-full bg-gradient-to-r from-yellow-400 to-yellow-500 text-black font-semibold py-3 rounded-full hover:opacity-90 transition flex items-center justify-center"
           >
-            {loading ? (
-              <Loader2 className="animate-spin w-5 h-5 mr-2" />
-            ) : null}
+            {loading && <Loader2 className="animate-spin w-5 h-5 mr-2" />}
             {loading ? "Posting..." : "Post"}
           </button>
         </motion.div>
       </div>
 
-      {/* ✅ Reusable Bottom Nav */}
+      {/* ✅ Bottom Navigation */}
       <BottomNavigation />
     </div>
   );
