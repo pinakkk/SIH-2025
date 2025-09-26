@@ -50,12 +50,12 @@ export function SeeMorePage() {
   }, []);
 
   const features = [
-    {
-      title: "Emergency Settings",
-      description: "Configure emergency contacts and alert preferences",
-      icon: <Settings size={24} className="text-[#e0d5ce]" />,
-      path: "/emergency-settings"
-    },
+    // {
+    //   title: "Emergency Settings",
+    //   description: "Configure emergency contacts and alert preferences",
+    //   icon: <Settings size={24} className="text-[#e0d5ce]" />,
+    //   path: "/emergency-settings"
+    // },
     {
       title: "Community Chat",
       description: "Connect with your local community during emergencies",
