@@ -10,7 +10,7 @@ export interface ApiError {
   details?: any;
 }
 
-export type Theme = 'light' | 'dark' | 'system';
+export type Theme = 'light' | 'dark'; // Removed 'system'
 
 export interface ThemeState {
   theme: Theme;

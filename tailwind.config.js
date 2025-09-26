@@ -8,6 +8,36 @@ export default {
         border: 'var(--border)',
         background: 'var(--background)',
         foreground: 'var(--foreground)',
+
+        // Light mode specific colors
+        light: {
+          bg: '#fafafa',
+          card: '#ffffff',
+          header: '#ffffff',
+          sidebar: '#f9fafb',
+          border: '#e5e7eb',
+          text: '#111827',
+          'text-secondary': '#6b7280',
+          'text-muted': '#9ca3af',
+        },
+
+        // Emergency theme colors (work in both modes)
+        emergency: {
+          50: '#fef2f2',
+          100: '#fee2e2',
+          500: '#ef4444',
+          600: '#dc2626',
+          700: '#b91c1c',
+        },
+
+        rescue: {
+          50: '#fef3c7',
+          100: '#fde68a',
+          500: '#f59e0b',
+          600: '#d97706',
+          700: '#b45309',
+        },
+
         primary: {
           50: '#eef2ff',
           100: '#e0e7ff',

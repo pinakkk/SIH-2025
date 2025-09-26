@@ -3,15 +3,37 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #0f172a;
-  --border: #e2e8f0;
+  /* Light Mode Colors */
+  --background: #fafafa;
+  --foreground: #1a1a1a;
+  --border: #e5e7eb;
+  --card-bg: #ffffff;
+  --card-secondary: #f8fafc;
+  --header-bg: #ffffff;
+  --sidebar-bg: #f9fafb;
+  --text-primary: #111827;
+  --text-secondary: #6b7280;
+  --text-muted: #9ca3af;
+  --accent-bg: #fef3c7;
+  --danger-bg: #fef2f2;
+  --success-bg: #f0fdf4;
 }
 
 .dark {
-  --background: #0f172a;
+  /* Dark Mode Colors (existing) */
+  --background: #1f1816;
   --foreground: #f8fafc;
   --border: #334155;
+  --card-bg: #2a1e1c;
+  --card-secondary: #1e1614;
+  --header-bg: #2b2320;
+  --sidebar-bg: #1f1816;
+  --text-primary: #ffffff;
+  --text-secondary: #bfb2ac;
+  --text-muted: #9ca3af;
+  --accent-bg: rgba(245, 124, 0, 0.1);
+  --danger-bg: rgba(239, 68, 68, 0.1);
+  --success-bg: rgba(34, 197, 94, 0.1);
 }
 
 @layer base {
@@ -40,12 +62,13 @@
 }
 
 @layer components {
+  /* Updated glassmorphism styles for both themes */
   .glass {
-    @apply bg-white/10 dark:bg-gray-900/10 backdrop-blur-md border-white/20 dark:border-gray-700/20;
+    @apply bg-white/20 dark:bg-gray-900/10 backdrop-blur-md border-gray-200/30 dark:border-white/20;
   }
 
   .glass-strong {
-    @apply bg-white/20 dark:bg-gray-900/20 backdrop-blur-lg border-white/30 dark:border-gray-700/30;
+    @apply bg-white/30 dark:bg-gray-900/20 backdrop-blur-lg border-gray-300/40 dark:border-gray-700/30;
   }
 
   .gradient-text {

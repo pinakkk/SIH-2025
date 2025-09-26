@@ -1,348 +1,3 @@
-// import React, { useEffect, useState } from "react";
-// import { motion, AnimatePresence } from "framer-motion";
-// import { X, User, Settings, LogOut, MessageSquareText, BadgeCheck } from "lucide-react";
-// import { useNavigate } from "react-router-dom";
-// import axios from "axios";
-// import { ROUTES } from "@/lib/constants";
-// import { Icon } from "@iconify/react";
-
-// interface ProfileSidebarProps {
-//   isOpen: boolean;
-//   onClose: () => void;
-// }
-
-// interface UserData {
-//   _id: string;
-//   username: string;
-//   email: string;
-//   profilePic?: string;
-//   role?: string;
-// }
-
-// export const ProfileSidebar: React.FC<ProfileSidebarProps> = ({
-//   isOpen,
-//   onClose,
-// }) => {
-//   const [user, setUser] = useState<UserData | null>(null);
-//   const [showVerifyOptions, setShowVerifyOptions] = useState(false);
-//   const navigate = useNavigate();
-
-//   // 🔥 Fetch user data when sidebar opens
-//   useEffect(() => {
-//     if (isOpen) {
-//       axios
-//         .get("http://localhost:5002/api/user-data", {
-//           withCredentials: true, // send cookies
-//         })
-//         .then((res) => {
-//           if (res.data.success) {
-//             setUser(res.data.data);
-//           }
-//         })
-//         .catch((err) => {
-//           console.error("Failed to fetch user data:", err);
-//         });
-//     }
-//   }, [isOpen]);
-
-//   const handleLogout = async () => {
-//     try {
-//       await axios.post(
-//         "http://localhost:5002/api/logout",
-//         {},
-//         { withCredentials: true }
-//       );
-//       setUser(null);
-//       onClose();
-//       navigate(ROUTES.LOGIN, { replace: true });
-//     } catch (err) {
-//       console.error("Logout failed:", err);
-//     }
-//   };
-
-//   return (
-//     <AnimatePresence>
-//       {isOpen && (
-//         <>
-//           {/* Overlay */}
-//           <motion.div
-//             initial={{ opacity: 0 }}
-//             animate={{ opacity: 0.5 }}
-//             exit={{ opacity: 0 }}
-//             transition={{ duration: 0.2 }}
-//             onClick={onClose}
-//             className="fixed inset-0 bg-black z-[99]"
-//           />
-
-//           {/* Sidebar */}
-//           <motion.div
-//             initial={{ x: "100%" }}
-//             animate={{ x: 0 }}
-//             exit={{ x: "100%" }}
-//             transition={{ type: "spring", stiffness: 300, damping: 30 }}
-//             className="fixed top-0 right-0 w-80 h-full bg-[#1f1816] border-l border-[#3a2f2d] z-[100] shadow-2xl flex flex-col"
-//           >
-//             {/* Header */}
-//             <div className="flex justify-between items-center px-5 py-4 border-b border-[#3a2f2d]">
-//               <h2 className="text-lg font-semibold">Profile</h2>
-//               <button
-//                 onClick={onClose}
-//                 className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-[#2a2a2a] transition"
-//               >
-//                 <X size={20} />
-//               </button>
-//             </div>
-
-//             {/* User Info */}
-//             <div className="flex flex-col items-center py-6 border-b border-[#3a2f2d]">
-//               <img
-//                 src={user?.profilePic || "https://i.pravatar.cc/80"}
-//                 alt="profile"
-//                 className="w-20 h-20 rounded-full object-cover border-2 border-[#2f2523]"
-//               />
-//               <h3 className="mt-3 font-semibold">
-//                 {user?.username || "Guest User"}
-//               </h3>
-//               <p className="text-sm text-gray-400">
-//                 {user?.email || "No email"}
-//               </p>
-//               {user?.role && (
-//                 <p className="text-xs text-gray-500 mt-1">Role: {user.role}</p>
-//               )}
-//             </div>
-
-//             {/* Options */}
-//             <div className="flex flex-col gap-1 p-4">
-//               <button
-//                 onClick={() => {
-//                   navigate(ROUTES.PROFILE);
-//                   onClose();
-//                 }}
-//                 className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-[#2a2a2a] transition text-left"
-//               >
-//                 <User size={18} /> Profile
-//               </button>
-//               <button
-//                 onClick={() => {
-//                   navigate(ROUTES.CHATBOT);
-//                   onClose();
-//                 }}
-//                 className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-[#2a2a2a] transition text-left"
-//               >
-//                 <MessageSquareText size={18} /> AI Assistant
-//               </button>
-//               <button
-//                 onClick={() => setShowVerifyOptions(!showVerifyOptions)}
-//                 className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-[#2a2a2a] transition text-left"
-//               >
-//                 <BadgeCheck size={18} /> Verify as Official
-//               </button>
-              
-//               {/* Verification Options */}
-//               {showVerifyOptions && (
-//                 <div className="ml-8 mt-1 mb-2 flex flex-col gap-2">
-//                   <button
-//                     onClick={() => {
-//                       navigate(ROUTES.VERIFY_GOVERNMENT);
-//                       onClose();
-//                     }}
-//                     className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#2a2a2a]/50 hover:bg-[#2a2a2a] transition text-left text-sm"
-//                   >
-//                     <Icon icon="mdi:government" className="text-lg text-yellow-400" />
-//                     <span>Verify as Government Official</span>
-//                   </button>
-//                   <button
-//                     onClick={() => {
-//                       navigate(ROUTES.VERIFY_NGO);
-//                       onClose();
-//                     }}
-//                     className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#2a2a2a]/50 hover:bg-[#2a2a2a] transition text-left text-sm"
-//                   >
-//                     <Icon icon="mdi:hand-heart" className="text-lg text-yellow-400" />
-//                     <span>Verify as NGO</span>
-//                   </button>
-//                 </div>
-//               )}
-              
-//               <button
-//                 className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-[#2a2a2a] transition text-left"
-//               >
-//                 <Settings size={18} /> Settings
-//               </button>
-//               <button
-//                 onClick={handleLogout}
-//                 className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-red-600/20 transition text-left text-red-400"
-//               >
-//                 <LogOut size={18} /> Logout
-//               </button>
-//             </div>
-//           </motion.div>
-//         </>
-//       )}
-//     </AnimatePresence>
-//   );
-// };
-
-
-// import React from "react";
-// import { motion, AnimatePresence } from "framer-motion";
-// import {
-//   X,
-//   User,
-//   Settings,
-//   LogOut,
-//   MessageSquareText,
-//   BadgeCheck,
-// } from "lucide-react";
-// import { useAuth } from "@/hooks/use-auth";
-// import { useNavigate } from "react-router-dom";
-// import { ROUTES } from "@/lib/constants";
-// import { Icon } from "@iconify/react";
-
-// interface ProfileSidebarProps {
-//   isOpen: boolean;
-//   onClose: () => void;
-// }
-
-// export const ProfileSidebar: React.FC<ProfileSidebarProps> = ({
-//   isOpen,
-//   onClose,
-// }) => {
-//   const { user, logout } = useAuth();
-//   const navigate = useNavigate();
-//   const [showVerifyOptions, setShowVerifyOptions] = React.useState(false);
-
-//   // ✅ Safe navigate helper (prevents double navigation + throttling warnings)
-//   const safeNavigate = (path: string) => {
-//     onClose();
-//     requestAnimationFrame(() => navigate(path));
-//   };
-
-//   const handleLogout = async () => {
-//     try {
-//       await logout(); // clears global auth state & cookies/tokens
-//       safeNavigate(ROUTES.LOGIN);
-//     } catch (err) {
-//       console.error("Logout failed:", err);
-//     }
-//   };
-
-//   return (
-//     <AnimatePresence>
-//       {isOpen && (
-//         <>
-//           {/* Overlay */}
-//           <motion.div
-//             initial={{ opacity: 0 }}
-//             animate={{ opacity: 0.5 }}
-//             exit={{ opacity: 0 }}
-//             transition={{ duration: 0.2 }}
-//             onClick={onClose}
-//             className="fixed inset-0 bg-black z-[99]"
-//           />
-
-//           {/* Sidebar */}
-//           <motion.div
-//             initial={{ x: "100%" }}
-//             animate={{ x: 0 }}
-//             exit={{ x: "100%" }}
-//             transition={{ type: "spring", stiffness: 300, damping: 30 }}
-//             className="fixed top-0 right-0 w-80 h-full bg-[#1f1816] border-l border-[#3a2f2d] z-[100] shadow-2xl flex flex-col"
-//           >
-//             {/* Header */}
-//             <div className="flex justify-between items-center px-5 py-4 border-b border-[#3a2f2d]">
-//               <h2 className="text-lg font-semibold">Profile</h2>
-//               <button
-//                 onClick={onClose}
-//                 className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-[#2a2a2a] transition"
-//               >
-//                 <X size={20} />
-//               </button>
-//             </div>
-
-//             {/* User Info */}
-//             <div className="flex flex-col items-center py-6 border-b border-[#3a2f2d]">
-//               <img
-//                 src={user?.photoURL || "https://i.pravatar.cc/80"}
-//                 alt="profile"
-//                 className="w-20 h-20 rounded-full object-cover border-2 border-[#2f2523]"
-//               />
-//               <h3 className="mt-3 font-semibold">
-//                 {user?.displayName || "Guest User"}
-//               </h3>
-//               <p className="text-sm text-gray-400">
-//                 {user?.email || "No email"}
-//               </p>
-//             </div>
-
-//             {/* Options */}
-//             <div className="flex flex-col gap-1 p-4">
-//               <button
-//                 onClick={() => safeNavigate(ROUTES.PROFILE)}
-//                 className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-[#2a2a2a] transition text-left"
-//               >
-//                 <User size={18} /> Profile
-//               </button>
-
-//               <button
-//                 onClick={() => safeNavigate(ROUTES.CHATBOT)}
-//                 className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-[#2a2a2a] transition text-left"
-//               >
-//                 <MessageSquareText size={18} /> AI Assistant
-//               </button>
-
-//               <button
-//                 onClick={() => setShowVerifyOptions(!showVerifyOptions)}
-//                 className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-[#2a2a2a] transition text-left"
-//               >
-//                 <BadgeCheck size={18} /> Verify as Official
-//               </button>
-
-//               {/* Verification Options */}
-//               {showVerifyOptions && (
-//                 <div className="ml-8 mt-1 mb-2 flex flex-col gap-2">
-//                   <button
-//                     onClick={() => safeNavigate(ROUTES.VERIFY_GOVERNMENT)}
-//                     className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#2a2a2a]/50 hover:bg-[#2a2a2a] text-sm"
-//                   >
-//                     <Icon
-//                       icon="mdi:government"
-//                       className="text-lg text-yellow-400"
-//                     />
-//                     <span>Verify as Government Official</span>
-//                   </button>
-//                   <button
-//                     onClick={() => safeNavigate(ROUTES.VERIFY_NGO)}
-//                     className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#2a2a2a]/50 hover:bg-[#2a2a2a] text-sm"
-//                   >
-//                     <Icon
-//                       icon="mdi:hand-heart"
-//                       className="text-lg text-yellow-400"
-//                     />
-//                     <span>Verify as NGO</span>
-//                   </button>
-//                 </div>
-//               )}
-
-//               <button className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-[#2a2a2a] transition text-left">
-//                 <Settings size={18} /> Settings
-//               </button>
-
-//               <button
-//                 onClick={handleLogout}
-//                 className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-red-600/20 transition text-left text-red-400"
-//               >
-//                 <LogOut size={18} /> Logout
-//               </button>
-//             </div>
-//           </motion.div>
-//         </>
-//       )}
-//     </AnimatePresence>
-//   );
-// };
-
-
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -357,23 +12,23 @@ import { useAuth } from "@/hooks/use-auth";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "@/lib/constants";
 import { Icon } from "@iconify/react";
+import { ThemeToggle } from '@/components/shared/ThemeToggle';
 
 interface ProfileSidebarProps {
   isOpen: boolean;
   onClose: () => void;
+  className?: string; // allow parent to pass theme-aware classes
 }
 
 export const ProfileSidebar: React.FC<ProfileSidebarProps> = ({
   isOpen,
   onClose,
+  className = "",
 }) => {
   const { user, logout } = useAuth();
-  console.log("Sidebar User:", user);
-
   const navigate = useNavigate();
   const [showVerifyOptions, setShowVerifyOptions] = React.useState(false);
 
-  // ✅ Safe navigate helper
   const safeNavigate = (path: string) => {
     onClose();
     requestAnimationFrame(() => navigate(path));
@@ -388,19 +43,17 @@ export const ProfileSidebar: React.FC<ProfileSidebarProps> = ({
     }
   };
 
-  // ✅ Choose profile image from Firebase or backend API
- const profileImage =
-  (user?.photoURL && user.photoURL !== "null" ? user.photoURL : null) ||
-  user?.avatar ||
-  user?.profilePic ||
-  "https://i.pravatar.cc/80";
-
+  const profileImage =
+    (user?.photoURL && user.photoURL !== "null" ? user.photoURL : null) ||
+    user?.avatar ||
+    user?.profilePic ||
+    "https://i.pravatar.cc/80";
 
   return (
     <AnimatePresence>
       {isOpen && (
         <>
-          {/* Overlay */}
+          {/* Overlay (keeps same overlay for both themes) */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 0.5 }}
@@ -416,56 +69,61 @@ export const ProfileSidebar: React.FC<ProfileSidebarProps> = ({
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className="fixed top-0 right-0 w-80 h-full bg-[#1f1816] border-l border-[#3a2f2d] z-[100] shadow-2xl flex flex-col"
+            // combine default theme-aware classes with any parent-supplied classes
+            className={`fixed top-0 right-0 w-80 h-full z-[100] shadow-2xl flex flex-col
+              bg-white text-gray-900 border-l border-gray-200
+              dark:bg-[#1f1816] dark:text-white dark:border-[#3a2f2d]
+              ${className}`}
           >
             {/* Header */}
-            <div className="flex justify-between items-center px-5 py-4 border-b border-[#3a2f2d]">
-              <h2 className="text-lg font-semibold">Profile</h2>
+            <div className="flex justify-between items-center px-5 py-4 border-b border-gray-200 dark:border-[#3a2f2d]">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Profile</h2>
               <button
                 onClick={onClose}
-                className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-[#2a2a2a] transition"
+                className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-[#2a2a2a] transition"
+                aria-label="Close sidebar"
               >
                 <X size={20} />
               </button>
             </div>
 
             {/* User Info */}
-            <div className="flex flex-col items-center py-6 border-b border-[#3a2f2d]">
+            <div className="flex flex-col items-center py-6 border-b border-gray-100 dark:border-[#3a2f2d]">
               <img
-  src={profileImage}
-  alt="profile"
-  referrerPolicy="no-referrer"   // ✅ fixes Google image blocking
-  className="w-20 h-20 rounded-full object-cover border-2 border-[#2f2523]"
-  onError={(e) => (e.currentTarget.src = "https://i.pravatar.cc/80")} // ✅ fallback if broken
-/>
+                src={profileImage}
+                alt="profile"
+                referrerPolicy="no-referrer"
+                className="w-20 h-20 rounded-full object-cover border-2 border-gray-100 dark:border-[#2f2523]"
+                onError={(e) => (e.currentTarget.src = "https://i.pravatar.cc/80")}
+              />
 
-              <h3 className="mt-3 font-semibold">
+              <h3 className="mt-3 font-semibold text-gray-900 dark:text-white">
                 {user?.displayName || user?.name || "Guest User"}
               </h3>
-              <p className="text-sm text-gray-400">
+              <p className="text-sm text-gray-600 dark:text-gray-400">
                 {user?.email || "No email"}
               </p>
             </div>
 
             {/* Options */}
-            <div className="flex flex-col gap-1 p-4">
+            <div className="flex-1 flex flex-col gap-1 p-4">
               <button
                 onClick={() => safeNavigate(ROUTES.PROFILE)}
-                className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-[#2a2a2a] transition text-left"
+                className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-[#2a2a2a] transition text-left text-gray-800 dark:text-gray-100"
               >
                 <User size={18} /> Profile
               </button>
 
               <button
                 onClick={() => safeNavigate(ROUTES.CHATBOT)}
-                className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-[#2a2a2a] transition text-left"
+                className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-[#2a2a2a] transition text-left text-gray-800 dark:text-gray-100"
               >
                 <MessageSquareText size={18} /> AI Assistant
               </button>
 
               <button
                 onClick={() => setShowVerifyOptions(!showVerifyOptions)}
-                className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-[#2a2a2a] transition text-left"
+                className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-[#2a2a2a] transition text-left text-gray-800 dark:text-gray-100"
               >
                 <BadgeCheck size={18} /> Verify as Official
               </button>
@@ -475,37 +133,40 @@ export const ProfileSidebar: React.FC<ProfileSidebarProps> = ({
                 <div className="ml-8 mt-1 mb-2 flex flex-col gap-2">
                   <button
                     onClick={() => safeNavigate(ROUTES.VERIFY_GOVERNMENT)}
-                    className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#2a2a2a]/50 hover:bg-[#2a2a2a] text-sm"
+                    className="flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-50 hover:bg-gray-100 dark:bg-[#2a2a2a] dark:hover:bg-[#2f2f2f] text-sm text-gray-800 dark:text-gray-100"
                   >
-                    <Icon
-                      icon="mdi:government"
-                      className="text-lg text-yellow-400"
-                    />
+                    <Icon icon="mdi:government" className="text-lg text-yellow-500" />
                     <span>Verify as Government Official</span>
                   </button>
                   <button
                     onClick={() => safeNavigate(ROUTES.VERIFY_NGO)}
-                    className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#2a2a2a]/50 hover:bg-[#2a2a2a] text-sm"
+                    className="flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-50 hover:bg-gray-100 dark:bg-[#2a2a2a] dark:hover:bg-[#2f2f2f] text-sm text-gray-800 dark:text-gray-100"
                   >
-                    <Icon
-                      icon="mdi:hand-heart"
-                      className="text-lg text-yellow-400"
-                    />
+                    <Icon icon="mdi:hand-heart" className="text-lg text-yellow-500" />
                     <span>Verify as NGO</span>
                   </button>
                 </div>
               )}
 
-              <button className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-[#2a2a2a] transition text-left">
+              <div className="px-4 py-2">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm text-gray-700 dark:text-gray-300">Theme</span>
+                </div>
+                <ThemeToggle />
+              </div>
+
+              <button className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-[#2a2a2a] transition text-left text-gray-800 dark:text-gray-100">
                 <Settings size={18} /> Settings
               </button>
 
-              <button
-                onClick={handleLogout}
-                className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-red-600/20 transition text-left text-red-400"
-              >
-                <LogOut size={18} /> Logout
-              </button>
+              <div className="mt-auto px-4 pb-6">
+                <button
+                  onClick={handleLogout}
+                  className="w-full flex items-center justify-center gap-3 px-4 py-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-600/10 transition text-left text-red-600"
+                >
+                  <LogOut size={18} /> Logout
+                </button>
+              </div>
             </div>
           </motion.div>
         </>
@@ -513,3 +174,4 @@ export const ProfileSidebar: React.FC<ProfileSidebarProps> = ({
     </AnimatePresence>
   );
 };
+export default ProfileSidebar;
