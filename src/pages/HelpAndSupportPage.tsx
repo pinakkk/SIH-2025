@@ -177,6 +177,7 @@ import {
 } from '@/components/ui/Accordion';
 import { ArrowLeft, Search, HelpCircle, Users, Mail, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useTheme } from '@/hooks/use-theme';
 
 // FAQ Data
 const faqSections = [
@@ -229,6 +230,7 @@ export function HelpAndSupportPage() {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [fabOpen, setFabOpen] = useState(false);
+  const { isDark } = useTheme();
 
   const filteredSections = faqSections.filter(section =>
     section.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -236,56 +238,56 @@ export function HelpAndSupportPage() {
   );
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-start bg-[#0D0D0D] px-4 py-8">
+    <div className="min-h-screen flex flex-col items-center justify-start bg-gray-50 dark:bg-[#0D0D0D] px-4 py-8">
       {/* Content Card */}
-      <div className="w-full max-w-4xl text-left bg-gradient-to-br from-[#1b140e] via-[#1c1c1c] to-[#111111] border border-[#F57C00]/40 shadow-2xl p-6 rounded-2xl relative">
+      <div className="w-full max-w-4xl text-left bg-white dark:bg-gradient-to-br dark:from-[#1b140e] dark:via-[#1c1c1c] dark:to-[#111111] border border-gray-200 dark:border-[#F57C00]/40 shadow-2xl p-6 rounded-2xl relative">
         
         {/* Header */}
         <header className="flex items-center mb-6">
-          <button onClick={() => navigate(-1)} className="p-2 mr-3 rounded-full bg-[#F57C00]/10 hover:bg-[#F57C00]/30 transition-colors">
-            <ArrowLeft className="w-5 h-5 text-[#FFC107]" />
+          <button onClick={() => navigate(-1)} className="p-2 mr-3 rounded-full bg-gray-100 dark:bg-[#F57C00]/10 hover:bg-gray-200 dark:hover:bg-[#F57C00]/30 transition-colors">
+            <ArrowLeft className="w-5 h-5 text-amber-500 dark:text-[#FFC107]" />
           </button>
-          <h1 className="text-xl md:text-2xl font-bold text-[#FCFCFA]">Help & Support</h1>
+          <h1 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-[#FCFCFA]">Help & Support</h1>
         </header>
 
         {/* Search Bar */}
         <div className="relative mb-6">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[#FFEBB4] w-4 h-4" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-amber-500 dark:text-[#FFEBB4] w-4 h-4" />
           <input
             type="text"
             placeholder="Search your query..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-3 py-3 rounded-xl bg-[#FFF3E0]/10 border border-[#FFC107]/30 text-sm text-[#FCFCFA] placeholder-[#FFEBB4]/70 focus:outline-none focus:ring-2 focus:ring-[#F57C00] transition-all"
+            className="w-full pl-10 pr-3 py-3 rounded-xl bg-gray-50 dark:bg-[#FFF3E0]/10 border border-gray-300 dark:border-[#FFC107]/30 text-sm text-gray-800 dark:text-[#FCFCFA] placeholder-gray-500 dark:placeholder-[#FFEBB4]/70 focus:outline-none focus:ring-2 focus:ring-amber-500 dark:focus:ring-[#F57C00] transition-all"
           />
         </div>
 
         {/* Divider */}
-        <div className="h-[1px] w-full bg-gradient-to-r from-[#F57C00] via-[#FFC107] to-[#FFEBB4] rounded-full mb-6"></div>
+        <div className="h-[1px] w-full bg-gradient-to-r from-amber-400 via-amber-300 to-amber-200 dark:from-[#F57C00] dark:via-[#FFC107] dark:to-[#FFEBB4] rounded-full mb-6"></div>
 
         {/* FAQ Accordion (Responsive Grid) */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {filteredSections.map(section => (
             <div
               key={section.id}
-              className="bg-[#FFF3E0]/5 rounded-xl p-4 hover:shadow-md hover:scale-[1.01] transition-all"
+              className="bg-gray-50 dark:bg-[#FFF3E0]/5 border border-gray-100 dark:border-transparent rounded-xl p-4 hover:shadow-md hover:scale-[1.01] transition-all"
             >
               <Accordion type="multiple">
                 <AccordionItem value={section.id} className="border-none">
                   <AccordionTrigger className="px-1">
                     <div className="flex items-center gap-2">
-                      <HelpCircle className="w-5 h-5 text-[#FFC107]" />
-                      <span className="text-sm font-semibold text-[#FCFCFA]">{section.title}</span>
+                      <HelpCircle className="w-5 h-5 text-amber-500 dark:text-[#FFC107]" />
+                      <span className="text-sm font-semibold text-gray-900 dark:text-[#FCFCFA]">{section.title}</span>
                     </div>
                   </AccordionTrigger>
                   <AccordionContent className="pl-2">
-                    <Accordion type="multiple" className="ml-4 border-l border-[#F57C00]/40 pl-3">
+                    <Accordion type="multiple" className="ml-4 border-l border-gray-200 dark:border-[#F57C00]/40 pl-3">
                       {section.questions.map(q => (
                         <AccordionItem key={q.id} value={q.id} className="border-none">
-                          <AccordionTrigger className="text-sm text-[#FFEBB4] py-1 hover:text-[#FFC107] transition-colors">
+                          <AccordionTrigger className="text-sm text-amber-700 dark:text-[#FFEBB4] py-1 hover:text-amber-600 dark:hover:text-[#FFC107] transition-colors">
                             {q.question}
                           </AccordionTrigger>
-                          <AccordionContent className="pb-2 text-xs text-[#FFF3E0]/90 leading-relaxed">
+                          <AccordionContent className="pb-2 text-xs text-gray-700 dark:text-[#FFF3E0]/90 leading-relaxed">
                             {q.answer}
                           </AccordionContent>
                         </AccordionItem>
@@ -305,13 +307,13 @@ export function HelpAndSupportPage() {
           <>
             <button
               onClick={() => alert('Join Community Forum clicked')}
-              className="flex items-center gap-2 bg-gradient-to-r from-[#F57C00] via-[#FFC107] to-[#FFEBB4] text-[#111111] font-medium rounded-lg px-3 py-2 shadow-lg hover:opacity-90 transition-all text-sm"
+              className="flex items-center gap-2 bg-gradient-to-r from-amber-500 via-amber-400 to-amber-300 dark:from-[#F57C00] dark:via-[#FFC107] dark:to-[#FFEBB4] text-gray-900 dark:text-[#111111] font-medium rounded-lg px-3 py-2 shadow-lg hover:opacity-90 transition-all text-sm"
             >
               <Users className="w-4 h-4" /> Join Community
             </button>
             <button
               onClick={() => alert('Contact Us clicked')}
-              className="flex items-center gap-2 bg-gradient-to-r from-[#F57C00] via-[#FFC107] to-[#FFEBB4] text-[#111111] font-medium rounded-lg px-3 py-2 shadow-lg hover:opacity-90 transition-all text-sm"
+              className="flex items-center gap-2 bg-gradient-to-r from-amber-500 via-amber-400 to-amber-300 dark:from-[#F57C00] dark:via-[#FFC107] dark:to-[#FFEBB4] text-gray-900 dark:text-[#111111] font-medium rounded-lg px-3 py-2 shadow-lg hover:opacity-90 transition-all text-sm"
             >
               <Mail className="w-4 h-4" /> Contact Us
             </button>
@@ -320,10 +322,10 @@ export function HelpAndSupportPage() {
 
         <button
           onClick={() => setFabOpen(!fabOpen)}
-          className="w-14 h-14 rounded-full bg-[#F57C00] flex items-center justify-center text-[#FCFCFA] shadow-xl hover:scale-110 transition-transform"
+          className="w-14 h-14 rounded-full bg-amber-500 dark:bg-[#F57C00] flex items-center justify-center text-white dark:text-[#FCFCFA] shadow-xl hover:scale-110 transition-transform border border-amber-400 dark:border-[#F57C00]/40"
         >
           {fabOpen ? <X className="w-6 h-6" /> : (
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="#FCFCFA" xmlns="http://www.w3.org/2000/svg">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
               <rect x="4" y="4" width="6" height="6" rx="1" />
               <rect x="14" y="4" width="6" height="6" rx="1" />
               <rect x="4" y="14" width="6" height="6" rx="1" />

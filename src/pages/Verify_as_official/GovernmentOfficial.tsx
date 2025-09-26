@@ -4,9 +4,11 @@ import { ArrowLeft, Upload, Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "@/lib/constants";
 import { Icon } from "@iconify/react";
+import { useTheme } from "@/hooks/use-theme";
 
 export function GovernmentOfficial() {
   const navigate = useNavigate();
+  const { isDark } = useTheme();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     fullName: "",
@@ -60,21 +62,21 @@ export function GovernmentOfficial() {
   };
 
   return (
-    <div className="bg-[#1f1816] min-h-screen text-white font-sans">
+    <div className="bg-gray-50 dark:bg-[#1f1816] min-h-screen text-gray-900 dark:text-white font-sans">
       {/* Header with Back Button */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="sticky top-0 z-40 bg-[#2b2320]/95 backdrop-blur-md border-b border-[#3a2f2d]/50 px-5 py-4"
+        className="sticky top-0 z-40 bg-white/70 dark:bg-[#2b2320]/95 backdrop-blur-md border-b border-gray-200 dark:border-[#3a2f2d]/50 px-5 py-4"
       >
         <div className="flex items-center justify-between">
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => navigate(-1)}
-            className="flex items-center justify-center text-[#d8cdc6] hover:text-white transition-colors"
+            className="flex items-center justify-center text-gray-600 dark:text-[#d8cdc6] hover:text-gray-900 dark:hover:text-white transition-colors"
           >
-            <div className="w-10 h-10 flex items-center justify-center rounded-lg bg-[#372a28]/80 hover:bg-[#443331] transition">
+            <div className="w-10 h-10 flex items-center justify-center rounded-lg bg-gray-100 dark:bg-[#372a28]/80 hover:bg-gray-200 dark:hover:bg-[#443331] transition">
               <ArrowLeft size={16} />
             </div>
           </motion.button>
@@ -102,7 +104,7 @@ export function GovernmentOfficial() {
           className="mb-6"
         >
           <h2 className="text-xl font-semibold mb-2">Government Official Verification</h2>
-          <p className="text-sm text-gray-400">
+          <p className="text-sm text-gray-600 dark:text-gray-400">
             Please fill out the form below to verify your status as a government official. 
             All information will be reviewed by our team for authenticity.
           </p>
@@ -112,84 +114,84 @@ export function GovernmentOfficial() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Full Name */}
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-300">Full Name</label>
+              <label className="text-sm font-medium text-gray-600 dark:text-gray-300">Full Name</label>
               <input
                 type="text"
                 name="fullName"
                 value={formData.fullName}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 rounded-lg bg-[#2a2320] border border-[#3a2f2d] focus:outline-none focus:ring-2 focus:ring-yellow-500/50"
+                className="w-full px-4 py-3 rounded-lg bg-white dark:bg-[#2a2320] border border-gray-300 dark:border-[#3a2f2d] focus:outline-none focus:ring-2 focus:ring-yellow-500/50"
                 placeholder="Enter your full name"
               />
             </div>
 
             {/* Designation */}
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-300">Designation</label>
+              <label className="text-sm font-medium text-gray-600 dark:text-gray-300">Designation</label>
               <input
                 type="text"
                 name="designation"
                 value={formData.designation}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 rounded-lg bg-[#2a2320] border border-[#3a2f2d] focus:outline-none focus:ring-2 focus:ring-yellow-500/50"
+                className="w-full px-4 py-3 rounded-lg bg-white dark:bg-[#2a2320] border border-gray-300 dark:border-[#3a2f2d] focus:outline-none focus:ring-2 focus:ring-yellow-500/50"
                 placeholder="Your designation/position"
               />
             </div>
 
             {/* Department */}
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-300">Department</label>
+              <label className="text-sm font-medium text-gray-600 dark:text-gray-300">Department</label>
               <input
                 type="text"
                 name="department"
                 value={formData.department}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 rounded-lg bg-[#2a2320] border border-[#3a2f2d] focus:outline-none focus:ring-2 focus:ring-yellow-500/50"
+                className="w-full px-4 py-3 rounded-lg bg-white dark:bg-[#2a2320] border border-gray-300 dark:border-[#3a2f2d] focus:outline-none focus:ring-2 focus:ring-yellow-500/50"
                 placeholder="Your department/ministry"
               />
             </div>
 
             {/* Employee ID */}
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-300">Employee ID</label>
+              <label className="text-sm font-medium text-gray-600 dark:text-gray-300">Employee ID</label>
               <input
                 type="text"
                 name="employeeId"
                 value={formData.employeeId}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 rounded-lg bg-[#2a2320] border border-[#3a2f2d] focus:outline-none focus:ring-2 focus:ring-yellow-500/50"
+                className="w-full px-4 py-3 rounded-lg bg-white dark:bg-[#2a2320] border border-gray-300 dark:border-[#3a2f2d] focus:outline-none focus:ring-2 focus:ring-yellow-500/50"
                 placeholder="Your employee ID number"
               />
             </div>
 
             {/* Email */}
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-300">Official Email</label>
+              <label className="text-sm font-medium text-gray-600 dark:text-gray-300">Official Email</label>
               <input
                 type="email"
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 rounded-lg bg-[#2a2320] border border-[#3a2f2d] focus:outline-none focus:ring-2 focus:ring-yellow-500/50"
+                className="w-full px-4 py-3 rounded-lg bg-white dark:bg-[#2a2320] border border-gray-300 dark:border-[#3a2f2d] focus:outline-none focus:ring-2 focus:ring-yellow-500/50"
                 placeholder="Your official email address"
               />
             </div>
 
             {/* Phone */}
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-300">Phone Number</label>
+              <label className="text-sm font-medium text-gray-600 dark:text-gray-300">Phone Number</label>
               <input
                 type="tel"
                 name="phone"
                 value={formData.phone}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 rounded-lg bg-[#2a2320] border border-[#3a2f2d] focus:outline-none focus:ring-2 focus:ring-yellow-500/50"
+                className="w-full px-4 py-3 rounded-lg bg-white dark:bg-[#2a2320] border border-gray-300 dark:border-[#3a2f2d] focus:outline-none focus:ring-2 focus:ring-yellow-500/50"
                 placeholder="Your contact number"
               />
             </div>
@@ -197,22 +199,22 @@ export function GovernmentOfficial() {
 
           {/* Address */}
           <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-300">Office Address</label>
+            <label className="text-sm font-medium text-gray-600 dark:text-gray-300">Office Address</label>
             <textarea
               name="address"
               value={formData.address}
               onChange={handleChange}
               required
               rows={3}
-              className="w-full px-4 py-3 rounded-lg bg-[#2a2320] border border-[#3a2f2d] focus:outline-none focus:ring-2 focus:ring-yellow-500/50"
+              className="w-full px-4 py-3 rounded-lg bg-white dark:bg-[#2a2320] border border-gray-300 dark:border-[#3a2f2d] focus:outline-none focus:ring-2 focus:ring-yellow-500/50"
               placeholder="Your office address"
             />
           </div>
 
           {/* ID Card Upload */}
           <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-300">Government ID Card</label>
-            <div className="border border-dashed border-[#3a2f2d] rounded-lg p-4 hover:bg-[#2a2320]/50 transition cursor-pointer">
+            <label className="text-sm font-medium text-gray-600 dark:text-gray-300">Government ID Card</label>
+            <div className="border border-dashed border-gray-300 dark:border-[#3a2f2d] rounded-lg p-4 hover:bg-gray-50 dark:hover:bg-[#2a2320]/50 transition cursor-pointer">
               <input
                 type="file"
                 id="idCard"
@@ -226,15 +228,15 @@ export function GovernmentOfficial() {
                 <span className="text-sm font-medium">
                   {idCardFile ? idCardFile.name : "Upload your government ID card"}
                 </span>
-                <span className="text-xs text-gray-400 mt-1">Click to browse or drop files here</span>
+                <span className="text-xs text-gray-500 dark:text-gray-400 mt-1">Click to browse or drop files here</span>
               </label>
             </div>
           </div>
 
           {/* Authorization Letter */}
           <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-300">Authorization Letter (Optional)</label>
-            <div className="border border-dashed border-[#3a2f2d] rounded-lg p-4 hover:bg-[#2a2320]/50 transition cursor-pointer">
+            <label className="text-sm font-medium text-gray-600 dark:text-gray-300">Authorization Letter (Optional)</label>
+            <div className="border border-dashed border-gray-300 dark:border-[#3a2f2d] rounded-lg p-4 hover:bg-gray-50 dark:hover:bg-[#2a2320]/50 transition cursor-pointer">
               <input
                 type="file"
                 id="authLetter"
@@ -247,7 +249,7 @@ export function GovernmentOfficial() {
                 <span className="text-sm font-medium">
                   {authLetterFile ? authLetterFile.name : "Upload authorization letter (if any)"}
                 </span>
-                <span className="text-xs text-gray-400 mt-1">Click to browse or drop files here</span>
+                <span className="text-xs text-gray-500 dark:text-gray-400 mt-1">Click to browse or drop files here</span>
               </label>
             </div>
           </div>
@@ -271,7 +273,7 @@ export function GovernmentOfficial() {
           </div>
         </form>
 
-        <div className="mt-6 text-xs text-gray-500 text-center">
+        <div className="mt-6 text-xs text-gray-500 dark:text-gray-500 text-center">
           By submitting this form, you certify that all information provided is accurate and complete.
           False information may lead to rejection of verification and other consequences.
         </div>

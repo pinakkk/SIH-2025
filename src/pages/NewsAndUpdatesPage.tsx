@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useTheme } from "@/hooks/use-theme";
 
 interface NewsItem {
   id: string;
@@ -61,6 +62,7 @@ const NewsAndUpdatesPage = () => {
   const [loading, setLoading] = useState(true);
   const [news, setNews] = useState<NewsItem[]>([]);
   const navigate = useNavigate();
+  const { isDark } = useTheme();
 
   useEffect(() => {
     const fetchNews = async () => {
@@ -207,17 +209,17 @@ const NewsAndUpdatesPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#2a1e1c] to-[#1e1614] text-white">
+    <div className="min-h-screen bg-gray-50 dark:bg-gradient-to-b dark:from-[#2a1e1c] dark:to-[#1e1614] text-gray-900 dark:text-white">
       {/* Header */}
       <motion.header
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="sticky top-0 z-40 bg-[#2b2320]/55 backdrop-blur-sm border-b border-[#3a2f2d] px-4 py-4"
+        className="sticky top-0 z-40 bg-white/70 dark:bg-[#2b2320]/55 backdrop-blur-sm border-b border-gray-200 dark:border-[#3a2f2d] px-4 py-4"
       >
         <div className="flex items-center gap-3 max-w-7xl mx-auto">
           <button
             onClick={() => navigate(-1)}
-            className="w-10 h-10 rounded-full bg-[#372a28] flex items-center justify-center hover:bg-[#4a403d] transition-colors"
+            className="w-10 h-10 rounded-full bg-gray-100 dark:bg-[#372a28] flex items-center justify-center hover:bg-gray-200 dark:hover:bg-[#4a403d] transition-colors"
           >
             <ArrowLeft size={20} />
           </button>
@@ -225,7 +227,7 @@ const NewsAndUpdatesPage = () => {
             <h1 className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-yellow-500">
               News & Updates
             </h1>
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-gray-600 dark:text-gray-400">
               Related updates from multiple sources
             </p>
           </div>
@@ -243,7 +245,7 @@ const NewsAndUpdatesPage = () => {
             <Loader2 className="animate-spin text-red-500" size={32} />
           </div>
         ) : news.length === 0 ? (
-          <p className="text-center text-gray-400">
+          <p className="text-center text-gray-500 dark:text-gray-400">
             No relevant disaster updates available right now.
           </p>
         ) : (
@@ -261,7 +263,7 @@ const NewsAndUpdatesPage = () => {
                 rel="noopener noreferrer"
                 variants={itemVariants}
                 whileHover={{ scale: 1.02, y: -5 }}
-                className="group bg-gradient-to-b from-[#2b2320] to-[#241c1a] rounded-xl overflow-hidden border border-[#3a2f2d] hover:border-[#4a403d] shadow-lg transition-all duration-300 hover:from-[#372a28] hover:to-[#2b2320]"
+                className="group bg-white dark:bg-gradient-to-b dark:from-[#2b2320] dark:to-[#241c1a] rounded-xl overflow-hidden border border-gray-200 dark:border-[#3a2f2d] hover:border-gray-300 dark:hover:border-[#4a403d] shadow-lg transition-all duration-300 dark:hover:from-[#372a28] dark:hover:to-[#2b2320]"
               >
                 {item.urlToImage && (
                   <div className="h-40 w-full overflow-hidden">
@@ -273,13 +275,13 @@ const NewsAndUpdatesPage = () => {
                   </div>
                 )}
                 <div className="p-4 sm:p-6">
-                  <h3 className="text-lg sm:text-xl font-semibold mb-3 group-hover:text-orange-400 transition-colors leading-tight">
+                  <h3 className="text-lg sm:text-xl font-semibold mb-3 group-hover:text-orange-400 transition-colors leading-tight text-gray-900 dark:text-white">
                     {item.title}
                   </h3>
-                  <p className="text-[#d8cdc6] text-sm mb-4 line-clamp-3 leading-relaxed">
+                  <p className="text-gray-600 dark:text-[#d8cdc6] text-sm mb-4 line-clamp-3 leading-relaxed">
                     {item.description}
                   </p>
-                  <div className="flex justify-between items-center text-xs text-[#a69489]">
+                  <div className="flex justify-between items-center text-xs text-gray-500 dark:text-[#a69489]">
                     <span>
                       {new Date(item.date).toLocaleDateString("en-GB", {
                         day: "numeric",
