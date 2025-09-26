@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import { ROUTES } from "@/lib/constants";
+import { useTheme } from "@/hooks/use-theme";
 
 interface EmergencySettings {
   autoCallDelay: number; // seconds
@@ -22,6 +23,7 @@ interface EmergencySettings {
 
 const EmergencySettingsPage: React.FC = () => {
   const navigate = useNavigate();
+  const { isDark } = useTheme();
   const [settings, setSettings] = useState<EmergencySettings>({
     autoCallDelay: 10,
     locationSharing: true,
@@ -57,26 +59,26 @@ const EmergencySettingsPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-purple-900/20 text-white px-6 py-10">
+    <div className="min-h-screen bg-gray-50 dark:bg-gradient-to-br dark:from-black dark:via-gray-900 dark:to-purple-900/20 text-gray-900 dark:text-white px-6 py-10">
       {/* Header */}
       <div className="flex w-full justify-between items-center mb-8">
         <button 
           onClick={() => navigate(ROUTES.EMERGENCY_MODE)}
-          className="text-gray-300 p-3 rounded-full bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/20 transition-all"
+          className="text-gray-600 dark:text-gray-300 p-3 rounded-full bg-gray-100 dark:bg-white/10 backdrop-blur-md border border-gray-200 dark:border-white/20 hover:bg-gray-200 dark:hover:bg-white/20 transition-all"
         >
           <Icon icon="mdi:arrow-left" className="text-xl" />
         </button>
-        <h1 className="text-xl font-semibold drop-shadow-md">Emergency Settings</h1>
+        <h1 className="text-xl font-semibold dark:drop-shadow-md">Emergency Settings</h1>
         <button 
           onClick={saveSettings}
-          className="text-green-400 p-3 rounded-full bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/20 transition-all"
+          className="text-green-600 dark:text-green-400 p-3 rounded-full bg-gray-100 dark:bg-white/10 backdrop-blur-md border border-gray-200 dark:border-white/20 hover:bg-gray-200 dark:hover:bg-white/20 transition-all"
         >
           <Icon icon="mdi:check" className="text-xl" />
         </button>
       </div>
 
       {/* Tab Navigation */}
-      <div className="flex bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-2 mb-6">
+      <div className="flex bg-white dark:bg-white/5 backdrop-blur-xl border border-gray-200 dark:border-white/10 rounded-2xl p-2 mb-6">
         {[
           { id: 'general', label: 'General', icon: 'mdi:cog' },
           { id: 'medical', label: 'Medical', icon: 'mdi:medical-bag' },
@@ -87,8 +89,8 @@ const EmergencySettingsPage: React.FC = () => {
             onClick={() => setActiveTab(tab.id as any)}
             className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl transition-all ${
               activeTab === tab.id
-                ? "bg-orange-500/20 border border-orange-500/30 text-orange-300"
-                : "text-gray-400 hover:text-gray-200 hover:bg-white/10"
+                ? "bg-orange-500/10 dark:bg-orange-500/20 border border-orange-500/20 dark:border-orange-500/30 text-orange-600 dark:text-orange-300"
+                : "text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-white/10"
             }`}
           >
             <Icon icon={tab.icon} />
@@ -101,11 +103,11 @@ const EmergencySettingsPage: React.FC = () => {
       {activeTab === 'general' && (
         <div className="space-y-6">
           {/* Auto Call Delay */}
-          <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-6">
-            <h3 className="text-lg font-semibold mb-4 text-orange-300">Emergency Call Settings</h3>
+          <div className="bg-white dark:bg-white/5 backdrop-blur-xl border border-gray-200 dark:border-white/10 rounded-3xl p-6">
+            <h3 className="text-lg font-semibold mb-4 text-orange-600 dark:text-orange-300">Emergency Call Settings</h3>
             <div className="space-y-4">
               <div>
-                <label className="block text-sm text-gray-300 mb-2 font-medium">
+                <label className="block text-sm text-gray-700 dark:text-gray-300 mb-2 font-medium">
                   Auto-call delay: {settings.autoCallDelay} seconds
                 </label>
                 <input
@@ -114,9 +116,9 @@ const EmergencySettingsPage: React.FC = () => {
                   max="30"
                   value={settings.autoCallDelay}
                   onChange={(e) => updateSetting('autoCallDelay', parseInt(e.target.value))}
-                  className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider-thumb"
+                  className="w-full h-2 bg-gray-300 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer slider-thumb"
                 />
-                <div className="flex justify-between text-xs text-gray-400 mt-1">
+                <div className="flex justify-between text-xs text-gray-600 dark:text-gray-400 mt-1">
                   <span>5s</span>
                   <span>30s</span>
                 </div>
@@ -125,8 +127,8 @@ const EmergencySettingsPage: React.FC = () => {
           </div>
 
           {/* Alert Settings */}
-          <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-6">
-            <h3 className="text-lg font-semibold mb-4 text-blue-300">Alert Preferences</h3>
+          <div className="bg-white dark:bg-white/5 backdrop-blur-xl border border-gray-200 dark:border-white/10 rounded-3xl p-6">
+            <h3 className="text-lg font-semibold mb-4 text-blue-600 dark:text-blue-300">Alert Preferences</h3>
             <div className="space-y-4">
               {[
                 { key: 'locationSharing', label: 'Automatic location sharing', icon: 'mdi:map-marker' },
@@ -136,13 +138,13 @@ const EmergencySettingsPage: React.FC = () => {
               ].map((setting) => (
                 <div key={setting.key} className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <Icon icon={setting.icon} className="text-xl text-gray-400" />
-                    <span>{setting.label}</span>
+                    <Icon icon={setting.icon} className="text-xl text-gray-500 dark:text-gray-400" />
+                    <span className="text-gray-800 dark:text-white">{setting.label}</span>
                   </div>
                   <button
                     onClick={() => updateSetting(setting.key as keyof EmergencySettings, !settings[setting.key as keyof EmergencySettings])}
                     className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                      settings[setting.key as keyof EmergencySettings] ? 'bg-orange-500' : 'bg-gray-700'
+                      settings[setting.key as keyof EmergencySettings] ? 'bg-orange-500' : 'bg-gray-300 dark:bg-gray-700'
                     }`}
                   >
                     <span
@@ -157,15 +159,15 @@ const EmergencySettingsPage: React.FC = () => {
           </div>
 
           {/* Emergency Message */}
-          <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-6">
-            <h3 className="text-lg font-semibold mb-4 text-green-300">Emergency Message</h3>
+          <div className="bg-white dark:bg-white/5 backdrop-blur-xl border border-gray-200 dark:border-white/10 rounded-3xl p-6">
+            <h3 className="text-lg font-semibold mb-4 text-green-600 dark:text-green-300">Emergency Message</h3>
             <textarea
               value={settings.emergencyMessage}
               onChange={(e) => updateSetting('emergencyMessage', e.target.value)}
-              className="w-full h-24 px-4 py-3 rounded-2xl bg-black/20 backdrop-blur-xl border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:border-orange-500 transition-all resize-none"
+              className="w-full h-24 px-4 py-3 rounded-2xl bg-gray-50 dark:bg-black/20 backdrop-blur-xl border border-gray-200 dark:border-white/10 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:border-orange-500 transition-all resize-none"
               placeholder="Enter your emergency message..."
             />
-            <p className="text-xs text-gray-400 mt-2">
+            <p className="text-xs text-gray-600 dark:text-gray-400 mt-2">
               This message will be sent to your emergency contacts.
             </p>
           </div>
@@ -175,56 +177,56 @@ const EmergencySettingsPage: React.FC = () => {
       {/* Medical Information */}
       {activeTab === 'medical' && (
         <div className="space-y-6">
-          <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-6">
-            <h3 className="text-lg font-semibold mb-4 text-red-300">Medical Information</h3>
-            <p className="text-sm text-gray-400 mb-6">
+          <div className="bg-white dark:bg-white/5 backdrop-blur-xl border border-gray-200 dark:border-white/10 rounded-3xl p-6">
+            <h3 className="text-lg font-semibold mb-4 text-red-600 dark:text-red-300">Medical Information</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
               This information will be shared with emergency responders to provide better care.
             </p>
             
             <div className="space-y-4">
               <div>
-                <label className="block text-sm text-gray-300 mb-2 font-medium">Blood Type</label>
+                <label className="block text-sm text-gray-700 dark:text-gray-300 mb-2 font-medium">Blood Type</label>
                 <select
                   value={settings.medicalInfo.bloodType}
                   onChange={(e) => updateMedicalInfo('bloodType', e.target.value)}
-                  className="w-full px-4 py-3 rounded-2xl bg-black/20 backdrop-blur-xl border border-white/10 text-white focus:outline-none focus:border-orange-500 transition-all"
+                  className="w-full px-4 py-3 rounded-2xl bg-gray-50 dark:bg-black/20 backdrop-blur-xl border border-gray-200 dark:border-white/10 text-gray-900 dark:text-white focus:outline-none focus:border-orange-500 transition-all"
                 >
                   {['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'].map(type => (
-                    <option key={type} value={type} className="bg-gray-800">{type}</option>
+                    <option key={type} value={type} className={`${isDark ? 'bg-gray-800' : 'bg-white'}`}>{type}</option>
                   ))}
                 </select>
               </div>
 
               <div>
-                <label className="block text-sm text-gray-300 mb-2 font-medium">Allergies</label>
+                <label className="block text-sm text-gray-700 dark:text-gray-300 mb-2 font-medium">Allergies</label>
                 <input
                   type="text"
                   value={settings.medicalInfo.allergies}
                   onChange={(e) => updateMedicalInfo('allergies', e.target.value)}
                   placeholder="List any allergies (e.g., Penicillin, Nuts)"
-                  className="w-full px-4 py-3 rounded-2xl bg-black/20 backdrop-blur-xl border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:border-orange-500 transition-all"
+                  className="w-full px-4 py-3 rounded-2xl bg-gray-50 dark:bg-black/20 backdrop-blur-xl border border-gray-200 dark:border-white/10 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:border-orange-500 transition-all"
                 />
               </div>
 
               <div>
-                <label className="block text-sm text-gray-300 mb-2 font-medium">Current Medications</label>
+                <label className="block text-sm text-gray-700 dark:text-gray-300 mb-2 font-medium">Current Medications</label>
                 <input
                   type="text"
                   value={settings.medicalInfo.medications}
                   onChange={(e) => updateMedicalInfo('medications', e.target.value)}
                   placeholder="List current medications"
-                  className="w-full px-4 py-3 rounded-2xl bg-black/20 backdrop-blur-xl border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:border-orange-500 transition-all"
+                  className="w-full px-4 py-3 rounded-2xl bg-gray-50 dark:bg-black/20 backdrop-blur-xl border border-gray-200 dark:border-white/10 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:border-orange-500 transition-all"
                 />
               </div>
 
               <div>
-                <label className="block text-sm text-gray-300 mb-2 font-medium">Medical Conditions</label>
+                <label className="block text-sm text-gray-700 dark:text-gray-300 mb-2 font-medium">Medical Conditions</label>
                 <input
                   type="text"
                   value={settings.medicalInfo.conditions}
                   onChange={(e) => updateMedicalInfo('conditions', e.target.value)}
                   placeholder="List any medical conditions"
-                  className="w-full px-4 py-3 rounded-2xl bg-black/20 backdrop-blur-xl border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:border-orange-500 transition-all"
+                  className="w-full px-4 py-3 rounded-2xl bg-gray-50 dark:bg-black/20 backdrop-blur-xl border border-gray-200 dark:border-white/10 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:border-orange-500 transition-all"
                 />
               </div>
             </div>
@@ -235,9 +237,9 @@ const EmergencySettingsPage: React.FC = () => {
       {/* Quick Dial Settings */}
       {activeTab === 'contacts' && (
         <div className="space-y-6">
-          <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-6">
-            <h3 className="text-lg font-semibold mb-4 text-yellow-300">Quick Dial Numbers</h3>
-            <p className="text-sm text-gray-400 mb-6">
+          <div className="bg-white dark:bg-white/5 backdrop-blur-xl border border-gray-200 dark:border-white/10 rounded-3xl p-6">
+            <h3 className="text-lg font-semibold mb-4 text-yellow-600 dark:text-yellow-300">Quick Dial Numbers</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
               Configure emergency numbers for quick access.
             </p>
             
@@ -256,9 +258,9 @@ const EmergencySettingsPage: React.FC = () => {
                       updateSetting('quickDial', newQuickDial);
                     }}
                     placeholder="Emergency number"
-                    className="flex-1 px-4 py-3 rounded-2xl bg-black/20 backdrop-blur-xl border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:border-orange-500 transition-all"
+                    className="flex-1 px-4 py-3 rounded-2xl bg-gray-50 dark:bg-black/20 backdrop-blur-xl border border-gray-200 dark:border-white/10 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:border-orange-500 transition-all"
                   />
-                  <button className="p-3 rounded-full bg-green-500/20 border border-green-500/30 text-green-400 hover:bg-green-500/30 transition-all">
+                  <button className="p-3 rounded-full bg-green-500/10 dark:bg-green-500/20 border border-green-500/20 dark:border-green-500/30 text-green-600 dark:text-green-400 hover:bg-green-500/20 dark:hover:bg-green-500/30 transition-all">
                     <Icon icon="mdi:phone" />
                   </button>
                 </div>
@@ -267,7 +269,7 @@ const EmergencySettingsPage: React.FC = () => {
 
             <button
               onClick={() => updateSetting('quickDial', [...settings.quickDial, ''])}
-              className="w-full mt-4 py-3 rounded-2xl bg-white/10 border border-white/20 text-gray-300 font-medium hover:bg-white/20 transition-all flex items-center justify-center gap-2"
+              className="w-full mt-4 py-3 rounded-2xl bg-gray-100 dark:bg-white/10 border border-gray-200 dark:border-white/20 text-gray-700 dark:text-gray-300 font-medium hover:bg-gray-200 dark:hover:bg-white/20 transition-all flex items-center justify-center gap-2"
             >
               <Icon icon="mdi:plus" />
               Add Quick Dial Number

@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/Card";
 import { ROUTES } from "@/lib/constants";
+import { useTheme } from "@/hooks/use-theme";
 
 interface LocationData {
   latitude: number;
@@ -30,11 +31,12 @@ interface LocationData {
 
 // Skeleton loading component
 const SkeletonBlock = ({ className = "" }: { className?: string }) => (
-  <div className={`bg-[#2a2a2a] animate-pulse rounded-xl ${className}`} />
+  <div className={`bg-gray-200 dark:bg-[#2a2a2a] animate-pulse rounded-xl ${className}`} />
 );
 
 const LiveLocationPage: React.FC = () => {
   const navigate = useNavigate();
+  const { isDark } = useTheme();
   const [isSharing, setIsSharing] = useState(false);
   const [location, setLocation] = useState<LocationData | null>(null);
   const [battery] = useState(85);
@@ -110,24 +112,24 @@ const LiveLocationPage: React.FC = () => {
   };
 
   return (
-    <div className="bg-[#1f1816] min-h-screen text-white font-sans">
+    <div className="bg-gray-50 dark:bg-[#1f1816] min-h-screen text-gray-900 dark:text-white font-sans">
       {/* Sticky Header */}
       <motion.header
         animate={{
           boxShadow: scrolled
-            ? "0 8px 20px rgba(0,0,0,0.6)"
-            : "0 2px 6px rgba(0,0,0,0.25)",
+            ? isDark ? "0 8px 20px rgba(0,0,0,0.6)" : "0 8px 20px rgba(0,0,0,0.1)"
+            : isDark ? "0 2px 6px rgba(0,0,0,0.25)" : "0 2px 6px rgba(0,0,0,0.05)",
           backdropFilter: "saturate(120%) blur(6px)",
         }}
         transition={{ duration: 0.2 }}
-        className="sticky top-0 z-40 bg-[#2b2320]/85 border-b border-[#3a2f2d] px-4 sm:px-5 py-3 sm:py-4 flex justify-between items-center"
+        className="sticky top-0 z-40 bg-white/85 dark:bg-[#2b2320]/85 border-b border-gray-200 dark:border-[#3a2f2d] px-4 sm:px-5 py-3 sm:py-4 flex justify-between items-center"
       >
         <motion.button 
           initial={{ opacity: 0, x: -10 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.4 }}
           onClick={() => navigate(ROUTES.EMERGENCY_MODE)}
-          className="w-10 h-10 rounded-full bg-[#372a28] flex items-center justify-center hover:scale-105 transition-transform text-gray-300"
+          className="w-10 h-10 rounded-full bg-gray-100 dark:bg-[#372a28] flex items-center justify-center hover:scale-105 transition-transform text-gray-600 dark:text-gray-300"
         >
           <ArrowLeft size={18} />
         </motion.button>
@@ -146,7 +148,7 @@ const LiveLocationPage: React.FC = () => {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.4, delay: 0.2 }}
           onClick={copyLocation}
-          className="w-10 h-10 rounded-full bg-[#372a28] flex items-center justify-center hover:scale-105 transition-transform text-blue-400"
+          className="w-10 h-10 rounded-full bg-gray-100 dark:bg-[#372a28] flex items-center justify-center hover:scale-105 transition-transform text-blue-500 dark:text-blue-400"
         >
           <Copy size={18} />
         </motion.button>
@@ -163,24 +165,24 @@ const LiveLocationPage: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4 }}
             >
-              <Card className="bg-gradient-to-b from-[#2a1e1c] to-[#1e1614] border border-[#3a2f2d] rounded-2xl mb-4 shadow-lg">
+              <Card className="bg-white dark:bg-gradient-to-b dark:from-[#2a1e1c] dark:to-[#1e1614] border border-gray-200 dark:border-[#3a2f2d] rounded-2xl mb-4 shadow-lg">
                 <CardContent className="p-4 sm:p-5">
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-3">
-                      <div className="p-2 bg-blue-500/15 rounded-full">
-                        <Share2 className="text-blue-400" size={20} />
+                      <div className="p-2 bg-blue-500/10 dark:bg-blue-500/15 rounded-full">
+                        <Share2 className="text-blue-600 dark:text-blue-400" size={20} />
                       </div>
                       <div>
-                        <h2 className="font-semibold text-white">Location Sharing</h2>
-                        <p className="text-xs text-[#bfb2ac]">Emergency tracking active</p>
+                        <h2 className="font-semibold text-gray-900 dark:text-white">Location Sharing</h2>
+                        <p className="text-xs text-gray-600 dark:text-[#bfb2ac]">Emergency tracking active</p>
                       </div>
                     </div>
                     <div className={`flex items-center gap-2 px-3 py-1 rounded-full text-sm ${
                       isSharing 
-                        ? "bg-green-500/20 border border-green-500/30 text-green-300" 
-                        : "bg-gray-500/20 border border-gray-500/30 text-gray-300"
+                        ? "bg-green-500/10 dark:bg-green-500/20 border border-green-500/20 dark:border-green-500/30 text-green-600 dark:text-green-300" 
+                        : "bg-gray-200 dark:bg-gray-500/20 border border-gray-300 dark:border-gray-500/30 text-gray-500 dark:text-gray-300"
                     }`}>
-                      <div className={`w-2 h-2 rounded-full ${isSharing ? "bg-green-400 animate-pulse" : "bg-gray-400"}`} />
+                      <div className={`w-2 h-2 rounded-full ${isSharing ? "bg-green-500 dark:bg-green-400 animate-pulse" : "bg-gray-500 dark:bg-gray-400"}`} />
                       {isSharing ? "Active" : "Inactive"}
                     </div>
                   </div>
@@ -188,25 +190,25 @@ const LiveLocationPage: React.FC = () => {
                   {location && (
                     <div className="space-y-3">
                       <div className="flex items-center gap-3">
-                        <MapPin className="text-red-400" size={18} />
+                        <MapPin className="text-red-500 dark:text-red-400" size={18} />
                         <div className="flex-1">
-                          <p className="text-sm text-[#bfb2ac]">Current Location</p>
-                          <p className="font-medium text-sm">{location.address}</p>
+                          <p className="text-sm text-gray-600 dark:text-[#bfb2ac]">Current Location</p>
+                          <p className="font-medium text-sm text-gray-900 dark:text-white">{location.address}</p>
                         </div>
                       </div>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">
                         <div className="flex items-center gap-2">
-                          <Icon icon="mdi:crosshairs-gps" className="text-blue-400 text-sm" />
+                          <Icon icon="mdi:crosshairs-gps" className="text-blue-500 dark:text-blue-400 text-sm" />
                           <div className="min-w-0 flex-1">
-                            <p className="text-xs text-[#bfb2ac]">Coordinates</p>
-                            <p className="font-mono text-xs truncate">{formatCoordinates(location.latitude, location.longitude)}</p>
+                            <p className="text-xs text-gray-600 dark:text-[#bfb2ac]">Coordinates</p>
+                            <p className="font-mono text-xs text-gray-900 dark:text-white truncate">{formatCoordinates(location.latitude, location.longitude)}</p>
                           </div>
                         </div>
                         <div className="flex items-center gap-2">
-                          <Icon icon="mdi:target" className="text-yellow-400 text-sm" />
+                          <Icon icon="mdi:target" className="text-yellow-500 dark:text-yellow-400 text-sm" />
                           <div>
-                            <p className="text-xs text-[#bfb2ac]">Accuracy</p>
-                            <p className="text-xs">±{location.accuracy.toFixed(0)}m</p>
+                            <p className="text-xs text-gray-600 dark:text-[#bfb2ac]">Accuracy</p>
+                            <p className="text-xs text-gray-900 dark:text-white">±{location.accuracy.toFixed(0)}m</p>
                           </div>
                         </div>
                       </div>
@@ -232,13 +234,13 @@ const LiveLocationPage: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.1 }}
           >
-            <Card className="bg-[#2a2a2a] border-0 rounded-2xl mb-4 shadow-lg overflow-hidden">
+            <Card className="bg-gray-100 dark:bg-[#2a2a2a] border-0 rounded-2xl mb-4 shadow-lg overflow-hidden">
               <CardContent className="p-0">
-                <div className="h-48 bg-gradient-to-br from-blue-500/20 to-green-500/20 relative flex items-center justify-center">
+                <div className="h-48 bg-gradient-to-br from-blue-500/10 to-green-500/10 dark:from-blue-500/20 dark:to-green-500/20 relative flex items-center justify-center">
                   <div className="text-center">
-                    <Icon icon="mdi:map" className="text-5xl text-blue-400 mb-2" />
-                    <p className="text-[#d8cdc6] font-medium">Interactive Map</p>
-                    <p className="text-sm text-[#bfb2ac]">Real-time location tracking</p>
+                    <Icon icon="mdi:map" className="text-5xl text-blue-500 dark:text-blue-400 mb-2" />
+                    <p className="text-gray-800 dark:text-[#d8cdc6] font-medium">Interactive Map</p>
+                    <p className="text-sm text-gray-600 dark:text-[#bfb2ac]">Real-time location tracking</p>
                   </div>
                   {/* Animated location pin */}
                   <motion.div 
@@ -263,25 +265,25 @@ const LiveLocationPage: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.2 }}
           >
-            <Card className="bg-[#2a2a2a] border-0 rounded-2xl mb-4 shadow-lg">
+            <Card className="bg-white dark:bg-[#2a2a2a] border border-gray-200 dark:border-0 rounded-2xl mb-4 shadow-lg">
               <CardContent className="p-4 sm:p-5">
-                <h3 className="font-semibold mb-3 text-yellow-300 flex items-center gap-2">
+                <h3 className="font-semibold mb-3 text-yellow-500 dark:text-yellow-300 flex items-center gap-2">
                   <AlertCircle size={18} />
                   Device Status
                 </h3>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="flex items-center gap-3">
-                    <Battery className="text-green-400" size={20} />
+                    <Battery className="text-green-500 dark:text-green-400" size={20} />
                     <div>
-                      <p className="text-sm text-[#bfb2ac]">Battery</p>
-                      <p className="font-semibold text-white">{battery}%</p>
+                      <p className="text-sm text-gray-600 dark:text-[#bfb2ac]">Battery</p>
+                      <p className="font-semibold text-gray-900 dark:text-white">{battery}%</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
-                    <Wifi className="text-blue-400" size={20} />
+                    <Wifi className="text-blue-500 dark:text-blue-400" size={20} />
                     <div>
-                      <p className="text-sm text-[#bfb2ac]">Signal</p>
-                      <p className="font-semibold text-white">Strong</p>
+                      <p className="text-sm text-gray-600 dark:text-[#bfb2ac]">Signal</p>
+                      <p className="font-semibold text-gray-900 dark:text-white">Strong</p>
                     </div>
                   </div>
                 </div>
@@ -299,9 +301,9 @@ const LiveLocationPage: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.3 }}
           >
-            <Card className="bg-[#2a2a2a] border-0 rounded-2xl mb-6 shadow-lg">
+            <Card className="bg-white dark:bg-[#2a2a2a] border border-gray-200 dark:border-0 rounded-2xl mb-6 shadow-lg">
               <CardContent className="p-4 sm:p-5">
-                <h3 className="font-semibold mb-4 text-orange-300 flex items-center gap-2">
+                <h3 className="font-semibold mb-4 text-orange-500 dark:text-orange-300 flex items-center gap-2">
                   <Users size={18} />
                   Shared With ({shareHistory.length})
                 </h3>
@@ -319,16 +321,16 @@ const LiveLocationPage: React.FC = () => {
                           {share.avatar}
                         </div>
                         <div>
-                          <p className="font-medium text-white">{share.contact}</p>
-                          <p className="text-sm text-[#bfb2ac] flex items-center gap-1">
+                          <p className="font-medium text-gray-900 dark:text-white">{share.contact}</p>
+                          <p className="text-sm text-gray-600 dark:text-[#bfb2ac] flex items-center gap-1">
                             <Clock size={12} />
                             {share.time}
                           </p>
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
-                        <CheckCircle className="text-green-400" size={16} />
-                        <span className="text-sm text-green-300">{share.status}</span>
+                        <CheckCircle className="text-green-500 dark:text-green-400" size={16} />
+                        <span className="text-sm text-green-600 dark:text-green-300">{share.status}</span>
                       </div>
                     </motion.div>
                   ))}
@@ -377,7 +379,7 @@ const LiveLocationPage: React.FC = () => {
               onClick={() => navigate(ROUTES.EMERGENCY_CONTACTS)}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="w-full py-3 sm:py-4 rounded-2xl bg-[#372a28] border border-[#3a2f2d] text-[#d8cdc6] font-semibold text-base sm:text-lg hover:bg-[#4a403d] transition-all flex items-center justify-center gap-3"
+              className="w-full py-3 sm:py-4 rounded-2xl bg-gray-100 dark:bg-[#372a28] border border-gray-200 dark:border-[#3a2f2d] text-gray-700 dark:text-[#d8cdc6] font-semibold text-base sm:text-lg hover:bg-gray-200 dark:hover:bg-[#4a403d] transition-all flex items-center justify-center gap-3"
             >
               <Users size={18} />
               Manage Emergency Contacts

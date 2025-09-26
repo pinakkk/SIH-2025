@@ -5,11 +5,12 @@ import { motion } from "framer-motion";
 import { Icon } from "@iconify/react";
 import { ROUTES } from "@/lib/constants";
 import AppLogo from '../assets/icons/rescue-saathi.png';
+import { useTheme } from "@/hooks/use-theme";
 
 // ✅ Skeleton with rounded-xl by default
 const SkeletonBlock = ({ className = "" }: { className?: string }) => (
   <div
-    className={`bg-[#2a2a2a] animate-pulse rounded-xl ${className}`}
+    className={`bg-gray-200 dark:bg-[#2a2a2a] animate-pulse rounded-xl ${className}`}
   />
 );
 
@@ -24,6 +25,7 @@ interface Contact {
 const EmergencyContactsPage: React.FC = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
+  const { isDark } = useTheme();
   const [contacts, setContacts] = useState<Contact[]>([
     {
       id: "1",
@@ -90,13 +92,13 @@ const EmergencyContactsPage: React.FC = () => {
   };
 
   return (
-    <div className="bg-[#1f1816] min-h-screen text-white font-sans flex flex-col">
+    <div className="bg-gray-50 dark:bg-[#1f1816] min-h-screen text-gray-900 dark:text-white font-sans flex flex-col">
       {/* Sticky Header */}
       <motion.header
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="sticky top-0 z-40 bg-[#2b2320]/85 backdrop-blur-md border-b border-[#3a2f2d] px-5 py-4 flex justify-between items-center"
+        className="sticky top-0 z-40 bg-white/85 dark:bg-[#2b2320]/85 backdrop-blur-md border-b border-gray-200 dark:border-[#3a2f2d] px-5 py-4 flex justify-between items-center"
       >
         {loading ? (
           <>
@@ -110,9 +112,9 @@ const EmergencyContactsPage: React.FC = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => navigate(ROUTES.EMERGENCY_MODE)}
-              className="w-10 h-10 rounded-full bg-[#372a28] flex items-center justify-center hover:bg-[#4a403d] transition-colors"
+              className="w-10 h-10 rounded-full bg-gray-100 dark:bg-[#372a28] flex items-center justify-center hover:bg-gray-200 dark:hover:bg-[#4a403d] transition-colors"
             >
-              <Icon icon="solar:arrow-left-outline" className="text-xl text-[#d8cdc6]" />
+              <Icon icon="solar:arrow-left-outline" className="text-xl text-gray-600 dark:text-[#d8cdc6]" />
             </motion.button>
             <div className="flex items-center gap-3">
               <img
@@ -126,7 +128,7 @@ const EmergencyContactsPage: React.FC = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setShowAddContact(true)}
-              className="w-10 h-10 rounded-full bg-[#372a28] flex items-center justify-center hover:bg-[#4a403d] transition-colors"
+              className="w-10 h-10 rounded-full bg-gray-100 dark:bg-[#372a28] flex items-center justify-center hover:bg-gray-200 dark:hover:bg-[#4a403d] transition-colors"
             >
               <Icon icon="solar:add-circle-outline" className="text-xl text-orange-400" />
             </motion.button>
@@ -155,9 +157,9 @@ const EmergencyContactsPage: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 0.1 }}
-              className="bg-[#2a2a2a] border border-[#3a2f2d] rounded-2xl p-5 mb-6 shadow-lg"
+              className="bg-white dark:bg-[#2a2a2a] border border-gray-200 dark:border-[#3a2f2d] rounded-2xl p-5 mb-6 shadow-lg"
             >
-              <h2 className="text-lg font-semibold mb-4 text-orange-300 flex items-center gap-2">
+              <h2 className="text-lg font-semibold mb-4 text-orange-500 dark:text-orange-300 flex items-center gap-2">
                 <Icon icon="solar:bolt-bold" className="text-xl" />
                 Quick Actions
               </h2>
@@ -165,18 +167,18 @@ const EmergencyContactsPage: React.FC = () => {
                 <motion.button 
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="flex flex-col items-center justify-center p-4 bg-green-500/20 border border-green-500/30 rounded-xl hover:bg-green-500/30 transition-all"
+                  className="flex flex-col items-center justify-center p-4 bg-green-500/10 dark:bg-green-500/20 border border-green-500/20 dark:border-green-500/30 rounded-xl hover:bg-green-500/20 dark:hover:bg-green-500/30 transition-all"
                 >
-                  <Icon icon="solar:chat-round-bold" className="text-2xl text-green-400 mb-2" />
-                  <span className="text-sm text-green-300 font-medium">SMS All</span>
+                  <Icon icon="solar:chat-round-bold" className="text-2xl text-green-600 dark:text-green-400 mb-2" />
+                  <span className="text-sm text-green-600 dark:text-green-300 font-medium">SMS All</span>
                 </motion.button>
                 <motion.button 
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="flex flex-col items-center justify-center p-4 bg-blue-500/20 border border-blue-500/30 rounded-xl hover:bg-blue-500/30 transition-all"
+                  className="flex flex-col items-center justify-center p-4 bg-blue-500/10 dark:bg-blue-500/20 border border-blue-500/20 dark:border-blue-500/30 rounded-xl hover:bg-blue-500/20 dark:hover:bg-blue-500/30 transition-all"
                 >
-                  <Icon icon="solar:phone-calling-bold" className="text-2xl text-blue-400 mb-2" />
-                  <span className="text-sm text-blue-300 font-medium">Call All</span>
+                  <Icon icon="solar:phone-calling-bold" className="text-2xl text-blue-600 dark:text-blue-400 mb-2" />
+                  <span className="text-sm text-blue-600 dark:text-blue-300 font-medium">Call All</span>
                 </motion.button>
               </div>
             </motion.div>
@@ -202,7 +204,7 @@ const EmergencyContactsPage: React.FC = () => {
                       hidden: { opacity: 0, y: 20 },
                       visible: { opacity: 1, y: 0 }
                     }}
-                    className="bg-[#2a2a2a] border border-[#3a2f2d] rounded-2xl p-4 hover:bg-[#353535] transition-all shadow-lg"
+                    className="bg-white dark:bg-[#2a2a2a] border border-gray-200 dark:border-[#3a2f2d] rounded-2xl p-4 hover:bg-gray-50 dark:hover:bg-[#353535] transition-all shadow-lg"
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-4">
@@ -211,15 +213,15 @@ const EmergencyContactsPage: React.FC = () => {
                         </div>
                         <div>
                           <div className="flex items-center gap-2">
-                            <h3 className="font-semibold text-lg text-white">{contact.name}</h3>
+                            <h3 className="font-semibold text-lg text-gray-900 dark:text-white">{contact.name}</h3>
                             {contact.isPrimary && (
-                              <span className="px-2 py-1 bg-orange-500/20 border border-orange-500/30 rounded-full text-xs text-orange-300 font-medium">
+                              <span className="px-2 py-1 bg-orange-500/10 dark:bg-orange-500/20 border border-orange-500/20 dark:border-orange-500/30 rounded-full text-xs text-orange-600 dark:text-orange-300 font-medium">
                                 Primary
                               </span>
                             )}
                           </div>
-                          <p className="text-[#bfb2ac] text-sm">{contact.relation}</p>
-                          <p className="text-[#d8cdc6] text-sm font-mono">{contact.phone}</p>
+                          <p className="text-gray-600 dark:text-[#bfb2ac] text-sm">{contact.relation}</p>
+                          <p className="text-gray-800 dark:text-[#d8cdc6] text-sm font-mono">{contact.phone}</p>
                         </div>
                       </div>
                       <div className="flex gap-2">
@@ -227,7 +229,7 @@ const EmergencyContactsPage: React.FC = () => {
                           whileHover={{ scale: 1.1 }}
                           whileTap={{ scale: 0.9 }}
                           onClick={() => handleCallContact(contact.phone, contact.name)}
-                          className="w-10 h-10 rounded-full bg-green-500/20 border border-green-500/30 text-green-400 hover:bg-green-500/30 transition-all flex items-center justify-center"
+                          className="w-10 h-10 rounded-full bg-green-500/10 dark:bg-green-500/20 border border-green-500/20 dark:border-green-500/30 text-green-600 dark:text-green-400 hover:bg-green-500/20 dark:hover:bg-green-500/30 transition-all flex items-center justify-center"
                         >
                           <Icon icon="solar:phone-calling-bold" className="text-lg" />
                         </motion.button>
@@ -237,8 +239,8 @@ const EmergencyContactsPage: React.FC = () => {
                           onClick={() => handleSetPrimary(contact.id)}
                           className={`w-10 h-10 rounded-full border transition-all flex items-center justify-center ${
                             contact.isPrimary
-                              ? "bg-orange-500/20 border-orange-500/30 text-orange-400"
-                              : "bg-[#372a28] border-[#3a2f2d] text-[#bfb2ac] hover:bg-[#4a403d]"
+                              ? "bg-orange-500/10 dark:bg-orange-500/20 border-orange-500/20 dark:border-orange-500/30 text-orange-500 dark:text-orange-400"
+                              : "bg-gray-100 dark:bg-[#372a28] border-gray-200 dark:border-[#3a2f2d] text-gray-500 dark:text-[#bfb2ac] hover:bg-gray-200 dark:hover:bg-[#4a403d]"
                           }`}
                         >
                           <Icon icon="solar:star-bold" className="text-lg" />
@@ -247,7 +249,7 @@ const EmergencyContactsPage: React.FC = () => {
                           whileHover={{ scale: 1.1 }}
                           whileTap={{ scale: 0.9 }}
                           onClick={() => handleDeleteContact(contact.id)}
-                          className="w-10 h-10 rounded-full bg-red-500/20 border border-red-500/30 text-red-400 hover:bg-red-500/30 transition-all flex items-center justify-center"
+                          className="w-10 h-10 rounded-full bg-red-500/10 dark:bg-red-500/20 border border-red-500/20 dark:border-red-500/30 text-red-600 dark:text-red-400 hover:bg-red-500/20 dark:hover:bg-red-500/30 transition-all flex items-center justify-center"
                         >
                           <Icon icon="solar:trash-bin-minimalistic-bold" className="text-lg" />
                         </motion.button>
@@ -273,52 +275,52 @@ const EmergencyContactsPage: React.FC = () => {
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            className="bg-[#2a2a2a] border border-[#3a2f2d] rounded-2xl p-6 w-full max-w-md shadow-2xl"
+            className="bg-white dark:bg-[#2a2a2a] border border-gray-200 dark:border-[#3a2f2d] rounded-2xl p-6 w-full max-w-md shadow-2xl"
           >
             <div className="flex justify-between items-center mb-6">
-              <h3 className="text-xl font-semibold text-white flex items-center gap-2">
-                <Icon icon="solar:user-plus-bold" className="text-orange-400" />
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                <Icon icon="solar:user-plus-bold" className="text-orange-500 dark:text-orange-400" />
                 Add Emergency Contact
               </h3>
               <motion.button
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 onClick={() => setShowAddContact(false)}
-                className="w-8 h-8 rounded-full bg-[#372a28] hover:bg-[#4a403d] transition-colors flex items-center justify-center"
+                className="w-8 h-8 rounded-full bg-gray-100 dark:bg-[#372a28] hover:bg-gray-200 dark:hover:bg-[#4a403d] transition-colors flex items-center justify-center"
               >
-                <Icon icon="solar:close-circle-outline" className="text-lg text-[#d8cdc6]" />
+                <Icon icon="solar:close-circle-outline" className="text-lg text-gray-600 dark:text-[#d8cdc6]" />
               </motion.button>
             </div>
 
             <div className="space-y-4">
               <div>
-                <label className="block text-sm text-[#d8cdc6] mb-2 font-medium">Name</label>
+                <label className="block text-sm text-gray-600 dark:text-[#d8cdc6] mb-2 font-medium">Name</label>
                 <input
                   type="text"
                   placeholder="Contact Name"
                   value={newContact.name}
                   onChange={(e) => setNewContact({ ...newContact, name: e.target.value })}
-                  className="w-full px-4 py-3 rounded-xl bg-[#1f1816] border border-[#3a2f2d] text-white placeholder-[#bfb2ac] focus:outline-none focus:border-orange-500 transition-all"
+                  className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-[#1f1816] border border-gray-200 dark:border-[#3a2f2d] text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-[#bfb2ac] focus:outline-none focus:border-orange-500 transition-all"
                 />
               </div>
               <div>
-                <label className="block text-sm text-[#d8cdc6] mb-2 font-medium">Phone</label>
+                <label className="block text-sm text-gray-600 dark:text-[#d8cdc6] mb-2 font-medium">Phone</label>
                 <input
                   type="tel"
                   placeholder="+91 XXXXX XXXXX"
                   value={newContact.phone}
                   onChange={(e) => setNewContact({ ...newContact, phone: e.target.value })}
-                  className="w-full px-4 py-3 rounded-xl bg-[#1f1816] border border-[#3a2f2d] text-white placeholder-[#bfb2ac] focus:outline-none focus:border-orange-500 transition-all"
+                  className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-[#1f1816] border border-gray-200 dark:border-[#3a2f2d] text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-[#bfb2ac] focus:outline-none focus:border-orange-500 transition-all"
                 />
               </div>
               <div>
-                <label className="block text-sm text-[#d8cdc6] mb-2 font-medium">Relation</label>
+                <label className="block text-sm text-gray-600 dark:text-[#d8cdc6] mb-2 font-medium">Relation</label>
                 <input
                   type="text"
                   placeholder="e.g., Mother, Doctor, Friend"
                   value={newContact.relation}
                   onChange={(e) => setNewContact({ ...newContact, relation: e.target.value })}
-                  className="w-full px-4 py-3 rounded-xl bg-[#1f1816] border border-[#3a2f2d] text-white placeholder-[#bfb2ac] focus:outline-none focus:border-orange-500 transition-all"
+                  className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-[#1f1816] border border-gray-200 dark:border-[#3a2f2d] text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-[#bfb2ac] focus:outline-none focus:border-orange-500 transition-all"
                 />
               </div>
             </div>
@@ -328,7 +330,7 @@ const EmergencyContactsPage: React.FC = () => {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => setShowAddContact(false)}
-                className="flex-1 py-3 rounded-xl bg-[#372a28] border border-[#3a2f2d] text-[#d8cdc6] font-medium hover:bg-[#4a403d] transition-all"
+                className="flex-1 py-3 rounded-xl bg-gray-100 dark:bg-[#372a28] border border-gray-200 dark:border-[#3a2f2d] text-gray-700 dark:text-[#d8cdc6] font-medium hover:bg-gray-200 dark:hover:bg-[#4a403d] transition-all"
               >
                 Cancel
               </motion.button>

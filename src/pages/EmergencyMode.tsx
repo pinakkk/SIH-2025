@@ -5,11 +5,12 @@ import { motion } from "framer-motion";
 import { Icon } from "@iconify/react";
 import { ROUTES } from "@/lib/constants";
 import AppLogo from '../assets/icons/rescue-saathi.png';
+import { useTheme } from "@/hooks/use-theme";
 
 // ✅ Skeleton with rounded-xl by default
 const SkeletonBlock = ({ className = "" }: { className?: string }) => (
   <div
-    className={`bg-[#2a2a2a] animate-pulse rounded-xl ${className}`}
+    className={`bg-gray-200 dark:bg-[#2a2a2a] animate-pulse rounded-xl ${className}`}
   />
 );
 
@@ -18,6 +19,7 @@ const EmergencyMode: React.FC = () => {
   const [sosPressed, setSosPressed] = useState(false);
   const [countdown, setCountdown] = useState(0);
   const [loading, setLoading] = useState(true);
+  const { isDark } = useTheme();
 
   useEffect(() => {
     const t = setTimeout(() => setLoading(false), 800);
@@ -49,13 +51,13 @@ const EmergencyMode: React.FC = () => {
   };
 
   return (
-    <div className="bg-[#1f1816] min-h-screen text-white font-sans flex flex-col">
+    <div className="bg-gray-50 dark:bg-[#1f1816] min-h-screen text-gray-900 dark:text-white font-sans flex flex-col">
       {/* Sticky Header */}
       <motion.header
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="sticky top-0 z-40 bg-[#2b2320]/85 backdrop-blur-md border-b border-[#3a2f2d] px-5 py-4 flex justify-between items-center"
+        className="sticky top-0 z-40 bg-white/85 dark:bg-[#2b2320]/85 backdrop-blur-md border-b border-gray-200 dark:border-[#3a2f2d] px-5 py-4 flex justify-between items-center"
       >
         {loading ? (
           <>
@@ -69,9 +71,9 @@ const EmergencyMode: React.FC = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => navigate(ROUTES.DASHBOARD)}
-              className="w-10 h-10 rounded-full bg-[#372a28] flex items-center justify-center hover:bg-[#4a403d] transition-colors"
+              className="w-10 h-10 rounded-full bg-gray-100 dark:bg-[#372a28] flex items-center justify-center hover:bg-gray-200 dark:hover:bg-[#4a403d] transition-colors"
             >
-              <Icon icon="solar:arrow-left-outline" className="text-xl text-[#d8cdc6]" />
+              <Icon icon="solar:arrow-left-outline" className="text-xl text-gray-700 dark:text-[#d8cdc6]" />
             </motion.button>
             <div className="flex items-center gap-3">
               <img
@@ -85,9 +87,9 @@ const EmergencyMode: React.FC = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => navigate(ROUTES.EMERGENCY_SETTINGS)}
-              className="w-10 h-10 rounded-full bg-[#372a28] flex items-center justify-center hover:bg-[#4a403d] transition-colors"
+              className="w-10 h-10 rounded-full bg-gray-100 dark:bg-[#372a28] flex items-center justify-center hover:bg-gray-200 dark:hover:bg-[#4a403d] transition-colors"
             >
-              <Icon icon="solar:settings-outline" className="text-xl text-[#d8cdc6]" />
+              <Icon icon="solar:settings-outline" className="text-xl text-gray-700 dark:text-[#d8cdc6]" />
             </motion.button>
           </>
         )}
@@ -149,8 +151,8 @@ const EmergencyMode: React.FC = () => {
                   animate={{ opacity: 1, y: 0 }}
                   className="mt-4 text-center"
                 >
-                  <p className="text-yellow-300 font-semibold">Emergency call starting in {countdown}s</p>
-                  <p className="text-sm text-[#d8cdc6]">Tap SOS again to cancel</p>
+                  <p className="text-yellow-600 dark:text-yellow-300 font-semibold">Emergency call starting in {countdown}s</p>
+                  <p className="text-sm text-gray-600 dark:text-[#d8cdc6]">Tap SOS again to cancel</p>
                 </motion.div>
               )}
             </motion.div>
@@ -168,20 +170,20 @@ const EmergencyMode: React.FC = () => {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => navigate(ROUTES.EMERGENCY_CONTACTS)}
-                  className="flex flex-col items-center justify-center h-28 rounded-2xl bg-[#2a2a2a] border border-[#3a2f2d] shadow-lg hover:bg-[#353535] transition-all"
+                  className="flex flex-col items-center justify-center h-28 rounded-2xl bg-white dark:bg-[#2a2a2a] border border-gray-200 dark:border-[#3a2f2d] shadow-lg hover:bg-gray-100 dark:hover:bg-[#353535] transition-all"
                 >
-                  <Icon icon="solar:users-group-rounded-bold" className="text-3xl mb-2 text-blue-400" />
-                  <p className="text-sm font-medium text-center text-[#d8cdc6]">Emergency<br />Contacts</p>
+                  <Icon icon="solar:users-group-rounded-bold" className="text-3xl mb-2 text-blue-500 dark:text-blue-400" />
+                  <p className="text-sm font-medium text-center text-gray-700 dark:text-[#d8cdc6]">Emergency<br />Contacts</p>
                 </motion.button>
                 
                 <motion.button 
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => navigate(ROUTES.LIVE_LOCATION)}
-                  className="flex flex-col items-center justify-center h-28 rounded-2xl bg-[#2a2a2a] border border-[#3a2f2d] shadow-lg hover:bg-[#353535] transition-all"
+                  className="flex flex-col items-center justify-center h-28 rounded-2xl bg-white dark:bg-[#2a2a2a] border border-gray-200 dark:border-[#3a2f2d] shadow-lg hover:bg-gray-100 dark:hover:bg-[#353535] transition-all"
                 >
-                  <Icon icon="solar:map-point-wave-bold" className="text-3xl mb-2 text-green-400" />
-                  <p className="text-sm font-medium text-center text-[#d8cdc6]">Share Live<br />Location</p>
+                  <Icon icon="solar:map-point-wave-bold" className="text-3xl mb-2 text-green-500 dark:text-green-400" />
+                  <p className="text-sm font-medium text-center text-gray-700 dark:text-[#d8cdc6]">Share Live<br />Location</p>
                 </motion.button>
               </div>
 
@@ -189,10 +191,10 @@ const EmergencyMode: React.FC = () => {
               <motion.button 
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="w-full flex items-center justify-center gap-3 h-16 rounded-2xl bg-[#2a2a2a] border border-[#3a2f2d] shadow-lg hover:bg-[#353535] transition-all"
+                className="w-full flex items-center justify-center gap-3 h-16 rounded-2xl bg-white dark:bg-[#2a2a2a] border border-gray-200 dark:border-[#3a2f2d] shadow-lg hover:bg-gray-100 dark:hover:bg-[#353535] transition-all"
               >
-                <Icon icon="solar:chat-round-bold" className="text-xl text-yellow-400" />
-                <span className="font-medium text-[#d8cdc6]">SMS My Family</span>
+                <Icon icon="solar:chat-round-bold" className="text-xl text-yellow-500 dark:text-yellow-400" />
+                <span className="font-medium text-gray-700 dark:text-[#d8cdc6]">SMS My Family</span>
               </motion.button>
 
               {/* Emergency Call Button */}
