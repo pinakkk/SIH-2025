@@ -3,9 +3,11 @@ import { motion } from "framer-motion";
 import { ArrowLeft, Upload, Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "@/lib/constants";
+import { useTheme } from "@/hooks/use-theme";
 
 export function NgoOfficial() {
   const navigate = useNavigate();
+  const { isDark } = useTheme();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     organizationName: "",
@@ -100,21 +102,21 @@ export function NgoOfficial() {
   };
 
   return (
-    <div className="bg-[#1f1816] min-h-screen text-white font-sans">
+    <div className="bg-gray-50 dark:bg-[#1f1816] min-h-screen text-gray-900 dark:text-white font-sans">
       {/* Header with Back Button */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="sticky top-0 z-40 bg-[#2b2320]/95 backdrop-blur-md border-b border-[#3a2f2d]/50 px-5 py-4"
+        className="sticky top-0 z-40 bg-white/70 dark:bg-[#2b2320]/95 backdrop-blur-md border-b border-gray-200 dark:border-[#3a2f2d]/50 px-5 py-4"
       >
         <div className="flex items-center justify-between">
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => navigate(-1)}
-            className="flex items-center justify-center text-[#d8cdc6] hover:text-white transition-colors"
+            className="flex items-center justify-center text-gray-600 dark:text-[#d8cdc6] hover:text-gray-900 dark:hover:text-white transition-colors"
           >
-            <div className="w-10 h-10 flex items-center justify-center rounded-lg bg-[#372a28]/80 hover:bg-[#443331] transition">
+            <div className="w-10 h-10 flex items-center justify-center rounded-lg bg-gray-100 dark:bg-[#372a28]/80 hover:bg-gray-200 dark:hover:bg-[#443331] transition">
               <ArrowLeft size={16} />
             </div>
           </motion.button>
@@ -141,7 +143,7 @@ export function NgoOfficial() {
           className="mb-6"
         >
           <h2 className="text-xl font-semibold mb-2">NGO Verification</h2>
-          <p className="text-sm text-gray-400">
+          <p className="text-sm text-gray-600 dark:text-gray-400">
             Please fill out the form below to verify your organization as a recognized NGO.
             All information will be reviewed by our team for authenticity.
           </p>
@@ -154,55 +156,55 @@ export function NgoOfficial() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Organization Name */}
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-300">Organization Name</label>
+                <label className="text-sm font-medium text-gray-600 dark:text-gray-300">Organization Name</label>
                 <input
                   type="text"
                   name="organizationName"
                   value={formData.organizationName}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 rounded-lg bg-[#2a2320] border border-[#3a2f2d] focus:outline-none focus:ring-2 focus:ring-yellow-500/50"
+                  className="w-full px-4 py-3 rounded-lg bg-white dark:bg-[#2a2320] border border-gray-300 dark:border-[#3a2f2d] focus:outline-none focus:ring-2 focus:ring-yellow-500/50"
                   placeholder="Full legal name of your organization"
                 />
               </div>
 
               {/* Registration Number */}
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-300">Registration Number</label>
+                <label className="text-sm font-medium text-gray-600 dark:text-gray-300">Registration Number</label>
                 <input
                   type="text"
                   name="registrationNumber"
                   value={formData.registrationNumber}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 rounded-lg bg-[#2a2320] border border-[#3a2f2d] focus:outline-none focus:ring-2 focus:ring-yellow-500/50"
+                  className="w-full px-4 py-3 rounded-lg bg-white dark:bg-[#2a2320] border border-gray-300 dark:border-[#3a2f2d] focus:outline-none focus:ring-2 focus:ring-yellow-500/50"
                   placeholder="NGO registration number"
                 />
               </div>
 
               {/* Website */}
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-300">Website (Optional)</label>
+                <label className="text-sm font-medium text-gray-600 dark:text-gray-300">Website (Optional)</label>
                 <input
                   type="url"
                   name="website"
                   value={formData.website}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-lg bg-[#2a2320] border border-[#3a2f2d] focus:outline-none focus:ring-2 focus:ring-yellow-500/50"
+                  className="w-full px-4 py-3 rounded-lg bg-white dark:bg-[#2a2320] border border-gray-300 dark:border-[#3a2f2d] focus:outline-none focus:ring-2 focus:ring-yellow-500/50"
                   placeholder="https://yourorganization.org"
                 />
               </div>
 
               {/* Year Established */}
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-300">Year Established</label>
+                <label className="text-sm font-medium text-gray-600 dark:text-gray-300">Year Established</label>
                 <input
                   type="text"
                   name="established"
                   value={formData.established}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 rounded-lg bg-[#2a2320] border border-[#3a2f2d] focus:outline-none focus:ring-2 focus:ring-yellow-500/50"
+                  className="w-full px-4 py-3 rounded-lg bg-white dark:bg-[#2a2320] border border-gray-300 dark:border-[#3a2f2d] focus:outline-none focus:ring-2 focus:ring-yellow-500/50"
                   placeholder="Year your NGO was established"
                 />
               </div>
@@ -210,14 +212,14 @@ export function NgoOfficial() {
 
             {/* Address */}
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-300">Registered Office Address</label>
+              <label className="text-sm font-medium text-gray-600 dark:text-gray-300">Registered Office Address</label>
               <textarea
                 name="address"
                 value={formData.address}
                 onChange={handleChange}
                 required
                 rows={3}
-                className="w-full px-4 py-3 rounded-lg bg-[#2a2320] border border-[#3a2f2d] focus:outline-none focus:ring-2 focus:ring-yellow-500/50"
+                className="w-full px-4 py-3 rounded-lg bg-white dark:bg-[#2a2320] border border-gray-300 dark:border-[#3a2f2d] focus:outline-none focus:ring-2 focus:ring-yellow-500/50"
                 placeholder="Full address of your registered office"
               />
             </div>
@@ -227,56 +229,56 @@ export function NgoOfficial() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Contact Person */}
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-300">Contact Person Name</label>
+                <label className="text-sm font-medium text-gray-600 dark:text-gray-300">Contact Person Name</label>
                 <input
                   type="text"
                   name="contactPerson"
                   value={formData.contactPerson}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 rounded-lg bg-[#2a2320] border border-[#3a2f2d] focus:outline-none focus:ring-2 focus:ring-yellow-500/50"
+                  className="w-full px-4 py-3 rounded-lg bg-white dark:bg-[#2a2320] border border-gray-300 dark:border-[#3a2f2d] focus:outline-none focus:ring-2 focus:ring-yellow-500/50"
                   placeholder="Name of primary contact person"
                 />
               </div>
 
               {/* Designation */}
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-300">Designation</label>
+                <label className="text-sm font-medium text-gray-600 dark:text-gray-300">Designation</label>
                 <input
                   type="text"
                   name="designation"
                   value={formData.designation}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 rounded-lg bg-[#2a2320] border border-[#3a2f2d] focus:outline-none focus:ring-2 focus:ring-yellow-500/50"
+                  className="w-full px-4 py-3 rounded-lg bg-white dark:bg-[#2a2320] border border-gray-300 dark:border-[#3a2f2d] focus:outline-none focus:ring-2 focus:ring-yellow-500/50"
                   placeholder="Position in the organization"
                 />
               </div>
 
               {/* Email */}
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-300">Email</label>
+                <label className="text-sm font-medium text-gray-600 dark:text-gray-300">Email</label>
                 <input
                   type="email"
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 rounded-lg bg-[#2a2320] border border-[#3a2f2d] focus:outline-none focus:ring-2 focus:ring-yellow-500/50"
+                  className="w-full px-4 py-3 rounded-lg bg-white dark:bg-[#2a2320] border border-gray-300 dark:border-[#3a2f2d] focus:outline-none focus:ring-2 focus:ring-yellow-500/50"
                   placeholder="Official email address"
                 />
               </div>
 
               {/* Phone */}
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-300">Phone Number</label>
+                <label className="text-sm font-medium text-gray-600 dark:text-gray-300">Phone Number</label>
                 <input
                   type="tel"
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 rounded-lg bg-[#2a2320] border border-[#3a2f2d] focus:outline-none focus:ring-2 focus:ring-yellow-500/50"
+                  className="w-full px-4 py-3 rounded-lg bg-white dark:bg-[#2a2320] border border-gray-300 dark:border-[#3a2f2d] focus:outline-none focus:ring-2 focus:ring-yellow-500/50"
                   placeholder="Contact phone number"
                 />
               </div>
@@ -286,7 +288,7 @@ export function NgoOfficial() {
             
             {/* Areas of Work */}
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-300">Areas of Work (Select all that apply)</label>
+              <label className="text-sm font-medium text-gray-600 dark:text-gray-300">Areas of Work (Select all that apply)</label>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mt-2">
                 {areasOfWorkOptions.map((area) => (
                   <div key={area} className="flex items-center">
@@ -297,7 +299,7 @@ export function NgoOfficial() {
                       onChange={() => handleCheckboxChange(area)}
                       className="w-4 h-4 rounded accent-yellow-500 mr-2"
                     />
-                    <label htmlFor={area} className="text-sm">
+                    <label htmlFor={area} className="text-sm text-gray-800 dark:text-gray-100">
                       {area}
                     </label>
                   </div>
@@ -307,14 +309,14 @@ export function NgoOfficial() {
 
             {/* Description */}
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-300">Organization Description</label>
+              <label className="text-sm font-medium text-gray-600 dark:text-gray-300">Organization Description</label>
               <textarea
                 name="description"
                 value={formData.description}
                 onChange={handleChange}
                 required
                 rows={4}
-                className="w-full px-4 py-3 rounded-lg bg-[#2a2320] border border-[#3a2f2d] focus:outline-none focus:ring-2 focus:ring-yellow-500/50"
+                className="w-full px-4 py-3 rounded-lg bg-white dark:bg-[#2a2320] border border-gray-300 dark:border-[#3a2f2d] focus:outline-none focus:ring-2 focus:ring-yellow-500/50"
                 placeholder="Brief description of your organization's mission, vision and activities"
               />
             </div>
@@ -323,8 +325,8 @@ export function NgoOfficial() {
 
             {/* Registration Document */}
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-300">Registration Certificate</label>
-              <div className="border border-dashed border-[#3a2f2d] rounded-lg p-4 hover:bg-[#2a2320]/50 transition cursor-pointer">
+              <label className="text-sm font-medium text-gray-600 dark:text-gray-300">Registration Certificate</label>
+              <div className="border border-dashed border-gray-300 dark:border-[#3a2f2d] rounded-lg p-4 hover:bg-gray-50 dark:hover:bg-[#2a2320]/50 transition cursor-pointer">
                 <input
                   type="file"
                   id="registrationDoc"
@@ -343,15 +345,15 @@ export function NgoOfficial() {
                       ? registrationDoc.name
                       : "Upload NGO registration certificate"}
                   </span>
-                  <span className="text-xs text-gray-400 mt-1">Click to browse or drop files here</span>
+                  <span className="text-xs text-gray-500 dark:text-gray-400 mt-1">Click to browse or drop files here</span>
                 </label>
               </div>
             </div>
 
             {/* Tax Exemption Document */}
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-300">Tax Exemption Certificate (Optional)</label>
-              <div className="border border-dashed border-[#3a2f2d] rounded-lg p-4 hover:bg-[#2a2320]/50 transition cursor-pointer">
+              <label className="text-sm font-medium text-gray-600 dark:text-gray-300">Tax Exemption Certificate (Optional)</label>
+              <div className="border border-dashed border-gray-300 dark:border-[#3a2f2d] rounded-lg p-4 hover:bg-gray-50 dark:hover:bg-[#2a2320]/50 transition cursor-pointer">
                 <input
                   type="file"
                   id="taxExemption"
@@ -369,7 +371,7 @@ export function NgoOfficial() {
                       ? taxExemptionDoc.name
                       : "Upload tax exemption certificate (if available)"}
                   </span>
-                  <span className="text-xs text-gray-400 mt-1">Click to browse or drop files here</span>
+                  <span className="text-xs text-gray-500 dark:text-gray-400 mt-1">Click to browse or drop files here</span>
                 </label>
               </div>
             </div>
@@ -394,7 +396,7 @@ export function NgoOfficial() {
           </div>
         </form>
 
-        <div className="mt-6 text-xs text-gray-500 text-center">
+        <div className="mt-6 text-xs text-gray-500 dark:text-gray-500 text-center">
           By submitting this form, you certify that all information provided is accurate and complete.
           False information may lead to rejection of verification and other consequences.
         </div>
