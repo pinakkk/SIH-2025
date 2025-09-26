@@ -34,7 +34,7 @@ import { GroupsPage } from "@/pages/GroupsPage";
 import EvacuationCentersPage from "@/pages/EvacuationCentersPage";
 
 import { HazardDetailsPage } from "@/pages/HazardDetailsPage";
-// import { HazardFullMapPage } from "@/pages/HazardFullMapPage";
+import ReportDetailsPage from "./pages/ReportDetailsPage";
 
 // Lazy load register
 const LazyRegisterPage = React.lazy(() =>
@@ -119,6 +119,9 @@ function App() {
               <Route path={ROUTES.EMERGENCY_HOTLINES} element={<EmergencyHotlinesPage />} />
               <Route path={ROUTES.VIEW_DETAILS} element={<ViewDetailsPage />} />
               <Route path={ROUTES.REPORT_UPDATES} element={<ReportUpdatesPage />} />
+
+              <Route path={ROUTES.REPORT_DETAILS} element={<ReportDetailsPage />} />
+
               <Route path={ROUTES.SEE_MORE} element={<SeeMorePage />} />
               <Route path={ROUTES.CHATBOT} element={<ChatbotPage />} />
             </Route>
@@ -144,24 +147,14 @@ function App() {
             />
 
             <Route
-  path={ROUTES.HAZARD_DETAILS}
-  element={
-    <ProtectedRoute>
-      <HazardDetailsPage />
-    </ProtectedRoute>
-  }
-/>
+              path={ROUTES.HAZARD_DETAILS}
+              element={
+                <ProtectedRoute>
+                  <HazardDetailsPage />
+                </ProtectedRoute>
+              }
+            />
 
-{/* <Route
-  path={ROUTES.HAZARD_MAP}
-  element={
-    <ProtectedRoute>
-      <HazardFullMapPage />
-    </ProtectedRoute>
-  }
-/> */}
-
-            
             {/* Craete Post */}
             <Route
               path={ROUTES.CREATE_POST}
@@ -172,15 +165,15 @@ function App() {
               }
             />
 
-{/* Community Page */}
+            {/* Community Page */}
             <Route
-  path={ROUTES.COMMUNITY}
-  element={
-    <ProtectedRoute>
-      <CommunityPage />
-    </ProtectedRoute>
-  }
-/>
+              path={ROUTES.COMMUNITY}
+              element={
+                <ProtectedRoute>
+                  <CommunityPage />
+                </ProtectedRoute>
+              }
+            />
 
             {/* Groups Page */}
             <Route

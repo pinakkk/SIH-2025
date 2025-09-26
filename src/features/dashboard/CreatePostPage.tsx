@@ -219,7 +219,8 @@ export function CreatePostPage() {
           formData.append("photos", media);
 
           const res = await axios.post(
-            "https://sih-2025-l3ur.onrender.com/api/create-post",
+            "http://localhost:5002/api/create-post",
+            // "https://sih-2025-l3ur.onrender.com/api/create-post",
             formData,
             {
               withCredentials: true,

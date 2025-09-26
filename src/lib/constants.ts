@@ -15,6 +15,7 @@ export const ROUTES = {
   LOGIN: '/login',
   REGISTER: '/register',
   DASHBOARD: '/dashboard',
+  REPORT_DETAILS: "/community/:id",
   LIVE_HAZARD_MAP: "/dashboard/live-hazard-map",
   CREATE_POST: "/create-post", 
   COMMUNITY: "/community",
