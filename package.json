@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@radix-ui/react-accordion": "^1.2.12",
     "@react-google-maps/api": "^2.20.7",
     "@supabase/supabase-js": "^2.57.4",
     "axios": "^1.12.2",
