@@ -125,8 +125,9 @@ export const login = async (req, res) => {
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "7d",
     });
-
-    // 4. Store in cookie
+     // 4. Store in cookie
+     console.log(token);
+     
     res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",

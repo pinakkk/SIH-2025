@@ -423,7 +423,7 @@ export function useAuth() {
     setIsLoading(true);
     try {
       const { data } = await axios.post(
-        "https://sih-2025-l3ur.onrender.com/api/login",
+        "http://localhost:5002/api/login",
         { email, password },
         { withCredentials: true }
       );
