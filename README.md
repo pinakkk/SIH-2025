@@ -1,7 +1,3 @@
-﻿before deploying, change in 
-api.ts, registerpage.tsx, live hazard, create post
-
-
 # Ocean Disaster Management Platform - SIH 2025
 
 A mobile and web platform that enables citizens, coastal residents, and disaster managers to share real-time information during ocean-related emergencies. This community-driven solution helps identify and track coastal hazards through citizen reports, social media monitoring, and AI-powered analysis.
@@ -132,4 +128,5 @@ Create a `.env` file for local configuration:
 VITE_API_URL=http://localhost:3001
 VITE_MAP_API_KEY=your_map_api_key
 ```
+
 
